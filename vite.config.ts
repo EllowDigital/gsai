@@ -1,31 +1,43 @@
+import path from "path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
-import path from "path";
 import { componentTagger } from "lovable-tagger";
+import { tempo } from "tempo-devtools/dist/vite";
 
-// https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
-  server: {
-    host: "::",
-    port: 8080,
-    open: true, // Automatically opens browser
-    strictPort: true, // Ensures exact port usage
-  },
-  plugins: [react(), mode === "development" && componentTagger()].filter(
-    Boolean
-  ),
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-      three: path.resolve(__dirname, "node_modules/three"), // Properly resolves Three.js
+export default defineConfig(({ mode }) => {
+  const isDev = mode === "development";
+  const isGitHub = process.env.DEPLOY_TARGET === "github";
+
+  // Set base path depending on environment
+  const base = isDev ? "/" : isGitHub ? "/gsai-webv3/" : "/";
+
+  return {
+    base,
+    server: {
+      host: "::", // Accept IPv6 connections
+      port: 8080,
+      open: true, // Open browser on start
+      strictPort: true, // Fail if port is taken
     },
-  },
-  build: {
-    minify: "esbuild",
-    sourcemap: mode === "development",
-  },
-  optimizeDeps: {
-    include: ["three"],
-  },
-}));
-
+    plugins: [
+      react(),
+      tempo(),
+      isDev && componentTagger(), // Only enable in development
+    ].filter(Boolean),
+    resolve: {
+      preserveSymlinks: true,
+      alias: {
+        "@": path.resolve(__dirname, "src"),
+        three: path.resolve(__dirname, "node_modules/three"),
+      },
+    },
+    build: {
+      minify: "esbuild",
+      sourcemap: isDev,
+    },
+    optimizeDeps: {
+      include: ["three"],
+      entries: ["src/main.tsx", "src/tempobook/**/*"],
+    },
+  };
+});
