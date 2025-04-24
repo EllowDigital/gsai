@@ -14,13 +14,19 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
-    /* Linting */
-    "strict": false,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noImplicitAny": false,
-    "noFallthroughCasesInSwitch": false,
+    /* Linting & Type Safety */
+    "strict": true, // Enable strict mode for better type safety
+    "noUnusedLocals": true, // Avoid unused variables
+    "noUnusedParameters": true, // Avoid unused function parameters
+    "noImplicitAny": true, // Enforce explicit typing
+    "noFallthroughCasesInSwitch": true, // Ensure no fall-through in switch statements
 
+    /* Interoperability */
+    "esModuleInterop": true, // Enable compatibility with CommonJS modules
+    "allowSyntheticDefaultImports": true, // Allow default imports from modules without them
+
+    /* Other Useful Settings */
+    "resolveJsonModule": true, // If you're importing JSON files
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]

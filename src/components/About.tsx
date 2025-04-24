@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 
 const About = () => {
@@ -9,12 +8,10 @@ const About = () => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('animate-fade-in-up');
-            // Ensure visibility
-            if (entry.target instanceof HTMLElement) {
-              entry.target.style.visibility = 'visible';
-              entry.target.style.opacity = '1';
-            }
+            const target = entry.target as HTMLElement;
+            target.classList.add('animate-fade-in-up');
+            target.style.visibility = 'visible';
+            target.style.opacity = '1';
           }
         });
       },
@@ -24,10 +21,9 @@ const About = () => {
     const elements = document.querySelectorAll('.about-animate');
     elements.forEach((el) => observer.observe(el));
 
-    // Explicitly ensure the section is visible
+    // Ensure the section itself is visible
     if (sectionRef.current) {
       sectionRef.current.style.visibility = 'visible';
-      sectionRef.current.style.display = 'block';
       sectionRef.current.style.position = 'relative';
       sectionRef.current.style.zIndex = '1';
     }
@@ -68,17 +64,16 @@ const About = () => {
   ];
 
   return (
-    <section 
-      id="about" 
-      ref={sectionRef} 
-      className="py-20 bg-gradient-to-b from-black to-gsai-gray-900"
-      style={{ position: 'relative', zIndex: 1, visibility: 'visible' }}
+    <section
+      id="about"
+      ref={sectionRef}
+      className="py-20 bg-gradient-to-b from-black to-gsai-gray-900 section-visible"
     >
       <div className="gsai-container">
         <div className="text-center mb-16">
           <h2 className="section-title text-white about-animate opacity-0">About Us</h2>
           <div className="w-24 h-1 bg-gsai-red mx-auto mt-4 mb-8"></div>
-          
+
           <div className="max-w-3xl mx-auto about-animate opacity-0" style={{ animationDelay: '0.2s' }}>
             <p className="text-gray-300 text-lg mb-6">
               Ghatak Sports Academy India™ (GSAI) is a premier martial arts institution dedicated to transforming lives through disciplined training and personal development.
@@ -102,7 +97,7 @@ const About = () => {
             </div>
           ))}
         </div>
-        
+
         <div className="mt-20 text-center about-animate opacity-0" style={{ animationDelay: '0.9s' }}>
           <h3 className="text-2xl text-white mb-6">Our Mission</h3>
           <p className="text-gray-300 text-lg max-w-3xl mx-auto">

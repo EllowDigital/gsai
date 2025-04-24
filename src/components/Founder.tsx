@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 
 const Founder = () => {
@@ -8,6 +7,11 @@ const Founder = () => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add('animate-fade-in-up');
+            // Ensure visibility
+            if (entry.target instanceof HTMLElement) {
+              entry.target.style.visibility = 'visible';
+              entry.target.style.opacity = '1';
+            }
           }
         });
       },
@@ -35,9 +39,14 @@ const Founder = () => {
             <div className="flip-card-inner">
               <div className="flip-card-front flex items-center justify-center">
                 <div className="text-center p-6">
-                  <svg className="w-24 h-24 mx-auto text-white mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
+                  {/* Founder image */}
+                  <div className="mb-6">
+                    <img
+                      src="/images/founder.webp" // Add the path to the image
+                      alt="Founder - Nitesh Yadav"
+                      className="w-24 h-24 rounded-full mx-auto object-cover"
+                    />
+                  </div>
                   <h3 className="text-2xl font-bold text-white mb-2">Mr. Nitesh Yadav</h3>
                   <p className="text-gsai-gold">Founder & Chief Instructor</p>
                   <p className="text-white/70 mt-4">Hover to reveal message</p>
@@ -58,7 +67,7 @@ const Founder = () => {
           <div className="max-w-xl founder-animate opacity-0" style={{ animationDelay: '0.2s' }}>
             <h3 className="text-2xl font-bold text-white mb-4">A Legacy of Excellence</h3>
             <p className="text-gray-300 mb-6">
-              With over 15 years of experience in martial arts, Mr. Nitesh Yadav established Ghatak Sports Academy India™ with a vision to create a center of excellence for martial arts training in India.
+              With over 8 years of experience in martial arts, Mr. Nitesh Yadav established Ghatak Sports Academy India™ with a vision to create a center of excellence for martial arts training in India.
             </p>
             <p className="text-gray-300 mb-6">
               His expertise spans multiple disciplines including Karate, Taekwondo, and MMA, earning him national and international recognition.

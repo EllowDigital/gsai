@@ -1,5 +1,4 @@
-
-import React, { Suspense, lazy, useEffect } from 'react';
+import React, { Suspense, lazy, useEffect, useState } from 'react';
 import NavBar from '@/components/NavBar';
 import Hero from '@/components/Hero';
 
@@ -21,62 +20,71 @@ const SectionLoader = () => (
 );
 
 const Index = () => {
-  // Force sections to be visible after component mount
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Ensure components mount after the initial render for better UX
   useEffect(() => {
-    // Set a timeout to ensure DOM is fully loaded
-    const timer = setTimeout(() => {
-      const sections = document.querySelectorAll('section');
-      sections.forEach(section => {
-        section.style.visibility = 'visible';
-        section.style.display = 'block';
-      });
-    }, 500);
-    
-    return () => clearTimeout(timer);
+    setIsMounted(true);
   }, []);
-  
+
   return (
     <div className="font-sans min-h-screen bg-black overflow-x-hidden">
       <NavBar />
-      
+
       {/* Hero section */}
       <div className="relative">
         <Hero />
       </div>
-      
-      {/* Content sections with proper stacking context */}
+
+      {/* Content sections with lazy loading */}
       <div className="relative">
-        <Suspense fallback={<SectionLoader />}>
-          <About />
-        </Suspense>
-        
-        <Suspense fallback={<SectionLoader />}>
-          <Founder />
-        </Suspense>
-        
-        <Suspense fallback={<SectionLoader />}>
-          <Programs />
-        </Suspense>
-        
-        <Suspense fallback={<SectionLoader />}>
-          <Gallery />
-        </Suspense>
-        
-        <Suspense fallback={<SectionLoader />}>
-          <FAQ />
-        </Suspense>
-        
-        <Suspense fallback={<SectionLoader />}>
-          <Contact />
-        </Suspense>
-        
-        <Suspense fallback={<SectionLoader />}>
-          <Affiliations />
-        </Suspense>
-        
-        <Suspense fallback={<SectionLoader />}>
-          <Footer />
-        </Suspense>
+        {isMounted && (
+          <Suspense fallback={<SectionLoader />}>
+            <About />
+          </Suspense>
+        )}
+
+        {isMounted && (
+          <Suspense fallback={<SectionLoader />}>
+            <Founder />
+          </Suspense>
+        )}
+
+        {isMounted && (
+          <Suspense fallback={<SectionLoader />}>
+            <Programs />
+          </Suspense>
+        )}
+
+        {isMounted && (
+          <Suspense fallback={<SectionLoader />}>
+            <Gallery />
+          </Suspense>
+        )}
+
+        {isMounted && (
+          <Suspense fallback={<SectionLoader />}>
+            <FAQ />
+          </Suspense>
+        )}
+
+        {isMounted && (
+          <Suspense fallback={<SectionLoader />}>
+            <Contact />
+          </Suspense>
+        )}
+
+        {isMounted && (
+          <Suspense fallback={<SectionLoader />}>
+            <Affiliations />
+          </Suspense>
+        )}
+
+        {isMounted && (
+          <Suspense fallback={<SectionLoader />}>
+            <Footer />
+          </Suspense>
+        )}
       </div>
     </div>
   );
