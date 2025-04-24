@@ -1,50 +1,51 @@
-import { defineConfig } from 'vite'; // Add this line to import defineConfig
-import path from 'path';
-import react from '@vitejs/plugin-react-swc';
-import { componentTagger } from 'lovable-tagger';
+import { defineConfig } from "vite"; // Import defineConfig from Vite
+import path from "path";
+import react from "@vitejs/plugin-react-swc";
+import { componentTagger } from "lovable-tagger";
 
 export default defineConfig(async ({ mode }) => {
-  const isDev = mode === 'development';
-  const isGitHub = process.env.DEPLOY_TARGET === 'github';
-  const base = isDev ? '/' : isGitHub ? '/gsai-webv3/' : '/';
+  const isDev = mode === "development"; // Check if the environment is development
+  const isGitHub = process.env.DEPLOY_TARGET === "github"; // Check if deployment target is GitHub
+  const base = isDev ? "/" : isGitHub ? "/gsai-webv3/" : "/"; // Set base URL for correct path resolution
 
   // Plugins array with dynamic import of tempo-devtools
-  const plugins = [react()];
+  const plugins = [react()]; // Add React plugin
 
   if (isDev) {
     try {
-      const { tempo } = await import('tempo-devtools/dist/vite');
+      // Dynamically import tempo-devtools during development if it exists
+      const { tempo } = await import("tempo-devtools/dist/vite");
       plugins.push(tempo());
     } catch {
-      console.warn('⚠️ tempo-devtools not found, skipping...');
+      console.warn("⚠️ tempo-devtools not found, skipping...");
     }
 
-    plugins.push(componentTagger());
+    plugins.push(componentTagger()); // Add lovable-tagger plugin for component tagging
   }
 
   return {
-    base,
+    base, // Ensure correct base path
     server: {
-      host: '::',
-      port: 8080,
-      open: true,
-      strictPort: true,
+      host: "::", // Allow for IPv6
+      port: 8080, // Set server port to 8080
+      open: true, // Automatically open the browser
+      strictPort: true, // Ensure the server uses the exact port specified
     },
-    plugins,
+    plugins, // Include all configured plugins
     resolve: {
-      preserveSymlinks: true,
+      preserveSymlinks: true, // Avoid issues with symlinked modules
       alias: {
-        '@': path.resolve(__dirname, 'src'),
-        three: path.resolve(__dirname, 'node_modules/three'),
+        "@": path.resolve(__dirname, "src"), // Create alias for src directory
+        three: path.resolve(__dirname, "node_modules/three"), // Alias for three.js
       },
     },
     build: {
-      minify: 'esbuild',
-      sourcemap: isDev,
+      minify: "esbuild", // Use esbuild for minification
+      sourcemap: isDev, // Enable sourcemaps only in development
     },
     optimizeDeps: {
-      include: ['three'],
-      entries: ['src/main.tsx', 'src/tempobook/**/*'],
+      include: ["three"], // Pre-bundle three.js for faster dev builds
+      entries: ["src/main.tsx", "src/tempobook/**/*"], // Include specific entry points
     },
   };
 });
