@@ -17,21 +17,31 @@ const Hero = () => {
   };
 
   return (
-    <div id="hero" ref={heroRef} className="relative h-screen flex items-center justify-center overflow-hidden bg-black">
-      {/* Particle background */}
-      <HeroParticles parentRef={heroRef} />
+    <div 
+      id="hero" 
+      ref={heroRef} 
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black"
+    >
+      {/* Particle background with lower z-index */}
+      <div className="absolute inset-0 z-0">
+        <HeroParticles parentRef={heroRef} />
+      </div>
       
-      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/60 to-black z-10" />
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/60 to-black z-1" />
       
-      {/* Animated martial artist SVG */}
-      <div className="absolute z-10 bottom-0 left-0 md:left-[10%] h-[60vh] lg:h-[70vh] opacity-70">
+      {/* Martial artist SVG */}
+      <div className="absolute z-2 bottom-0 left-0 md:left-[10%] h-[60vh] lg:h-[70vh] opacity-70">
         <MartialArtistSVG />
       </div>
       
-      {/* Decorative floating elements */}
-      <DecorativeIcons />
+      {/* Decorative elements */}
+      <div className="relative z-3">
+        <DecorativeIcons />
+      </div>
       
-      <div className="gsai-container relative z-20 text-center">
+      {/* Content */}
+      <div className="gsai-container relative z-4 text-center">
         <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-4 text-white animate-float">
           Welcome to
           <div className="mt-2">
@@ -47,6 +57,7 @@ const Hero = () => {
         
         <CTAButton onClick={scrollToContact} label="Join Now" />
         
+        {/* Scroll indicator */}
         <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
           <a href="#about" className="text-white/70 hover:text-white">
             <svg 
@@ -54,7 +65,6 @@ const Hero = () => {
               fill="none" 
               stroke="currentColor" 
               viewBox="0 0 24 24" 
-              xmlns="http://www.w3.org/2000/svg"
             >
               <path 
                 strokeLinecap="round" 
