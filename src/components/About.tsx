@@ -10,6 +10,11 @@ const About = () => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add('animate-fade-in-up');
+            // Ensure visibility
+            if (entry.target instanceof HTMLElement) {
+              entry.target.style.visibility = 'visible';
+              entry.target.style.opacity = '1';
+            }
           }
         });
       },
@@ -18,6 +23,14 @@ const About = () => {
 
     const elements = document.querySelectorAll('.about-animate');
     elements.forEach((el) => observer.observe(el));
+
+    // Explicitly ensure the section is visible
+    if (sectionRef.current) {
+      sectionRef.current.style.visibility = 'visible';
+      sectionRef.current.style.display = 'block';
+      sectionRef.current.style.position = 'relative';
+      sectionRef.current.style.zIndex = '1';
+    }
 
     return () => {
       elements.forEach((el) => observer.unobserve(el));
@@ -55,7 +68,12 @@ const About = () => {
   ];
 
   return (
-    <section id="about" ref={sectionRef} className="py-20 bg-gradient-to-b from-black to-gsai-gray-900">
+    <section 
+      id="about" 
+      ref={sectionRef} 
+      className="py-20 bg-gradient-to-b from-black to-gsai-gray-900"
+      style={{ position: 'relative', zIndex: 1, visibility: 'visible' }}
+    >
       <div className="gsai-container">
         <div className="text-center mb-16">
           <h2 className="section-title text-white about-animate opacity-0">About Us</h2>

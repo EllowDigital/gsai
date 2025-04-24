@@ -21,27 +21,28 @@ const Hero = () => {
       id="hero" 
       ref={heroRef} 
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black"
+      style={{ zIndex: 1 }}
     >
-      {/* Particle background with lower z-index */}
-      <div className="absolute inset-0 z-0">
+      {/* Particle background */}
+      <div className="absolute inset-0" style={{ zIndex: -1 }}>
         <HeroParticles parentRef={heroRef} />
       </div>
       
       {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/60 to-black z-1" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/60 to-black" style={{ zIndex: -1 }} />
       
       {/* Martial artist SVG */}
-      <div className="absolute z-2 bottom-0 left-0 md:left-[10%] h-[60vh] lg:h-[70vh] opacity-70">
+      <div className="absolute bottom-0 left-0 md:left-[10%] h-[60vh] lg:h-[70vh] opacity-70" style={{ zIndex: 1 }}>
         <MartialArtistSVG />
       </div>
       
       {/* Decorative elements */}
-      <div className="relative z-3">
+      <div className="relative" style={{ zIndex: 1 }}>
         <DecorativeIcons />
       </div>
       
       {/* Content */}
-      <div className="gsai-container relative z-4 text-center">
+      <div className="gsai-container relative text-center" style={{ zIndex: 2 }}>
         <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-4 text-white animate-float">
           Welcome to
           <div className="mt-2">

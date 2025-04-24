@@ -1,5 +1,5 @@
 
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useEffect } from 'react';
 import NavBar from '@/components/NavBar';
 import Hero from '@/components/Hero';
 
@@ -21,17 +21,31 @@ const SectionLoader = () => (
 );
 
 const Index = () => {
+  // Force sections to be visible after component mount
+  useEffect(() => {
+    // Set a timeout to ensure DOM is fully loaded
+    const timer = setTimeout(() => {
+      const sections = document.querySelectorAll('section');
+      sections.forEach(section => {
+        section.style.visibility = 'visible';
+        section.style.display = 'block';
+      });
+    }, 500);
+    
+    return () => clearTimeout(timer);
+  }, []);
+  
   return (
-    <div className="font-sans min-h-screen bg-black">
+    <div className="font-sans min-h-screen bg-black overflow-x-hidden">
       <NavBar />
       
-      {/* Hero section with adjusted z-index */}
-      <section className="relative z-10">
+      {/* Hero section */}
+      <div className="relative">
         <Hero />
-      </section>
+      </div>
       
-      {/* Content sections with higher z-index */}
-      <div className="relative z-20">
+      {/* Content sections with proper stacking context */}
+      <div className="relative">
         <Suspense fallback={<SectionLoader />}>
           <About />
         </Suspense>
