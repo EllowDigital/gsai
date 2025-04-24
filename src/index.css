@@ -141,6 +141,10 @@
        1px  1px 0 #000;
   }
   
+  .decorative-icon {
+    @apply absolute w-12 h-12 flex items-center justify-center animate-float;
+  }
+
   /* Particle animation */
   .particle {
     position: absolute;
@@ -195,6 +199,71 @@
     background-repeat: no-repeat;
     background-size: cover;
   }
+}
+
+/* Animation for martial artist SVG */
+@keyframes kick {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(-30deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes punch {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(20px); }
+  100% { transform: translateX(0); }
+}
+
+.arm-right {
+  animation: punch 2s infinite;
+}
+
+.leg-kicking {
+  animation: kick 1.5s infinite;
+  transform-origin: 150px 300px;
+}
+
+.animate-martial-artist {
+  filter: drop-shadow(0 0 15px rgba(234, 56, 76, 0.5));
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0% { box-shadow: 0 0 5px rgba(234, 56, 76, 0.5); }
+  50% { box-shadow: 0 0 20px rgba(234, 56, 76, 0.8); }
+  100% { box-shadow: 0 0 5px rgba(234, 56, 76, 0.5); }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s infinite;
+}
+
+@keyframes gradient-x {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.animate-gradient-x {
+  animation: gradient-x 3s infinite;
+}
+
+@keyframes orbit {
+  0% { transform: rotate(0deg) translateX(50px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(50px) rotate(-360deg); }
+}
+
+.decorative-icon {
+  animation: orbit 10s linear infinite, float 3s ease-in-out infinite;
 }
 
 /* For Webkit browsers (Chrome, Safari) */
