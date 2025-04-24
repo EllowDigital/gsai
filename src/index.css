@@ -1,0 +1,337 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Color scheme definitions for light mode */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem; /* Global radius for rounded corners */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    /* Color scheme definitions for dark mode */
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  /* Universal reset and layout styling */
+  * {
+    @apply border-border; /* Apply default border color */
+  }
+
+  body {
+    @apply bg-background text-foreground overflow-x-hidden; /* Background and text color */
+    font-family: "Inter", sans-serif; /* Global font */
+  }
+
+  html {
+    @apply scroll-smooth; /* Smooth scrolling */
+  }
+}
+
+@layer components {
+  /* Utility class for container */
+  .gsai-container {
+    @apply container mx-auto px-4 md:px-8; /* Responsive container with padding */
+  }
+
+  /* GSAI Button - Red variant */
+  .gsai-btn {
+    @apply bg-gsai-red text-white py-3 px-6 rounded-md font-bold uppercase tracking-wider 
+           transition-all duration-300 hover:bg-opacity-90 relative overflow-hidden
+           before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-full
+           before:bg-white before:opacity-30 before:transform before:scale-x-0 before:origin-right
+           hover:before:scale-x-100 hover:before:origin-left before:transition-transform before:duration-500;
+  }
+
+  /* GSAI Button - Gold variant */
+  .gsai-btn-gold {
+    @apply bg-gsai-gold text-black py-3 px-6 rounded-md font-bold uppercase tracking-wider 
+           transition-all duration-300 hover:bg-opacity-90 relative overflow-hidden
+           before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-full
+           before:bg-white before:opacity-30 before:transform before:scale-x-0 before:origin-right
+           hover:before:scale-x-100 hover:before:origin-left before:transition-transform before:duration-500;
+  }
+
+  /* Glass card effect */
+  .glass-card {
+    @apply bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-20 
+          rounded-lg shadow-xl;
+  }
+
+  /* Section title with underline */
+  .section-title {
+    @apply text-4xl md:text-5xl font-bold mb-6 relative inline-block;
+  }
+
+  .section-title::after {
+    @apply content-[''] absolute bottom-0 left-0 h-1 w-1/2 bg-gsai-red;
+  }
+
+  @layer base {
+    /* Text outline for clear and defined typography */
+    .text-outline {
+      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+        1px 1px 0 #000;
+    }
+
+    /* Base animation for floating elements */
+    @keyframes float {
+      0% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+      100% {
+        transform: translateY(0px);
+      }
+    }
+
+    /* Glow animation for elements */
+    @keyframes pulse-glow {
+      0% {
+        box-shadow: 0 0 5px rgba(234, 56, 76, 0.5);
+      }
+      50% {
+        box-shadow: 0 0 20px rgba(234, 56, 76, 0.8);
+      }
+      100% {
+        box-shadow: 0 0 5px rgba(234, 56, 76, 0.5);
+      }
+    }
+
+    /* Horizontal gradient animation */
+    @keyframes gradient-x {
+      0% {
+        transform: translateX(-100%);
+      }
+      50% {
+        transform: translateX(100%);
+      }
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+
+    /* Parallax effect */
+    .parallax {
+      background-attachment: fixed;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    /* Scrollbar customization for Webkit browsers */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #000;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #ea384c;
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #c0292b;
+    }
+  }
+
+  @layer components {
+    /* Decorative icon with floating animation */
+    .decorative-icon {
+      @apply absolute w-12 h-12 flex items-center justify-center;
+      animation: orbit 10s linear infinite, float 3s ease-in-out infinite;
+    }
+
+    /* Particle effect for background */
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      pointer-events: none;
+      transform-origin: center center;
+    }
+
+    /* Flip card styles */
+    .flip-card {
+      perspective: 1000px;
+      width: 300px;
+      height: 400px;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+    }
+
+    .flip-card:hover .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front,
+    .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 15px;
+      overflow: hidden;
+    }
+
+    .flip-card-front {
+      background: linear-gradient(45deg, #ea384c, #000000);
+    }
+
+    .flip-card-back {
+      transform: rotateY(180deg);
+      background: linear-gradient(45deg, #000000, #daa520);
+    }
+
+    /* Floating animation for elements */
+    .animate-float {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    /* Pulse glow animation for elements */
+    .animate-pulse-glow {
+      animation: pulse-glow 2s infinite;
+    }
+
+    /* Horizontal sliding gradient effect */
+    .animate-gradient-x {
+      animation: gradient-x 3s infinite;
+    }
+
+    /* Animation for martial artist movements */
+    @keyframes kick {
+      0% {
+        transform: rotate(0deg);
+      }
+      50% {
+        transform: rotate(-30deg);
+      }
+      100% {
+        transform: rotate(0deg);
+      }
+    }
+
+    @keyframes punch {
+      0% {
+        transform: translateX(0);
+      }
+      50% {
+        transform: translateX(20px);
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+    .arm-right {
+      animation: punch 2s infinite;
+    }
+
+    .leg-kicking {
+      animation: kick 1.5s infinite;
+      transform-origin: 150px 300px;
+    }
+
+    /* Drop shadow effect for martial artist animation */
+    .animate-martial-artist {
+      filter: drop-shadow(0 0 15px rgba(234, 56, 76, 0.5));
+    }
+
+    /* Slide-up animation for elements */
+    @keyframes slideFromBottom {
+      0% {
+        transform: translateY(100px);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .animate-slide-from-bottom {
+      animation: slideFromBottom 1s ease forwards;
+    }
+
+    /* Navbar show/hide animation */
+    @keyframes slideDown {
+      from {
+        transform: translateY(-100%);
+      }
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    .navbar-visible {
+      animation: slideDown 0.3s ease-in-out forwards;
+    }
+  }
+}
