@@ -1,5 +1,6 @@
 
 import React, { useEffect, useRef } from 'react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface HeroParticlesProps {
   parentRef: React.RefObject<HTMLDivElement>;
@@ -7,6 +8,7 @@ interface HeroParticlesProps {
 
 const HeroParticles: React.FC<HeroParticlesProps> = ({ parentRef }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const isMobile = useIsMobile();
   
   useEffect(() => {
     // Particle animation
@@ -37,16 +39,18 @@ const HeroParticles: React.FC<HeroParticlesProps> = ({ parentRef }) => {
 
     const initParticles = () => {
       particles = [];
-      const particleCount = Math.floor((canvas.width * canvas.height) / 15000); // Adjust for density
+      // Reduce particle count on mobile for better performance
+      const densityFactor = isMobile ? 30000 : 15000;
+      const particleCount = Math.floor((canvas.width * canvas.height) / densityFactor);
       
       for (let i = 0; i < particleCount; i++) {
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          radius: Math.random() * 3 + 1,
+          radius: Math.random() * (isMobile ? 2 : 3) + 1,
           color: `rgba(234, 56, 76, ${Math.random() * 0.5 + 0.3})`, // Red theme color with varying opacity
-          speedX: Math.random() * 2 - 1,
-          speedY: Math.random() * 2 - 1,
+          speedX: Math.random() * 1.5 - 0.75, // Reduced speed for better performance
+          speedY: Math.random() * 1.5 - 0.75, // Reduced speed for better performance
           connected: [],
         });
       }
@@ -76,21 +80,27 @@ const HeroParticles: React.FC<HeroParticlesProps> = ({ parentRef }) => {
         ctx.fillStyle = particle.color;
         ctx.fill();
         
-        // Connect particles
+        // Connect particles - reduce connection distance on mobile
+        const connectionDistance = isMobile ? 60 : 100;
         particle.connected = [];
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[j].x - particle.x;
-          const dy = particles[j].y - particle.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          
-          if (distance < 100) {
-            particle.connected.push(j);
-            ctx.beginPath();
-            ctx.moveTo(particle.x, particle.y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(234, 56, 76, ${1 - distance / 100})`;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
+        
+        // Skip some connections on mobile for performance
+        const skipFactor = isMobile ? 2 : 1;
+        if (i % skipFactor === 0) {
+          for (let j = i + 1; j < particles.length; j += skipFactor) {
+            const dx = particles[j].x - particle.x;
+            const dy = particles[j].y - particle.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance < connectionDistance) {
+              particle.connected.push(j);
+              ctx.beginPath();
+              ctx.moveTo(particle.x, particle.y);
+              ctx.lineTo(particles[j].x, particles[j].y);
+              ctx.strokeStyle = `rgba(234, 56, 76, ${1 - distance / connectionDistance})`;
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
           }
         }
       });
@@ -106,7 +116,7 @@ const HeroParticles: React.FC<HeroParticlesProps> = ({ parentRef }) => {
       window.removeEventListener('resize', resizeCanvas);
       cancelAnimationFrame(animationFrameId);
     };
-  }, [parentRef]);
+  }, [parentRef, isMobile]);
 
   return <canvas ref={canvasRef} className="absolute inset-0 z-0" />;
 };

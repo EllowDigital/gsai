@@ -24,7 +24,7 @@ const Hero = () => {
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/60 to-black z-10" />
       
       {/* Animated martial artist SVG */}
-      <div className="absolute z-10 bottom-0 left-0 md:left-[10%] h-[60vh] opacity-70">
+      <div className="absolute z-10 bottom-0 left-0 md:left-[10%] h-[60vh] lg:h-[70vh] opacity-70">
         <MartialArtistSVG />
       </div>
       
@@ -32,7 +32,7 @@ const Hero = () => {
       <DecorativeIcons />
       
       <div className="gsai-container relative z-20 text-center">
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 text-white animate-float">
+        <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-4 text-white animate-float">
           Welcome to
           <div className="mt-2">
             <span className="text-gsai-red">Ghatak </span>
@@ -41,7 +41,7 @@ const Hero = () => {
           </div>
         </h1>
         
-        <p className="text-xl md:text-2xl text-white/80 mb-8 max-w-3xl mx-auto">
+        <p className="text-lg sm:text-xl md:text-2xl text-white/80 mb-8 max-w-3xl mx-auto">
           Empowering Lives Through Martial Arts
         </p>
         
@@ -50,7 +50,7 @@ const Hero = () => {
         <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
           <a href="#about" className="text-white/70 hover:text-white">
             <svg 
-              className="w-8 h-8" 
+              className="w-6 h-6 sm:w-8 sm:h-8" 
               fill="none" 
               stroke="currentColor" 
               viewBox="0 0 24 24" 
