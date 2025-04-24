@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -35,19 +36,12 @@
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
@@ -96,6 +90,157 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-black text-foreground overflow-x-hidden;
+    font-family: 'Inter', sans-serif;
   }
+
+  html {
+    @apply scroll-smooth;
+  }
+}
+
+@layer components {
+  .gsai-container {
+    @apply container mx-auto px-4 md:px-8;
+  }
+
+  .gsai-btn {
+    @apply bg-gsai-red text-white py-3 px-6 rounded-md font-bold uppercase tracking-wider 
+           transition-all duration-300 hover:bg-opacity-90 relative overflow-hidden
+           before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-full
+           before:bg-white before:opacity-30 before:transform before:scale-x-0 before:origin-right
+           hover:before:scale-x-100 hover:before:origin-left before:transition-transform before:duration-500;
+  }
+
+  .gsai-btn-gold {
+    @apply bg-gsai-gold text-black py-3 px-6 rounded-md font-bold uppercase tracking-wider 
+           transition-all duration-300 hover:bg-opacity-90 relative overflow-hidden
+           before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-full
+           before:bg-white before:opacity-30 before:transform before:scale-x-0 before:origin-right
+           hover:before:scale-x-100 hover:before:origin-left before:transition-transform before:duration-500;
+  }
+
+  .glass-card {
+    @apply bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-20 
+          rounded-lg shadow-xl;
+  }
+
+  .section-title {
+    @apply text-4xl md:text-5xl font-bold mb-6 relative inline-block;
+  }
+
+  .section-title::after {
+    @apply content-[''] absolute bottom-0 left-0 h-1 w-1/2 bg-gsai-red;
+  }
+
+  .text-outline {
+    text-shadow: 
+      -1px -1px 0 #000,  
+       1px -1px 0 #000,
+      -1px  1px 0 #000,
+       1px  1px 0 #000;
+  }
+  
+  /* Particle animation */
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    pointer-events: none;
+    transform-origin: center center;
+  }
+
+  /* Flip Card Styles */
+  .flip-card {
+    perspective: 1000px;
+    width: 300px;
+    height: 400px;
+  }
+  
+  .flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+  }
+  
+  .flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg);
+  }
+  
+  .flip-card-front, .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 15px;
+    overflow: hidden;
+  }
+  
+  .flip-card-front {
+    background: linear-gradient(45deg, #ea384c, #000000);
+  }
+  
+  .flip-card-back {
+    transform: rotateY(180deg);
+    background: linear-gradient(45deg, #000000, #DAA520);
+  }
+
+  /* Parallax effect */
+  .parallax {
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+}
+
+/* For Webkit browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ea384c;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #c0292b;
+}
+
+/* Add more animations */
+@keyframes slideFromBottom {
+  0% {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-from-bottom {
+  animation: slideFromBottom 1s ease forwards;
+}
+
+/* Navbar show/hide animation */
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.navbar-visible {
+  animation: slideDown 0.3s ease-in-out forwards;
 }
