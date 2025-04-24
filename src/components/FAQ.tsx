@@ -62,6 +62,11 @@ const FAQ = () => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add('animate-fade-in-up');
+            // Ensure visibility
+            if (entry.target instanceof HTMLElement) {
+              entry.target.style.visibility = 'visible';
+              entry.target.style.opacity = '1';
+            }
           }
         });
       },

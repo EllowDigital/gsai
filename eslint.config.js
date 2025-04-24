@@ -4,26 +4,31 @@ import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 
+const recommendedRules = {
+  ...reactHooks.configs.recommended.rules,
+  "react-refresh/only-export-components": [
+    "warn", 
+    { allowConstantExport: true }
+  ],
+  "@typescript-eslint/no-unused-vars": "off",
+};
+
 export default tseslint.config(
   { ignores: ["dist"] },
   {
-    extends: [js.configs.recommended, ...tseslint.configs.recommended],
-    files: ["**/*.{ts,tsx}"],
+    extends: [
+      js.configs.recommended,
+      ...tseslint.configs.recommended, // Spreading recommended configs from typescript-eslint
+    ],
+    files: ["**/*.{ts,tsx}"], // Apply to TypeScript files only
     languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
+      ecmaVersion: 2020, // Ensure ECMAScript 2020 syntax support
+      globals: globals.browser, // Use browser globals for compatibility
     },
     plugins: {
-      "react-hooks": reactHooks,
-      "react-refresh": reactRefresh,
+      "react-hooks": reactHooks, // Include React Hooks plugin for hook-related rules
+      "react-refresh": reactRefresh, // Include React Refresh plugin for hot reloading
     },
-    rules: {
-      ...reactHooks.configs.recommended.rules,
-      "react-refresh/only-export-components": [
-        "warn",
-        { allowConstantExport: true },
-      ],
-      "@typescript-eslint/no-unused-vars": "off",
-    },
+    rules: recommendedRules, // Apply the combined rules
   }
 );

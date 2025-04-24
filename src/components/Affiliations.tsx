@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 
 const Affiliations = () => {
@@ -10,6 +9,11 @@ const Affiliations = () => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add('animate-fade-in-up');
+            // Ensure visibility
+            if (entry.target instanceof HTMLElement) {
+              entry.target.style.visibility = 'visible';
+              entry.target.style.opacity = '1';
+            }
           }
         });
       },
@@ -27,12 +31,12 @@ const Affiliations = () => {
   useEffect(() => {
     let scrollInterval: ReturnType<typeof setInterval>;
     const carousel = carouselRef.current;
-    
+
     const startCarousel = () => {
       if (carousel) {
         scrollInterval = setInterval(() => {
           carousel.scrollLeft += 1;
-          
+
           // Reset scroll position when reaching the end
           if (carousel.scrollLeft >= (carousel.scrollWidth - carousel.clientWidth)) {
             carousel.scrollLeft = 0;
@@ -59,13 +63,20 @@ const Affiliations = () => {
   }, []);
 
   const affiliations = [
-    { name: 'Government of India', logo: 'https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=300&h=200&fit=crop' },
-    { name: 'Fit India Movement', logo: 'https://images.unsplash.com/photo-1574680178050-55c6a6a96e0a?w=300&h=200&fit=crop' },
-    { name: 'Khelo India', logo: 'https://images.unsplash.com/flagged/photo-1575517111839-3a3843ee7f5d?w=300&h=200&fit=crop' },
-    { name: 'World Karate Federation', logo: 'https://images.unsplash.com/photo-1555597673-b21d5c935865?w=300&h=200&fit=crop' },
-    { name: 'International Boxing Association', logo: 'https://images.unsplash.com/photo-1517438322307-e67111335449?w=300&h=200&fit=crop' },
-    { name: 'World Taekwondo', logo: 'https://images.unsplash.com/photo-1631194758628-71ec7c35137e?w=300&h=200&fit=crop' },
+    { name: 'Government of India', logo: '/images/india.png' },
+    { name: 'Ministry of Youth Affairs and Sports', logo: '/images/ministry.png' },
+    { name: 'MSME Certification', logo: '/images/MSME.png' },
+    { name: 'ISO Certified', logo: '/images/iso.png' },
+    { name: 'Fit India Movement', logo: '/images/fit-india.png' },
+    { name: 'Khelo India Program', logo: '/images/khelo-india.png' },
+    { name: 'School Games Federation of India', logo: '/images/SGF.png' },
+    { name: 'Taekwondo Federation of India', logo: '/images/takewondo.png' },
+    { name: 'Uttar Pradesh Olympic Association', logo: '/images/up-olympic.png' },
+    { name: 'UP Kalaripayattu Association', logo: '/images/up-kalarippayattu.png' },
+    { name: 'Kalaripayattu Association Event', logo: '/images/IMG-20250404-WA0015.png' },
+    { name: 'Ghatak Sports Academy Logo', logo: '/images/logo.png' },
   ];
+
 
   return (
     <section className="py-20 bg-black">
@@ -78,29 +89,29 @@ const Affiliations = () => {
           </p>
         </div>
 
-        <div 
-          ref={carouselRef} 
+        <div
+          ref={carouselRef}
           className="flex overflow-x-hidden py-8 affiliation-animate opacity-0"
           style={{ animationDelay: '0.4s' }}
         >
           <div className="flex space-x-8 animate-scroll">
             {affiliations.map((affiliation, index) => (
               <div key={index} className="min-w-[200px] glass-card p-4 flex flex-col items-center">
-                <img 
-                  src={affiliation.logo} 
-                  alt={affiliation.name} 
+                <img
+                  src={affiliation.logo}
+                  alt={affiliation.name}
                   className="w-32 h-32 object-cover rounded-lg mb-4"
                 />
                 <p className="text-white text-center">{affiliation.name}</p>
               </div>
             ))}
-            
+
             {/* Duplicate items for smooth infinite scrolling */}
             {affiliations.map((affiliation, index) => (
               <div key={`dup-${index}`} className="min-w-[200px] glass-card p-4 flex flex-col items-center">
-                <img 
-                  src={affiliation.logo} 
-                  alt={affiliation.name} 
+                <img
+                  src={affiliation.logo}
+                  alt={affiliation.name}
                   className="w-32 h-32 object-cover rounded-lg mb-4"
                 />
                 <p className="text-white text-center">{affiliation.name}</p>

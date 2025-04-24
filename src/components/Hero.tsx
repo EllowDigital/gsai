@@ -1,10 +1,8 @@
-
-import React, { useEffect, useRef } from 'react';
-import { MedalIcon, TrophyIcon, AwardIcon, Star } from 'lucide-react';
+import React, { useRef } from 'react';
 import HeroParticles from './HeroParticles';
-import MartialArtistSVG from './MartialArtistSVG';
+// import MartialArtistSVG from './MartialArtistSVG';
 import CTAButton from './CTAButton';
-import DecorativeIcons from './DecorativeIcons';
+// import DecorativeIcons from './DecorativeIcons';
 
 const Hero = () => {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -17,32 +15,31 @@ const Hero = () => {
   };
 
   return (
-    <div 
-      id="hero" 
-      ref={heroRef} 
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black"
-      style={{ zIndex: 1 }}
+    <div
+      id="hero"
+      ref={heroRef}
+      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-black"
     >
       {/* Particle background */}
-      <div className="absolute inset-0" style={{ zIndex: -1 }}>
+      <div className="absolute inset-0 z-0">
         <HeroParticles parentRef={heroRef} />
       </div>
-      
+
       {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/60 to-black" style={{ zIndex: -1 }} />
-      
-      {/* Martial artist SVG */}
-      <div className="absolute bottom-0 left-0 md:left-[10%] h-[60vh] lg:h-[70vh] opacity-70" style={{ zIndex: 1 }}>
+      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/60 to-black z-10" />
+
+      {/* Martial artist SVG
+      <div className="absolute bottom-0 left-0 md:left-[10%] h-[60vh] lg:h-[70vh] opacity-70 z-20">
         <MartialArtistSVG />
-      </div>
-      
-      {/* Decorative elements */}
-      <div className="relative" style={{ zIndex: 1 }}>
+      </div> */}
+
+      {/* Decorative elements
+      <div className="relative z-30">
         <DecorativeIcons />
-      </div>
-      
-      {/* Content */}
-      <div className="gsai-container relative text-center" style={{ zIndex: 2 }}>
+      </div> */}
+
+      {/* Main content */}
+      <div className="gsai-container relative text-center z-40 flex flex-col items-center">
         <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-4 text-white animate-float">
           Welcome to
           <div className="mt-2">
@@ -51,26 +48,32 @@ const Hero = () => {
             <span className="text-gsai-gold"> India™</span>
           </div>
         </h1>
-        
+
         <p className="text-lg sm:text-xl md:text-2xl text-white/80 mb-8 max-w-3xl mx-auto">
           Empowering Lives Through Martial Arts
         </p>
-        
-        <CTAButton onClick={scrollToContact} label="Join Now" />
-        
+
+        {/* <CTAButton onClick={scrollToContact} label="Join Now" /> */}
+        <CTAButton
+          label="Join Now"
+          href="https://forms.gle/LTYn59kPWkQgC3VR7"
+        />
+
+
         {/* Scroll indicator */}
-        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <a href="#about" className="text-white/70 hover:text-white">
-            <svg 
-              className="w-6 h-6 sm:w-8 sm:h-8" 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24" 
+        <div className="mt-8 sm:mt-12 md:mt-16">
+          <a href="#about" className="text-white/70 hover:text-white animate-bounce">
+            <svg
+              className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              <path 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                strokeWidth={2} 
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
                 d="M19 14l-7 7m0 0l-7-7m7 7V3"
               />
             </svg>
