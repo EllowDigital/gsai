@@ -6,4 +6,11 @@
 [[redirects]]
   from = "/gsai-webv3/*"
   to = "/gsai-webv3/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
   status = 200
+  force = true
