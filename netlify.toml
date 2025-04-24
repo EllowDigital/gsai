@@ -8,9 +8,3 @@
   to = "/gsai-webv3/:splat"  # The `:splat` captures the rest of the path and redirects it.
   status = 301  # Permanent redirect.
   force = true  # Ensures this rule is applied even if there are other conflicting rules.
-
-[[redirects]]
-  from = "/*"  # Catch-all redirect for any other route.
-  to = "/index.html"  # Redirects to the root `index.html` page, typical for single-page applications.
-  status = 200  # HTTP 200, meaning the page is served normally.
-  force = true  # Ensures this rule is applied.
