@@ -1,33 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import './Preloader.css';  // Make sure the path is correct
+import React, { useEffect, useState } from 'react';
+import './Preloader.css';
 
-const Preloader: React.FC = () => {
-  const [isVisible, setIsVisible] = useState(true);
+interface PreloaderProps {
+  isVisible: boolean;
+}
+
+const Preloader: React.FC<PreloaderProps> = ({ isVisible }) => {
+  const [fadeOut, setFadeOut] = useState(false);
 
   useEffect(() => {
-    const handleLoad = () => {
-      setIsVisible(false);  // Hide the preloader when the page is fully loaded
-    };
+    // Hide the raw HTML preloader on mount
+    const htmlPreloader = document.getElementById('initial-preloader');
+    if (htmlPreloader) {
+      htmlPreloader.style.display = 'none';
+    }
 
-    // Attach the event listener for window load
-    window.addEventListener('load', handleLoad);
+    if (!isVisible) {
+      setFadeOut(true);
+      const timeout = setTimeout(() => {
+        const el = document.getElementById('preloader-container');
+        if (el) el.style.display = 'none';
+      }, 1000); // Same as fade-out duration
 
-    // Cleanup the event listener when component is unmounted
-    return () => {
-      window.removeEventListener('load', handleLoad);
-    };
-  }, []);
+      return () => clearTimeout(timeout); // Clean up if unmounted early
+    }
+  }, [isVisible]);
 
-  // If `isVisible` is `false`, the preloader won't render
+  if (!isVisible && !fadeOut) return null;
+
   return (
-    isVisible ? (
-      <div className="preloader-container">
-        <div className="preloader-wrapper">
-          <div className="preloader-circle"></div>
-          <div className="preloader-text">Ghatak Sports Academy</div>
-        </div>
+    <div
+      id="preloader-container"
+      className={`preloader-container ${fadeOut ? 'fade-out' : ''}`}
+    >
+      <div className="preloader-wrapper">
+        <div className="preloader-circle"></div>
+        <div className="preloader-text">Ghatak Sports Academy</div>
       </div>
-    ) : null
+    </div>
   );
 };
 

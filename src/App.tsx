@@ -14,39 +14,31 @@ const NotFound = React.lazy(() => import("./pages/NotFound"));
 const queryClient = new QueryClient();
 
 const App = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [showPreloader, setShowPreloader] = useState(true);
 
   useEffect(() => {
-    console.log('Initial loading state:', isLoading);
-
-    // Skip preloader if it's a reload
     if (performance.getEntriesByType("navigation")[0]?.type === "reload") {
-      setIsLoading(false);
+      setShowPreloader(false);
       return;
     }
 
-    // Show preloader for 2 seconds
     const timer = setTimeout(() => {
-      console.log('Preloader is now hidden');
-      setIsLoading(false);
-    }, 2000); // 2 seconds for testing
+      setShowPreloader(false);
+    }, 2000);
 
-    // Cleanup the timer on component unmount
     return () => clearTimeout(timer);
   }, []);
 
-  console.log('isLoading state:', isLoading);
-
   return (
     <>
-      {isLoading && <Preloader />} {/* Show preloader while loading */}
+      {/* Always render Preloader and control visibility inside it */}
+      <Preloader isVisible={showPreloader} />
 
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
           <Toaster />
           <Sonner />
           <BrowserRouter>
-            {/* Wrap <Routes> inside <Suspense> for lazy-loaded components */}
             <Suspense fallback={<div>Loading content...</div>}>
               <Routes>
                 <Route path="/" element={<Index />} />
@@ -54,8 +46,6 @@ const App = () => {
               </Routes>
             </Suspense>
           </BrowserRouter>
-
-          {/* Add the PWA updater here */}
           <PWA />
         </TooltipProvider>
       </QueryClientProvider>
