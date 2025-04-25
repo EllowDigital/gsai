@@ -4,9 +4,9 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle, RefreshCw, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { toast } from "@/components/ui/sonner"; // ✅ Toast notification
+import { toast } from "@/components/ui/sonner";
 
-// Temporary dummy implementation until PWA is properly setup
+// PWA implementation
 const PWA = () => {
   const [show, setShow] = useState(false);
 

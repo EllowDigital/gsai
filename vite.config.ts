@@ -1,18 +1,18 @@
-import { defineConfig } from "vite";
+
+import { defineConfig, type ConfigEnv, type PluginOption } from "vite";
 import path from "path";
 import react from "@vitejs/plugin-react-swc";
 import { componentTagger } from "lovable-tagger";
 import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
-export default defineConfig(async ({ mode }) => {
+export default defineConfig(({ mode }: ConfigEnv) => {
   const isDev = mode === "development";
   const isGitHub = process.env.DEPLOY_TARGET === "github";
   const base = isDev ? "/" : isGitHub ? "/gsai-webv3/" : "/";
 
-  const plugins = [
+  const plugins: PluginOption[] = [
     react(),
-
     VitePWA({
       registerType: "autoUpdate",
       includeAssets: [
@@ -91,12 +91,12 @@ export default defineConfig(async ({ mode }) => {
   if (isDev) {
     try {
       const { tempo } = await import("tempo-devtools/dist/vite");
-      plugins.push(tempo());
+      plugins.push(tempo() as PluginOption);
     } catch {
       console.warn("⚠️ tempo-devtools not found. Skipping...");
     }
 
-    plugins.push(componentTagger());
+    plugins.push(componentTagger() as PluginOption);
   }
 
   return {
