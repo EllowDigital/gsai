@@ -6,7 +6,7 @@ import { componentTagger } from "lovable-tagger";
 import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }: ConfigEnv) => {
+export default defineConfig(async ({ mode }: ConfigEnv) => {
   const isDev = mode === "development";
   const isGitHub = process.env.DEPLOY_TARGET === "github";
   const base = isDev ? "/" : isGitHub ? "/gsai-webv3/" : "/";
@@ -90,9 +90,12 @@ export default defineConfig(({ mode }: ConfigEnv) => {
   // Dev-only enhancements
   if (isDev) {
     try {
-      const { tempo } = await import("tempo-devtools/dist/vite");
-      plugins.push(tempo() as PluginOption);
-    } catch {
+      // Dynamic import for dev-only dependencies
+      const tempoModule = await import("tempo-devtools/dist/vite").catch(() => null);
+      if (tempoModule?.tempo) {
+        plugins.push(tempoModule.tempo() as PluginOption);
+      }
+    } catch (e) {
       console.warn("⚠️ tempo-devtools not found. Skipping...");
     }
 
@@ -118,12 +121,12 @@ export default defineConfig(({ mode }: ConfigEnv) => {
     build: {
       outDir: "dist",
       emptyOutDir: true,
-      minify: "esbuild",
+      minify: isDev ? false : "esbuild",
       sourcemap: isDev,
     },
     optimizeDeps: {
       include: ["three"],
-      entries: ["src/main.tsx", "src/tempobook/**/*"],
+      entries: ["src/main.tsx"],
     },
   };
 });

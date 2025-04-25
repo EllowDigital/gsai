@@ -6,11 +6,10 @@ import CTAButton from './CTAButton';
 import MartialArtistSVG from './MartialArtistSVG';
 
 const NavBar = () => {
-  const [isMounted, setIsMounted] = useState(false);
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    setIsMounted(true);
+    // No need to set isMounted here
   }, []);
 
   return (
