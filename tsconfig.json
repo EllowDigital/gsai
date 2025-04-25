@@ -9,15 +9,25 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "strict": true,
-    "noImplicitAny": true,
-    "noUnusedParameters": true,
-    "noUnusedLocals": true,
-    "strictNullChecks": true,
-    "skipLibCheck": true,
-    "allowJs": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true
+
+    /* Linting & Type Safety */
+    "strict": true, // Enable strict mode for better type safety
+    "noImplicitAny": true, // Avoid implicit `any` type
+    "noUnusedParameters": true, // Avoid unused function parameters
+    "noUnusedLocals": true, // Avoid unused variables
+
+    /* Strict Null Checks */
+    "strictNullChecks": true, // Enforce null and undefined checks for better reliability
+
+    /* Performance and Compatibility */
+    "skipLibCheck": true, // Skip checking type declarations in libraries (can improve build speed)
+    "allowJs": true, // Allow JavaScript files to be compiled (if necessary)
+
+    /* Interoperability */
+    "esModuleInterop": true, // Enable compatibility with CommonJS modules
+    "allowSyntheticDefaultImports": true, // Allow default imports from modules that don't have a default export
+
+    /* Other Useful Settings */
+    "resolveJsonModule": true // If you're importing JSON files directly
   }
 }
