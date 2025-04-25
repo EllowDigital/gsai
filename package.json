@@ -1,22 +1,20 @@
 {
   "name": "gsai-webv3",
-  "version": "1.2.6",
+  "version": "1.2.2",
   "private": true,
   "type": "module",
   "homepage": "https://ghatakgsai.netlify.app/",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "clean": "rimraf dist",
-    "build:dev": "vite build --mode development",
-    "build:prod": "npm run clean && vite build",
+    "build": "tsc && vite build",
     "deploy": "gh-pages -d dist",
-    "deploy:prod": "npm run build:prod && npm run deploy",
-    "deploy:staging": "npm run build:prod && gh-pages -d dist --branch staging",
-    "postbuild": "echo '✅ Build successful!'",
-    "postbuild:deploy": "echo '🚀 Deploying to GitHub Pages...' && npm run deploy"
+    "dev": "vite",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "predeploy": "npm run build",
+    "postbuild": "echo 'Build successful!'",
+    "postbuild-deploy": "echo 'Deploying to GitHub Pages...' && npm run deploy",
+    "preview": "vite preview",
+    "clean": "rimraf dist",
+    "deploy-prod": "Remove-Item -Recurse -Force node_modules; Remove-Item -Force package-lock.json; npm install; npm run build && npm run deploy"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",

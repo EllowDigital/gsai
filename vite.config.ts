@@ -17,7 +17,7 @@ export default defineConfig((env) => {
   const plugins = [
     // React SWC plugin
     react(),
-    
+
     // PWA configuration
     VitePWA({
       registerType: "autoUpdate",
