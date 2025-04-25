@@ -1,3 +1,4 @@
+
 import { useEffect } from 'react';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
@@ -8,16 +9,12 @@ import MartialArtistSVG from './MartialArtistSVG';
 const NavBar = () => {
   const isMobile = useIsMobile();
 
-  useEffect(() => {
-    // No need to set isMounted here
-  }, []);
-
   return (
     <header className="sticky top-0 z-50 bg-black/70 backdrop-blur-md shadow-md transition-all duration-300">
       <div className="gsai-container py-4 flex items-center justify-between">
         {/* Logo and Brand */}
         <div className="flex items-center">
-          <a href="/" className="flex items-center space-x-3">
+          <a href="/" className="flex items-center space-x-3" aria-label="Ghatak Sports Academy Home">
             {isMobile ? (
               <img src="/favicon_io/android-chrome-192x192.png" alt="GSAI Logo" className="h-8 w-8 rounded-full" />
             ) : (
@@ -32,7 +29,7 @@ const NavBar = () => {
 
         {/* Navigation Links (Desktop) */}
         {!isMobile && (
-          <nav className="hidden md:flex space-x-6">
+          <nav className="hidden md:flex space-x-6" aria-label="Main navigation">
             <a href="#about" className="text-gray-300 hover:text-white transition">About</a>
             <a href="#programs" className="text-gray-300 hover:text-white transition">Programs</a>
             <a href="#gallery" className="text-gray-300 hover:text-white transition">Gallery</a>
@@ -51,7 +48,9 @@ const NavBar = () => {
           {isMobile && (
             <Sheet>
               <SheetTrigger asChild>
-                <Menu className="h-6 w-6 text-white hover:text-gray-300 transition-colors" />
+                <button aria-label="Open menu">
+                  <Menu className="h-6 w-6 text-white hover:text-gray-300 transition-colors" />
+                </button>
               </SheetTrigger>
               <SheetContent side="right" className="bg-gsai-gray-800 text-white">
                 <SheetHeader>
@@ -60,7 +59,7 @@ const NavBar = () => {
                     Explore the academy and find what you need.
                   </SheetDescription>
                 </SheetHeader>
-                <nav className="flex flex-col space-y-4 mt-6">
+                <nav className="flex flex-col space-y-4 mt-6" aria-label="Mobile navigation">
                   <a href="#about" className="hover:text-gsai-red transition">About</a>
                   <a href="#programs" className="hover:text-gsai-red transition">Programs</a>
                   <a href="#gallery" className="hover:text-gsai-red transition">Gallery</a>
