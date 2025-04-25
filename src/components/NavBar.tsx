@@ -1,5 +1,4 @@
 
-import { useEffect } from 'react';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -32,6 +31,7 @@ const NavBar = () => {
           <nav className="hidden md:flex space-x-6" aria-label="Main navigation">
             <a href="#about" className="text-gray-300 hover:text-white transition">About</a>
             <a href="#programs" className="text-gray-300 hover:text-white transition">Programs</a>
+            <a href="#testimonials" className="text-gray-300 hover:text-white transition">Testimonials</a>
             <a href="#gallery" className="text-gray-300 hover:text-white transition">Gallery</a>
             <a href="#faq" className="text-gray-300 hover:text-white transition">FAQ</a>
             <a href="#contact" className="text-gray-300 hover:text-white transition">Contact</a>
@@ -62,6 +62,7 @@ const NavBar = () => {
                 <nav className="flex flex-col space-y-4 mt-6" aria-label="Mobile navigation">
                   <a href="#about" className="hover:text-gsai-red transition">About</a>
                   <a href="#programs" className="hover:text-gsai-red transition">Programs</a>
+                  <a href="#testimonials" className="hover:text-gsai-red transition">Testimonials</a>
                   <a href="#gallery" className="hover:text-gsai-red transition">Gallery</a>
                   <a href="#faq" className="hover:text-gsai-red transition">FAQ</a>
                   <a href="#contact" className="hover:text-gsai-red transition">Contact</a>

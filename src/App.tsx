@@ -12,6 +12,8 @@ import PWA from './pwa';
 // Lazy load pages
 const Index = React.lazy(() => import("./pages/Index"));
 const NotFound = React.lazy(() => import("./pages/NotFound"));
+const PrivacyPolicy = React.lazy(() => import("./pages/PrivacyPolicy"));
+const Terms = React.lazy(() => import("./pages/Terms"));
 
 // Create QueryClient with optimized settings
 const queryClient = new QueryClient({
@@ -91,12 +93,8 @@ const App = () => {
         // Report Core Web Vitals
         if (window.performance && 'PerformanceObserver' in window) {
           try {
-            const metrics = {
-              FCP: 0,
-              LCP: 0,
-              CLS: 0,
-              FID: 0,
-            };
+            // This is just for logging - metrics object is not used elsewhere
+            const performanceEntries = performance.getEntriesByType('navigation');
             
             if ('getEntriesByName' in performance) {
               const navEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
@@ -137,12 +135,14 @@ const App = () => {
               <Suspense fallback={
                 <div className="w-full h-screen flex items-center justify-center bg-black" aria-label="Loading page">
                   <div className="animate-pulse-glow w-12 h-12 rounded-full bg-gsai-red" role="status">
-                    <span className="visually-hidden">Loading...</span>
+                    <span className="sr-only">Loading...</span>
                   </div>
                 </div>
               }>
                 <Routes>
                   <Route path="/" element={<Index />} />
+                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                  <Route path="/terms" element={<Terms />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </Suspense>
