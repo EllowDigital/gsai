@@ -10,7 +10,7 @@ const CTAButton: React.FC<CTAButtonProps> = ({ onClick, label, href }) => {
   const buttonContent = (
     <>
       <span className="relative z-10">{label}</span>
-      <span className="absolute inset-0 bg-gradient-to-r from-gsai-red via-gsai-gold to-gsai-red opacity-75 blur-lg -z-10 animate-gradient-x"></span>
+      <span className="absolute inset-0 bg-gradient-to-r from-gsai-#ff0000 via-gsai-gold to-gsai-red opacity-75 blur-lg -z-10 animate-gradient-x"></span>
     </>
   );
 

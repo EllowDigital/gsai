@@ -48,8 +48,8 @@ const NavBar = () => {
             className="w-12 h-12 object-contain"
           />
           <span className="text-2xl font-bold text-white">
-            <span className="text-gsai-red">G</span>hatak
-            <span className="text-gsai-gold">SAI</span>
+            <span className="text-gsai-red">G</span>S
+            <span className="text-gsai-gold">AI</span>
           </span>
         </a>
 
