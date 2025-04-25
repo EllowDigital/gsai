@@ -1,33 +1,23 @@
-
 import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 
+const initialFormData = {
+  name: "",
+  email: "",
+  phone: "",
+  program: "",
+  message: "",
+};
+
 const Contact = () => {
   const { toast } = useToast();
-
-  // State for form data, errors, submission status, and success flag
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    program: "",
-    message: "",
-  });
-  const [errors, setErrors] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    program: "",
-    message: "",
-  });
+  const [formData, setFormData] = useState(initialFormData);
+  const [errors, setErrors] = useState<typeof formData>({ ...initialFormData });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  // Handle input change and reset errors on change
   const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -37,53 +27,45 @@ const Contact = () => {
     }
   };
 
-  // Validate form data and return a boolean indicating if the form is valid
   const validateForm = () => {
     let isValid = true;
-    const newErrors = { ...errors };
+    const newErrors: typeof errors = { ...initialFormData };
 
-    // Validate name
     if (!formData.name.trim()) {
-      newErrors.name = "Name is required";
+      newErrors.name = "Name is required.";
       isValid = false;
     }
 
-    // Validate email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
+      newErrors.email = "Email is required.";
       isValid = false;
     } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = "Please enter a valid email";
+      newErrors.email = "Enter a valid email address.";
       isValid = false;
     }
 
-    // Validate phone
     if (!formData.phone.trim()) {
-      newErrors.phone = "Phone is required";
+      newErrors.phone = "Phone number is required.";
       isValid = false;
     }
 
-    // Validate program selection
     if (!formData.program.trim()) {
-      newErrors.program = "Please select a program";
+      newErrors.program = "Select a program.";
       isValid = false;
     }
 
-    // Update error state
     setErrors(newErrors);
     return isValid;
   };
 
-  // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Validate form before submission
     if (!validateForm()) {
       toast({
         title: "Form Submission Failed",
-        description: "Please check the form for errors.",
+        description: "Please fix the errors in the form.",
         variant: "destructive",
       });
       return;
@@ -92,47 +74,61 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      const formDataToSend = new FormData();
-      formDataToSend.append("name", formData.name);
-      formDataToSend.append("email", formData.email);
-      formDataToSend.append("phone", formData.phone);
-      formDataToSend.append("program", formData.program);
-      formDataToSend.append("message", formData.message);
-
-      const response = await fetch(
-        "https://formsubmit.co/ellowdigitals@gmail.com",
-        {
-          method: "POST",
-          body: formDataToSend,
-        }
+      const payload = new FormData();
+      Object.entries(formData).forEach(([key, value]) =>
+        payload.append(key, value)
       );
 
-      if (response.ok) {
-        setIsSuccess(true);
+      // Add additional hidden fields for FormSubmit configurations
+      payload.append("_replyto", formData.email);
+      payload.append("_next", "https://ghatakgsai.netlify.app/"); // Ensure this URL is correct
+      payload.append("_subject", "GSAI: New submission!");
+      payload.append("_cc", "sarwanyadav6174@email.com");
+      payload.append("_bcc", "ghatakgsai@email.com");
+      payload.append("_honeypot", "name"); // Honeypot field to prevent spam
+      payload.append("_honeypot", "message");
+      payload.append("_template", "table"); // Optional: select email template (basic, table, etc.)
+      payload.append("_autoresponse", "Thank you for reaching out! We'll get back to you soon.");
+
+      payload.append("_blacklist", "spammy term, banned term");
+      payload.append("_captcha", "false"); // Optional: disable CAPTCHA if desired
+
+      const res = await fetch("https://formsubmit.co/ellowdigitals@gmail.com", {
+        method: "POST",
+        body: payload,
+        redirect: "manual", // prevent automatic redirect
+      });
+
+      console.log("FormSubmit response:", res); // Check the response from FormSubmit
+
+      if (res.status === 200 || res.status === 302) {
+        // Success (200 OK or 302 Found)
         toast({
-          title: "Form Submitted Successfully",
-          description: `We'll contact you soon about your interest in ${formData.program}.`,
+          title: "Success!",
+          description: `Thank you! We'll reach out soon regarding ${formData.program}.`,
         });
 
-        // Reset form data after successful submission
-        setFormData({
-          name: "",
-          email: "",
-          phone: "",
-          program: "",
-          message: "",
-        });
-
-        // Hide success message after a delay
+        setFormData(initialFormData);
+        setIsSuccess(true);
         setTimeout(() => setIsSuccess(false), 4000);
       } else {
-        throw new Error("Network response was not ok");
+        throw new Error(`Submission failed: ${res.statusText}`);
       }
-    } catch (error) {
-      console.error("Form submission failed", error);
+
+
       toast({
-        title: "Something went wrong!",
-        description: "Please try again later.",
+        title: "Success!",
+        description: `Thank you! We'll reach out soon regarding ${formData.program}.`,
+      });
+
+      setFormData(initialFormData);
+      setIsSuccess(true);
+      setTimeout(() => setIsSuccess(false), 4000);
+    } catch (error) {
+      console.error("Submission error:", error);
+      toast({
+        title: "Submission Error",
+        description: "Something went wrong. Please try again later.",
         variant: "destructive",
       });
     } finally {
@@ -140,27 +136,24 @@ const Contact = () => {
     }
   };
 
-  // Intersection Observer for animations
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
+          if (entry.isIntersecting && entry.target instanceof HTMLElement) {
             entry.target.classList.add("animate-fade-in-up");
-            if (entry.target instanceof HTMLElement) {
-              entry.target.style.visibility = "visible";
-              entry.target.style.opacity = "1";
-            }
+            entry.target.style.visibility = "visible";
+            entry.target.style.opacity = "1";
           }
         });
       },
       { threshold: 0.1 }
     );
 
-    const elements = document.querySelectorAll(".contact-animate");
-    elements.forEach((el) => observer.observe(el));
+    const animatedElements = document.querySelectorAll(".contact-animate");
+    animatedElements.forEach((el) => observer.observe(el));
 
-    return () => elements.forEach((el) => observer.unobserve(el));
+    return () => animatedElements.forEach((el) => observer.unobserve(el));
   }, []);
 
   return (
@@ -332,7 +325,6 @@ const Contact = () => {
             </div>
           </div>
 
-          {/* Contact Form Section */}
           <div
             className="contact-animate opacity-0"
             style={{ animationDelay: "0.5s" }}
@@ -348,8 +340,8 @@ const Contact = () => {
                 </p>
               )}
 
-              <form onSubmit={handleSubmit} netlify>
-                <input type="hidden" name="_captcha" value="false" />
+              <form onSubmit={handleSubmit} action="https://formsubmit.co/ellowdigitals@gmail.com"
+                method="POST" netlify>
 
                 <div className="mb-4">
                   <label htmlFor="name" className="block text-gray-300 mb-2">
@@ -442,9 +434,7 @@ const Contact = () => {
                     ))}
                   </select>
                   {errors.program && (
-                    <p className="text-red-400 text-sm mt-1">
-                      {errors.program}
-                    </p>
+                    <p className="text-red-400 text-sm mt-1">{errors.program}</p>
                   )}
                 </div>
 
@@ -462,23 +452,21 @@ const Contact = () => {
                     placeholder="Enter your message"
                   ></textarea>
                   {errors.message && (
-                    <p className="text-red-400 text-sm mt-1">
-                      {errors.message}
-                    </p>
+                    <p className="text-red-400 text-sm mt-1">{errors.message}</p>
                   )}
                 </div>
 
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className={`gsai-btn w-full transition-opacity duration-300 ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                  className={`gsai-btn w-full transition-opacity duration-300 ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
                 >
                   {isSubmitting ? "Sending..." : "Send Message"}
                 </button>
               </form>
             </div>
           </div>
+
         </div>
 
         {/* New Section for Map */}
