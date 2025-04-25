@@ -1,10 +1,11 @@
+
 /* Preloader container styling */
 .preloader-container {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background: radial-gradient(circle at center, #000000 0%, #1a1a1a 100%);
   display: flex;
   justify-content: center;
@@ -19,7 +20,7 @@
 .fade-out {
   opacity: 0;
   visibility: hidden;
-  transition: opacity 1s ease, visibility 1s ease;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
 }
 
 /* Preloader wrapper animation */
@@ -43,7 +44,7 @@
   background: radial-gradient(circle at 30% 30%, #333, #000);
   animation: rotate3D 2.5s linear infinite, scalePulse 1.8s ease-in-out infinite;
   transform-style: preserve-3d;
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1),
+  box-shadow: 0 0 30px rgba(255, 204, 0, 0.3),
     inset 0 0 15px rgba(255, 204, 0, 0.4), 0 0 20px rgba(255, 0, 0, 0.4);
 }
 
@@ -51,14 +52,26 @@
 .preloader-text {
   font-family: "Roboto", sans-serif;
   color: #fff;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 700;
   letter-spacing: 2px;
   margin-top: 20px;
   text-transform: uppercase;
-  text-shadow: 2px 2px 8px rgba(255, 204, 0, 0.3);
+  text-shadow: 2px 2px 8px rgba(255, 204, 0, 0.4);
   animation: fadeInText 1.5s ease-out 0.5s forwards;
   transform: translateY(-30px);
+  opacity: 0;
+}
+
+.preloader-subtext {
+  font-family: "Roboto", sans-serif;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  font-weight: 400;
+  margin-top: 10px;
+  letter-spacing: 1px;
+  animation: fadeInText 1.5s ease-out 0.8s forwards;
+  transform: translateY(-20px);
   opacity: 0;
 }
 
@@ -111,8 +124,12 @@
   }
 
   .preloader-text {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     margin-top: 15px;
+  }
+  
+  .preloader-subtext {
+    font-size: 0.9rem;
   }
 }
 
@@ -123,7 +140,11 @@
   }
 
   .preloader-text {
-    font-size: 1rem;
+    font-size: 1.2rem;
     margin-top: 10px;
+  }
+  
+  .preloader-subtext {
+    font-size: 0.8rem;
   }
 }

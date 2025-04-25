@@ -1,11 +1,20 @@
-import React, { useRef } from 'react';
+
+import React, { useRef, useEffect, useState } from 'react';
 import HeroParticles from './HeroParticles';
-// import MartialArtistSVG from './MartialArtistSVG';
 import CTAButton from './CTAButton';
-// import DecorativeIcons from './DecorativeIcons';
 
 const Hero = () => {
   const heroRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    // Ensure hero visibility after a short delay
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 300);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   const scrollToContact = () => {
     const contactSection = document.getElementById('contact');
@@ -28,41 +37,39 @@ const Hero = () => {
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/60 to-black z-10" />
 
-      {/* Martial artist SVG
-      <div className="absolute bottom-0 left-0 md:left-[10%] h-[60vh] lg:h-[70vh] opacity-70 z-20">
-        <MartialArtistSVG />
-      </div> */}
-
-      {/* Decorative elements
-      <div className="relative z-30">
-        <DecorativeIcons />
-      </div> */}
-
       {/* Main content */}
-      <div className="gsai-container relative text-center z-40 flex flex-col items-center">
+      <div className={`gsai-container relative text-center z-40 flex flex-col items-center transition-opacity duration-1000 ease-in-out ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
         <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-4 text-white animate-float">
-          Welcome to
-          <div className="mt-2">
+          <div className="relative inline-block">
+            Welcome to
+          </div>
+          <div className="mt-2 relative">
             <span className="text-gsai-red">Ghatak </span>
             <span className="text-white">Sports Academy</span>
             <span className="text-gsai-gold"> India™</span>
+            {/* Decorative elements */}
+            <div className="absolute -top-6 -right-6 w-12 h-12 opacity-70 hidden md:block">
+              <svg viewBox="0 0 24 24" fill="none" className="w-full h-full text-gsai-gold animate-float" style={{animationDelay: '0.2s'}}>
+                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor" />
+              </svg>
+            </div>
           </div>
         </h1>
 
-        <p className="text-lg sm:text-xl md:text-2xl text-white/80 mb-8 max-w-3xl mx-auto">
+        <p className="text-lg sm:text-xl md:text-2xl text-white/80 mb-8 max-w-3xl mx-auto animate-fade-in">
           Empowering Lives Through Martial Arts
         </p>
 
-        {/* <CTAButton onClick={scrollToContact} label="Join Now" /> */}
-        <CTAButton
-          label="Join Now"
-          href="https://forms.gle/LTYn59kPWkQgC3VR7"
-        />
-
+        <div className="animate-float" style={{animationDelay: '0.4s'}}>
+          <CTAButton
+            label="Join Now"
+            href="https://forms.gle/LTYn59kPWkQgC3VR7"
+          />
+        </div>
 
         {/* Scroll indicator */}
-        <div className="mt-8 sm:mt-12 md:mt-16">
-          <a href="#about" className="text-white/70 hover:text-white animate-bounce">
+        <div className="mt-8 sm:mt-12 md:mt-16 animate-bounce">
+          <a href="#about" className="text-white/70 hover:text-white transition-colors duration-300">
             <svg
               className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10"
               fill="none"

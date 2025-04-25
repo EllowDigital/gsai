@@ -1,3 +1,4 @@
+
 import React, { Suspense, lazy, useEffect, useState } from 'react';
 import NavBar from '@/components/NavBar';
 import Hero from '@/components/Hero';
@@ -12,79 +13,135 @@ const Contact = lazy(() => import('@/components/Contact'));
 const Affiliations = lazy(() => import('@/components/Affiliations'));
 const Footer = lazy(() => import('@/components/Footer'));
 
-// Loading fallback with animation
+// Enhanced Loading fallback with animation
 const SectionLoader = () => (
-  <div className="w-full py-20 flex items-center justify-center">
-    <div className="animate-pulse-glow w-10 h-10 rounded-full bg-gsai-red"></div>
+  <div className="w-full py-16 flex items-center justify-center">
+    <div className="animate-pulse-glow w-8 h-8 rounded-full bg-gsai-red"></div>
   </div>
 );
 
 const Index = () => {
   const [isMounted, setIsMounted] = useState(false);
-
-  // Ensure components mount after the initial render for better UX
+  const [visibleSections, setVisibleSections] = useState<Record<string, boolean>>({});
+  
+  // Trigger sections to become visible with staggered timing
   useEffect(() => {
     setIsMounted(true);
+    
+    const sectionIds = ['about', 'founder', 'programs', 'gallery', 'faq', 'contact', 'affiliations', 'footer'];
+    
+    sectionIds.forEach((section, index) => {
+      setTimeout(() => {
+        setVisibleSections(prev => ({
+          ...prev,
+          [section]: true
+        }));
+      }, index * 200); // Stagger the sections appearance
+    });
   }, []);
+
+  // Set up intersection observer for animations
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-fade-in-up');
+            entry.target.classList.add('opacity-100');
+            entry.target.classList.remove('opacity-0');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -10% 0px' }
+    );
+
+    // Observe all sections with animation classes
+    document.querySelectorAll('.section-animate').forEach((section) => {
+      observer.observe(section);
+    });
+
+    return () => {
+      document.querySelectorAll('.section-animate').forEach((section) => {
+        observer.unobserve(section);
+      });
+    };
+  }, [isMounted]);
 
   return (
     <div className="font-sans min-h-screen bg-black overflow-x-hidden">
       <NavBar />
 
-      {/* Hero section */}
-      <div className="relative">
+      {/* Hero section always visible */}
+      <div className="relative z-10">
         <Hero />
       </div>
 
-      {/* Content sections with lazy loading */}
-      <div className="relative">
-        {isMounted && (
-          <Suspense fallback={<SectionLoader />}>
-            <About />
-          </Suspense>
-        )}
+      {/* Content sections with progressive loading */}
+      <div className="relative z-20">
+        <div id="aboutSection" className="section-animate opacity-0">
+          {(isMounted && visibleSections.about) && (
+            <Suspense fallback={<SectionLoader />}>
+              <About />
+            </Suspense>
+          )}
+        </div>
 
-        {isMounted && (
-          <Suspense fallback={<SectionLoader />}>
-            <Founder />
-          </Suspense>
-        )}
+        <div id="founderSection" className="section-animate opacity-0">
+          {(isMounted && visibleSections.founder) && (
+            <Suspense fallback={<SectionLoader />}>
+              <Founder />
+            </Suspense>
+          )}
+        </div>
 
-        {isMounted && (
-          <Suspense fallback={<SectionLoader />}>
-            <Programs />
-          </Suspense>
-        )}
+        <div id="programsSection" className="section-animate opacity-0">
+          {(isMounted && visibleSections.programs) && (
+            <Suspense fallback={<SectionLoader />}>
+              <Programs />
+            </Suspense>
+          )}
+        </div>
 
-        {isMounted && (
-          <Suspense fallback={<SectionLoader />}>
-            <Gallery />
-          </Suspense>
-        )}
+        <div id="gallerySection" className="section-animate opacity-0">
+          {(isMounted && visibleSections.gallery) && (
+            <Suspense fallback={<SectionLoader />}>
+              <Gallery />
+            </Suspense>
+          )}
+        </div>
 
-        {isMounted && (
-          <Suspense fallback={<SectionLoader />}>
-            <FAQ />
-          </Suspense>
-        )}
+        <div id="faqSection" className="section-animate opacity-0">
+          {(isMounted && visibleSections.faq) && (
+            <Suspense fallback={<SectionLoader />}>
+              <FAQ />
+            </Suspense>
+          )}
+        </div>
 
-        {isMounted && (
-          <Suspense fallback={<SectionLoader />}>
-            <Contact />
-          </Suspense>
-        )}
+        <div id="contactSection" className="section-animate opacity-0">
+          {(isMounted && visibleSections.contact) && (
+            <Suspense fallback={<SectionLoader />}>
+              <Contact />
+            </Suspense>
+          )}
+        </div>
 
-        {isMounted && (
-          <Suspense fallback={<SectionLoader />}>
-            <Affiliations />
-          </Suspense>
-        )}
+        <div id="affiliationsSection" className="section-animate opacity-0">
+          {(isMounted && visibleSections.affiliations) && (
+            <Suspense fallback={<SectionLoader />}>
+              <Affiliations />
+            </Suspense>
+          )}
+        </div>
 
-        {isMounted && (
-          <Suspense fallback={<SectionLoader />}>
-            <Footer />
-          </Suspense>
-        )}
+        <div id="footerSection" className="section-animate opacity-0">
+          {(isMounted && visibleSections.footer) && (
+            <Suspense fallback={<SectionLoader />}>
+              <Footer />
+            </Suspense>
+          )}
+        </div>
       </div>
     </div>
   );

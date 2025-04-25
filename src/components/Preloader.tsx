@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import './Preloader.css';
 
@@ -14,6 +15,9 @@ const Preloader: React.FC<PreloaderProps> = ({ isVisible }) => {
     if (htmlPreloader) {
       htmlPreloader.style.display = 'none';
     }
+
+    // Set body to not scroll during preloader
+    document.body.style.overflow = isVisible ? 'hidden' : '';
 
     if (!isVisible) {
       setFadeOut(true);
@@ -36,6 +40,7 @@ const Preloader: React.FC<PreloaderProps> = ({ isVisible }) => {
       <div className="preloader-wrapper">
         <div className="preloader-circle"></div>
         <div className="preloader-text">Ghatak Sports Academy</div>
+        <div className="preloader-subtext">Loading experience...</div>
       </div>
     </div>
   );
