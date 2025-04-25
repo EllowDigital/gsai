@@ -8,11 +8,6 @@ interface HeroParticlesProps {
   parentRef: RefObject<HTMLDivElement>;
 }
 
-// Define consistent props interfaces for both particle components
-export interface ParticleProps {
-  parentRef: RefObject<HTMLDivElement>;
-}
-
 const HeroParticles = ({ parentRef }: HeroParticlesProps) => {
   const isMobile = useIsMobile();
 

@@ -3,10 +3,13 @@ import path from "path";
 import react from "@vitejs/plugin-react-swc";
 import { componentTagger } from "lovable-tagger";
 import { VitePWA } from "vite-plugin-pwa";
+<<<<<<< HEAD
 import viteCompression from "vite-plugin-compression";
 import { createHtmlPlugin } from "vite-plugin-html";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
+=======
+>>>>>>> parent of 3785fdc (Refactor: Optimize website for SEO, performance, and accessibility)
 
 // https://vitejs.dev/config/
 export default defineConfig((env) => {
@@ -91,6 +94,7 @@ export default defineConfig((env) => {
         ],
       },
     }),
+<<<<<<< HEAD
 
     // Production optimizations: Gzip and Brotli compression
     !isDev &&
@@ -145,16 +149,23 @@ export default defineConfig((env) => {
         },
       ],
     }),
+=======
+>>>>>>> parent of 3785fdc (Refactor: Optimize website for SEO, performance, and accessibility)
   ];
 
   // Add development-only enhancements (e.g., component tagging)
   if (isDev) {
-    plugins.push(componentTagger());
+    try {
+      // Dynamic import for dev-only dependencies would go here but we'll use a simpler approach
+      plugins.push(componentTagger());
+    } catch (e) {
+      console.warn("⚠️ componentTagger not found. Skipping...");
+    }
   }
 
   return {
     base,
-    plugins: plugins.filter(Boolean),
+    plugins,
     resolve: {
       preserveSymlinks: true,
       alias: {
@@ -173,6 +184,7 @@ export default defineConfig((env) => {
       emptyOutDir: true,
       minify: isDev ? false : "esbuild",
       sourcemap: isDev,
+<<<<<<< HEAD
       rollupOptions: {
         output: {
           manualChunks: {
@@ -183,6 +195,8 @@ export default defineConfig((env) => {
           },
         },
       },
+=======
+>>>>>>> parent of 3785fdc (Refactor: Optimize website for SEO, performance, and accessibility)
     },
     optimizeDeps: {
       include: ["three"],
