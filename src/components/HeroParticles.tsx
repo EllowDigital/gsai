@@ -1,7 +1,7 @@
 
 import { useIsMobile } from "@/hooks/use-mobile";
 import HeroParticlesSimple from "./HeroParticlesSimple";
-import HeroParticlesAdvanced from "./HeroParticlesAdvanced";
+import HeroParticlesVanilla from "./HeroParticlesVanilla";
 import { RefObject } from "react";
 
 interface HeroParticlesProps {
@@ -14,7 +14,7 @@ const HeroParticles = ({ parentRef }: HeroParticlesProps) => {
   return isMobile ? (
     <HeroParticlesSimple parentRef={parentRef} />
   ) : (
-    <HeroParticlesAdvanced parentRef={parentRef} />
+    <HeroParticlesVanilla parentRef={parentRef} />
   );
 };
 
