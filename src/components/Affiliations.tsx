@@ -1,5 +1,4 @@
-
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 const Affiliations = () => {
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -77,6 +76,7 @@ const Affiliations = () => {
     { name: 'Kalaripayattu Association Event', logo: '/images/IMG-20250404-WA0015.png' },
     { name: 'Ghatak Sports Academy Logo', logo: '/images/logo.png' },
   ];
+
 
   return (
     <section className="py-20 bg-black">
