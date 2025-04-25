@@ -26,31 +26,29 @@
   <meta name="geo.position" content="26.8467;80.9462" />
   <meta name="ICBM" content="26.8467,80.9462" />
 
-  <!-- Mobile & App Capabilities -->
+  <!-- App & Theme Meta -->
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="theme-color" content="#ff5000" />
   <meta name="msapplication-TileColor" content="#ff0000" />
 
+  <!-- Favicons -->
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon_io/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon_io/favicon-16x16.png">
   <link rel="shortcut icon" href="/favicon_io/favicon.ico">
-
-  <!-- <link rel="manifest" href="/favicon_io/site.manifest" /> -->
   <link rel="manifest" href="/favicon_io/webmanifest.json" />
 
-  <!-- PWA Meta Tags -->
+  <!-- App Name -->
   <meta name="apple-mobile-web-app-title" content="Ghatak Sports Academy">
   <meta name="application-name" content="Ghatak Sports Academy India">
-  <meta name="theme-color" content="#ff0000">
 
-  <!-- Preload/Prefetch for performance -->
+  <!-- Fonts and Prefetch -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="dns-prefetch" href="//ghatakgsai.netlify.app" />
 
-  <!-- Structured Data: Organization, Website, and Breadcrumbs -->
+  <!-- Structured Data -->
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -107,14 +105,64 @@
     }
   </script>
 
-  <script type="module" crossorigin src="/assets/index-B2g8npnE.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-BRGNIapd.css">
+  <!-- Inline CSS for initial preloader -->
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      background: #000;
+      /* Matches preloader background */
+      height: 100%;
+    }
+
+    #initial-preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: rgba(0, 0, 0, 0.9);
+      z-index: 99999;
+    }
+
+    #initial-preloader>div {
+      width: 80px;
+      height: 80px;
+      border: 10px solid transparent;
+      border-top: 10px solid #ffcc00;
+      border-bottom: 10px solid #ff0000;
+      border-radius: 50%;
+      animation: spin 1.5s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+  <script type="module" crossorigin src="/assets/index-CKanA8-Z.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-BwawxdvC.css">
 <link rel="manifest" href="/manifest.webmanifest"></head>
 
 <body role="document">
+  <!-- Initial preloader: will be hidden by Preloader.tsx useEffect -->
+  <div id="initial-preloader">
+    <div></div>
+  </div>
+
+  <!-- React mounts here -->
   <div id="root"></div>
 
-  <!-- Main JavaScript -->
+  <!-- Your scripts -->
   <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
 </body>
 
