@@ -10,7 +10,12 @@
     "dev": "vite",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "predeploy": "npm run build",
-    "preview": "vite preview"
+    "postbuild": "npm run postbuild-deploy",
+    "postbuild-deploy": "echo 'Build Successful! Deploying to GitHub Pages...' && npm run deploy",
+    "preview": "vite preview",
+    "clean": "rimraf dist",
+    "deploy-prod": "npm run clean && npm run build && npm run deploy",
+    "deploy-staging": "npm run clean && npm run build && gh-pages -d dist --branch staging"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -85,6 +90,7 @@
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",
     "vite": "^5.4.1",
-    "vite-plugin-pwa": "^1.0.0"
+    "vite-plugin-pwa": "^1.0.0",
+    "rimraf": "^5.0.0"
   }
 }
