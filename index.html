@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,32 +8,17 @@
 
   <!-- Compatibility & Title -->
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Ghatak Sports Academy | Top Martial Arts Training in India</title>
+  <title>Ghatak Sports Academy | Top Martial Arts Training</title>
 
-  <!-- SEO Meta Tags - Enhanced -->
+  <!-- SEO Meta Tags -->
   <meta name="description"
-    content="Join Ghatak Sports Academy - India's premier martial arts training center. Expert coaching in karate, taekwondo, self-defense, MMA, kickboxing and more. Classes for all ages and skill levels." />
+    content="Train at Ghatak Sports Academy, India's leading martial arts and self-defense school. Learn karate, taekwondo, fitness, and more with professional coaches." />
   <meta name="keywords"
-    content="martial arts India, karate classes, taekwondo India, self-defense training, MMA training, kickboxing, GSAI, Ghatak Sports Academy, fitness classes Lucknow, martial arts competition" />
+    content="martial arts India, karate classes, taekwondo India, self-defense training, GSAI, Ghatak Sports Academy, fitness classes Lucknow" />
   <meta name="author" content="GSAI Team" />
   <meta name="robots" content="index, follow" />
   <meta name="google-site-verification" content="WMhKG8wyqadZSkX0PKIkyv--6CSGCaErWsG6j5pnV-Q" />
   <link rel="canonical" href="https://ghatakgsai.netlify.app" />
-
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://ghatakgsai.netlify.app" />
-  <meta property="og:title" content="Ghatak Sports Academy | India's Premier Martial Arts Training" />
-  <meta property="og:description" content="Elevate your skills with professional martial arts training at Ghatak Sports Academy India. Join our karate, taekwondo, MMA, and self-defense programs." />
-  <meta property="og:image" content="https://ghatakgsai.netlify.app/images/logo.png" />
-  <meta property="og:site_name" content="Ghatak Sports Academy India" />
-
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:url" content="https://ghatakgsai.netlify.app" />
-  <meta name="twitter:title" content="Ghatak Sports Academy | India's Premier Martial Arts Training" />
-  <meta name="twitter:description" content="Elevate your skills with professional martial arts training at Ghatak Sports Academy India. Join our karate, taekwondo, MMA, and self-defense programs." />
-  <meta name="twitter:image" content="https://ghatakgsai.netlify.app/images/logo.png" />
 
   <!-- Geolocation Data -->
   <meta name="geo.region" content="IN-UP" />
@@ -47,13 +31,6 @@
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="theme-color" content="#ff5000" />
   <meta name="msapplication-TileColor" content="#ff0000" />
-  
-  <!-- Performance optimizations -->
-  <link rel="preload" href="/images/logo.png" as="image" />
-  <link rel="preload" href="/images/founder.webp" as="image" />
-  <link rel="preload" href="/favicon_io/favicon.ico" as="image" />
-  <link rel="preload" href="https://fonts.googleapis.com" as="document" />
-  <link rel="preload" href="https://fonts.gstatic.com" as="document" crossorigin />
 
   <!-- Favicons -->
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon_io/apple-touch-icon.png">
@@ -75,17 +52,10 @@
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "SportsOrganization",
+      "@type": "Organization",
       "name": "Ghatak Sports Academy India",
       "url": "https://ghatakgsai.netlify.app",
       "logo": "https://ghatakgsai.netlify.app/assets/favicon_io/android-chrome-192x192.png",
-      "description": "Train in martial arts at Ghatak Sports Academy, India's leading martial arts and self-defense school.",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Lucknow",
-        "addressRegion": "UP",
-        "addressCountry": "IN"
-      },
       "contactPoint": {
         "@type": "ContactPoint",
         "telephone": "+91 6394135988",
@@ -94,7 +64,9 @@
       },
       "sameAs": [
         "https://www.facebook.com/ghatakgsai",
-        "https://www.instagram.com/ghatakgsai"
+        "https://www.instagram.com/ghatakgsai",
+        "https://twitter.com/ghatakgsai",
+        "https://www.linkedin.com/company/ghatakgsai"
       ]
     }
   </script>
@@ -133,7 +105,7 @@
     }
   </script>
 
-  <!-- Inline Critical CSS for initial preloader -->
+  <!-- Inline CSS for initial preloader -->
   <style>
     html,
     body {
@@ -142,7 +114,6 @@
       background: #000;
       /* Matches preloader background */
       height: 100%;
-      font-display: swap;
     }
 
     #initial-preloader {
@@ -177,73 +148,21 @@
         transform: rotate(360deg);
       }
     }
-    
-    /* Prevent FOUC */
-    .no-js {
-      opacity: 0;
-      visibility: hidden;
-    }
-    
-    /* For accessibility */
-    .visually-hidden {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
-    }
   </style>
-  
-  <!-- Preload important scripts -->
-  <link rel="preload" href="/src/main.tsx" as="script" type="module" crossorigin />
 </head>
 
 <body role="document">
-  <!-- Skip to content link for accessibility -->
-  <a href="#main-content" class="visually-hidden focus:not-visually-hidden bg-gsai-red text-white py-2 px-4 fixed top-0 left-0 z-50">
-    Skip to content
-  </a>
-  
   <!-- Initial preloader: will be hidden by Preloader.tsx useEffect -->
-  <div id="initial-preloader" aria-live="polite" aria-label="Loading site...">
+  <div id="initial-preloader">
     <div></div>
   </div>
 
   <!-- React mounts here -->
-  <div id="root" class="no-js"></div>
-  <div id="main-content"></div>
+  <div id="root"></div>
 
   <!-- Your scripts -->
   <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
   <script type="module" src="/src/main.tsx"></script>
-  
-  <!-- Remove no-js class once JS loads -->
-  <script>document.querySelector('.no-js')?.classList.remove('no-js');</script>
-  
-  <!-- Detect JS support -->
-  <script>
-    if (!('querySelector' in document)) {
-      document.write('<div style="padding: 20px; background: #f8d7da; color: #721c24; text-align: center;">This website requires a modern browser. Please upgrade to view this site.</div>');
-    }
-  </script>
-  
-  <!-- Inline analytics - replace with your analytics solution -->
-  <script async defer>
-    // Your lightweight analytics code here
-    window.addEventListener('load', function() {
-      setTimeout(function() {
-        const pagePerformance = {
-          pageLoad: performance.now(),
-          domContentLoaded: performance.timing ? performance.timing.domContentLoadedEventEnd - performance.timing.navigationStart : 0
-        };
-        console.log('Performance metrics:', pagePerformance);
-      }, 0);
-    });
-  </script>
 </body>
 
 </html>
