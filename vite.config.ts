@@ -1,13 +1,12 @@
-
 import { defineConfig } from "vite";
 import path from "path";
 import react from "@vitejs/plugin-react-swc";
 import { componentTagger } from "lovable-tagger";
 import { VitePWA } from "vite-plugin-pwa";
-import viteCompression from 'vite-plugin-compression';
-import { createHtmlPlugin } from 'vite-plugin-html';
-import { viteStaticCopy } from 'vite-plugin-static-copy';
-import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
+import viteCompression from "vite-plugin-compression";
+import { createHtmlPlugin } from "vite-plugin-html";
+import { viteStaticCopy } from "vite-plugin-static-copy";
+import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 
 // https://vitejs.dev/config/
 export default defineConfig((env) => {
@@ -16,7 +15,10 @@ export default defineConfig((env) => {
   const base = isDev ? "/" : isGitHub ? "/gsai-webv3/" : "/";
 
   const plugins = [
+    // React SWC plugin
     react(),
+    
+    // PWA configuration
     VitePWA({
       registerType: "autoUpdate",
       includeAssets: [
@@ -89,17 +91,20 @@ export default defineConfig((env) => {
         ],
       },
     }),
-    
-    // Production optimizations
-    !isDev && viteCompression({
-      algorithm: 'gzip',
-      ext: '.gz',
-    }),
-    !isDev && viteCompression({
-      algorithm: 'brotliCompress',
-      ext: '.br',
-    }),
-    
+
+    // Production optimizations: Gzip and Brotli compression
+    !isDev &&
+      viteCompression({
+        algorithm: "gzip",
+        ext: ".gz",
+      }),
+    !isDev &&
+      viteCompression({
+        algorithm: "brotliCompress",
+        ext: ".br",
+      }),
+
+    // HTML Minification
     createHtmlPlugin({
       minify: !isDev && {
         collapseWhitespace: true,
@@ -112,36 +117,37 @@ export default defineConfig((env) => {
         minifyJS: true,
       },
     }),
-    
+
     // Image optimization (production only)
-    !isDev && ViteImageOptimizer({
-      jpg: {
-        quality: 80,
-      },
-      png: {
-        quality: 80,
-      },
-      webp: {
-        lossless: true,
-      },
-    }),
-    
-    // Copy robots.txt and sitemap.xml to the output directory
+    !isDev &&
+      ViteImageOptimizer({
+        jpg: {
+          quality: 80,
+        },
+        png: {
+          quality: 80,
+        },
+        webp: {
+          lossless: true,
+        },
+      }),
+
+    // Copy static files (robots.txt and sitemap.xml)
     viteStaticCopy({
       targets: [
         {
-          src: 'public/robots.txt',
-          dest: '',
+          src: "public/robots.txt",
+          dest: "",
         },
         {
-          src: 'public/sitemap.xml',
-          dest: '',
+          src: "public/sitemap.xml",
+          dest: "",
         },
       ],
     }),
   ];
 
-  // Dev-only enhancements
+  // Add development-only enhancements (e.g., component tagging)
   if (isDev) {
     plugins.push(componentTagger());
   }
@@ -170,11 +176,12 @@ export default defineConfig((env) => {
       rollupOptions: {
         output: {
           manualChunks: {
-            react: ['react', 'react-dom'],
-            ui: ['@/components/ui'],
-            vendor: ['three']
-          }
-        }
+            react: ["react", "react-dom"],
+            vendor: ["three"],
+            // Ensure the path to ui is correct and points to an entry file
+            ui: path.resolve(__dirname, "src/components/ui/index.ts"), // Entry file
+          },
+        },
       },
     },
     optimizeDeps: {

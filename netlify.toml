@@ -1,10 +1,10 @@
 [build]
-  base = "/"  # This sets the base directory for the build process, which seems correct for your project.
-  publish = "dist"  # This is where the build files will be published from.
-  command = "npm run build"  # The command to run the build process.
+  base = "/"  # Sets the base directory for the build process, appropriate for your project setup.
+  publish = "dist"  # Specifies the output directory where build files will be published.
+  command = "npm run build"  # Command to trigger the build process, defined in the project's package.json.
 
 [[redirects]]
-  from = "/gsai-webv3/*"  # Redirects any path that starts with "/gsai-webv3/"
-  to = "/gsai-webv3/:splat"  # The `:splat` captures the rest of the path and redirects it.
-  status = 301  # Permanent redirect.
-  force = true  # Ensures this rule is applied even if there are other conflicting rules.
+  from = "/gsai-webv3/*"  # Redirects any URL that starts with "/gsai-webv3/"
+  to = "/gsai-webv3/:splat"  # The ":splat" wildcard captures the remainder of the URL path and applies the redirect.
+  status = 301  # Permanent redirect (301) to indicate that the resource has been permanently moved.
+  force = true  # Forces this redirect rule to apply even if other conflicting rules exist.
