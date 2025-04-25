@@ -1,0 +1,176 @@
+/* Root container */
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Logo styles */
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms ease;
+}
+
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+/* Logo spin animation */
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Enable animation if motion preference allows */
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+/* Card component */
+.card {
+  padding: 2em;
+}
+
+/* Documentation text */
+.read-the-docs {
+  color: #888;
+}
+
+/* Add this CSS for animations and responsiveness */
+@keyframes martial-artist {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(10deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.animate-martial-artist {
+  animation: martial-artist 2s ease-in-out infinite;
+}
+
+@media (max-width: 768px) {
+  .animate-martial-artist {
+    animation: none; /* Disable animation on mobile to improve performance */
+  }
+}
+
+/* Make sure the SVG scales nicely */
+svg {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* Keyframe animation for the martial artist kick */
+@keyframes martial-kick {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(30deg); /* Kick position */
+  }
+  100% {
+    transform: rotate(0deg); /* Back to normal */
+  }
+}
+
+@keyframes arm-swing {
+  0% {
+    transform: rotate(0deg); /* Initial arm position */
+  }
+  50% {
+    transform: rotate(45deg); /* Arm swing position */
+  }
+  100% {
+    transform: rotate(0deg); /* Back to normal */
+  }
+}
+
+.martial-artist {
+  animation: martial-kick 2s ease-in-out infinite,
+    arm-swing 2s ease-in-out infinite;
+}
+
+.arm-right,
+.arm-left {
+  animation: arm-swing 2s ease-in-out infinite;
+}
+
+.leg-kicking {
+  animation: martial-kick 2s ease-in-out infinite;
+}
+
+/* Optional - Add smooth transitions */
+* {
+  transition: transform 0.3s ease-in-out;
+}
+
+.contact-animate {
+  text-decoration: none; /* Remove any underline from the text */
+}
+
+/* GLOBAL FIX FOR ALL h2 HEADERS */
+h2,
+h2::before,
+h2::after {
+  all: unset;
+  display: block;
+  font-size: 2.25rem; /* Tailwind text-4xl */
+  font-weight: 800; /* Tailwind font-extrabold */
+  color: white;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* Clean up all underlines or border under h2 */
+.section-title,
+.section-title::before,
+.section-title::after,
+.contact-animate,
+.contact-animate::before,
+.contact-animate::after {
+  text-decoration: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  background-image: none !important;
+}
+
+/* Optional - Remove inherited red gradient from somewhere (if using bg-clip-text or gradient) */
+.section-title {
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  -webkit-text-fill-color: inherit !important;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out forwards;
+}
