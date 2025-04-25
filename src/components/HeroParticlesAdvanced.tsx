@@ -60,7 +60,7 @@ const HeroParticlesAdvanced = ({ parentRef }: ParticleProps) => {
       const colorIndex = Math.floor(Math.random() * colorOptions.length);
       const color = colorOptions[colorIndex];
       
-      // This is the fix for the TypeScript error
+      // This is the fix for the TypeScript error - convert Color to individual components
       colors[i] = color.r;
       colors[i + 1] = color.g;
       colors[i + 2] = color.b;
@@ -122,8 +122,17 @@ const HeroParticlesAdvanced = ({ parentRef }: ParticleProps) => {
       window.removeEventListener('resize', handleResize);
       
       if (particlesRef.current) {
-        if (particlesRef.current.geometry) particlesRef.current.geometry.dispose();
-        if (particlesRef.current.material instanceof THREE.Material) particlesRef.current.material.dispose();
+        if (particlesRef.current.geometry) {
+          particlesRef.current.geometry.dispose();
+        }
+        
+        if (particlesRef.current.material) {
+          if (Array.isArray(particlesRef.current.material)) {
+            particlesRef.current.material.forEach(material => material.dispose());
+          } else {
+            particlesRef.current.material.dispose();
+          }
+        }
       }
       
       if (rendererRef.current) {

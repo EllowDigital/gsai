@@ -46,15 +46,13 @@ export const useScrollAnimation = <T extends HTMLElement>(
           // Use requestAnimationFrame to optimize the timing of class changes
           if (entry.isIntersecting) {
             requestAnimationFrame(() => {
-              entry.target.classList.add('visible');
+              (entry.target as HTMLElement).classList.add('visible');
               // Add will-change before animation starts
-              entry.target.style.willChange = 'opacity, transform';
+              (entry.target as HTMLElement).style.willChange = 'opacity, transform';
               
               // Set a timeout to remove will-change after animation completes
               setTimeout(() => {
-                if (entry.target instanceof HTMLElement) {
-                  entry.target.style.willChange = 'auto';
-                }
+                (entry.target as HTMLElement).style.willChange = 'auto';
               }, 1000); // Typical animation duration
               
               if (once) {
@@ -63,7 +61,7 @@ export const useScrollAnimation = <T extends HTMLElement>(
             });
           } else if (!once) {
             requestAnimationFrame(() => {
-              entry.target.classList.remove('visible');
+              (entry.target as HTMLElement).classList.remove('visible');
             });
           }
         });

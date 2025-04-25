@@ -8,6 +8,7 @@ import { Helmet } from 'react-helmet-async';
 const About = lazy(() => import('@/components/About'));
 const Founder = lazy(() => import('@/components/Founder'));
 const Programs = lazy(() => import('@/components/Programs'));
+const Testimonials = lazy(() => import('@/components/Testimonials'));
 const Gallery = lazy(() => import('@/components/Gallery'));
 const FAQ = lazy(() => import('@/components/FAQ'));
 const Contact = lazy(() => import('@/components/Contact'));
@@ -56,7 +57,7 @@ const Index = () => {
   useEffect(() => {
     setIsMounted(true);
     
-    const sectionIds = ['about', 'founder', 'programs', 'gallery', 'faq', 'contact', 'affiliations', 'footer'];
+    const sectionIds = ['about', 'founder', 'programs', 'testimonials', 'gallery', 'faq', 'contact', 'affiliations', 'footer'];
     
     // Use requestIdleCallback for non-critical operations
     const scheduleVisibility = (index: number) => {
@@ -164,6 +165,14 @@ const Index = () => {
               {(isMounted && visibleSections.programs) && (
                 <Suspense fallback={<SectionLoader />}>
                   <Programs />
+                </Suspense>
+              )}
+            </section>
+
+            <section id="testimonialsSection" className="section-animate opacity-0">
+              {(isMounted && visibleSections.testimonials) && (
+                <Suspense fallback={<SectionLoader />}>
+                  <Testimonials />
                 </Suspense>
               )}
             </section>
