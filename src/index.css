@@ -121,217 +121,435 @@
   .section-title::after {
     @apply content-[''] absolute bottom-0 left-0 h-1 w-1/2 bg-gsai-red;
   }
+}
 
-  @layer base {
-    /* Text outline for clear and defined typography */
-    .text-outline {
-      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
-        1px 1px 0 #000;
+@layer base {
+  /* Text outline for clear and defined typography */
+  .text-outline {
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+      1px 1px 0 #000;
+  }
+
+  /* Enhanced 3D Animations */
+  
+  /* Base animation for floating elements */
+  @keyframes float {
+    0% {
+      transform: translateY(0px);
     }
-
-    /* Base animation for floating elements */
-    @keyframes float {
-      0% {
-        transform: translateY(0px);
-      }
-      50% {
-        transform: translateY(-10px);
-      }
-      100% {
-        transform: translateY(0px);
-      }
+    50% {
+      transform: translateY(-10px);
     }
-
-    /* Glow animation for elements */
-    @keyframes pulse-glow {
-      0% {
-        box-shadow: 0 0 5px rgba(234, 56, 76, 0.5);
-      }
-      50% {
-        box-shadow: 0 0 20px rgba(234, 56, 76, 0.8);
-      }
-      100% {
-        box-shadow: 0 0 5px rgba(234, 56, 76, 0.5);
-      }
+    100% {
+      transform: translateY(0px);
     }
-
-    /* Horizontal gradient animation */
-    @keyframes gradient-x {
-      0% {
-        transform: translateX(-100%);
-      }
-      50% {
-        transform: translateX(100%);
-      }
-      100% {
-        transform: translateX(-100%);
-      }
+  }
+  
+  /* Slower floating animation */
+  @keyframes float-slow {
+    0% {
+      transform: translateY(0px) scale(1);
     }
-
-    /* Parallax effect */
-    .parallax {
-      background-attachment: fixed;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
+    50% {
+      transform: translateY(-15px) scale(1.05);
     }
-
-    /* Scrollbar customization for Webkit browsers */
-    ::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: #000;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #ea384c;
-      border-radius: 3px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: #c0292b;
+    100% {
+      transform: translateY(0px) scale(1);
     }
   }
 
-  @layer components {
-    /* Decorative icon with floating animation */
-    .decorative-icon {
-      @apply absolute w-12 h-12 flex items-center justify-center;
-      animation: orbit 10s linear infinite, float 3s ease-in-out infinite;
+  /* Glow animation for elements */
+  @keyframes pulse-glow {
+    0% {
+      filter: drop-shadow(0 0 5px rgba(234, 56, 76, 0.5));
     }
+    50% {
+      filter: drop-shadow(0 0 15px rgba(234, 56, 76, 0.8));
+    }
+    100% {
+      filter: drop-shadow(0 0 5px rgba(234, 56, 76, 0.5));
+    }
+  }
 
-    /* Particle effect for background */
-    .particle {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.3);
-      pointer-events: none;
-      transform-origin: center center;
+  /* Horizontal gradient animation */
+  @keyframes gradient-x {
+    0% {
+      transform: translateX(-100%);
     }
+    50% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+  
+  /* 3D flip animation */
+  @keyframes flip {
+    0% {
+      transform: perspective(1000px) rotateY(0);
+    }
+    100% {
+      transform: perspective(1000px) rotateY(360deg);
+    }
+  }
 
-    /* Flip card styles */
-    .flip-card {
-      perspective: 1000px;
-      width: 300px;
-      height: 400px;
+  /* Bounce animation */
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0);
     }
+    40% {
+      transform: translateY(-20px);
+    }
+    60% {
+      transform: translateY(-10px);
+    }
+  }
+  
+  /* Appear animation */
+  @keyframes appear {
+    from {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  /* Fade in up animation */
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Fade in animation */
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  /* Rotate animation */
+  @keyframes rotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  /* 3D rotate animation */
+  @keyframes rotate-3d {
+    0% {
+      transform: perspective(1000px) rotateY(0) rotateX(0);
+    }
+    50% {
+      transform: perspective(1000px) rotateY(180deg) rotateX(10deg);
+    }
+    100% {
+      transform: perspective(1000px) rotateY(360deg) rotateX(0);
+    }
+  }
 
-    .flip-card-inner {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      text-align: center;
-      transition: transform 0.8s;
-      transform-style: preserve-3d;
-    }
+  /* Parallax effect */
+  .parallax {
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  
+  /* 3D perspective container */
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
 
-    .flip-card:hover .flip-card-inner {
-      transform: rotateY(180deg);
-    }
+  /* Scrollbar customization for Webkit browsers */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
 
-    .flip-card-front,
-    .flip-card-back {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      border-radius: 15px;
-      overflow: hidden;
-    }
+  ::-webkit-scrollbar-track {
+    background: #000;
+  }
 
-    .flip-card-front {
-      background: linear-gradient(45deg, #ea384c, #000000);
-    }
+  ::-webkit-scrollbar-thumb {
+    background: #ea384c;
+    border-radius: 3px;
+  }
 
-    .flip-card-back {
-      transform: rotateY(180deg);
-      background: linear-gradient(45deg, #000000, #daa520);
-    }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #c0292b;
+  }
+}
 
-    /* Floating animation for elements */
-    .animate-float {
-      animation: float 3s ease-in-out infinite;
-    }
+@layer components {
+  /* Decorative icon with floating animation */
+  .decorative-icon {
+    @apply absolute w-12 h-12 flex items-center justify-center;
+    animation: orbit 10s linear infinite, float 3s ease-in-out infinite;
+  }
 
-    /* Pulse glow animation for elements */
-    .animate-pulse-glow {
-      animation: pulse-glow 2s infinite;
-    }
+  /* Particle effect for background */
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    pointer-events: none;
+    transform-origin: center center;
+  }
 
-    /* Horizontal sliding gradient effect */
-    .animate-gradient-x {
-      animation: gradient-x 3s infinite;
-    }
+  /* Flip card styles */
+  .flip-card {
+    perspective: 1000px;
+    width: 300px;
+    height: 400px;
+  }
 
-    /* Animation for martial artist movements */
-    @keyframes kick {
-      0% {
-        transform: rotate(0deg);
-      }
-      50% {
-        transform: rotate(-30deg);
-      }
-      100% {
-        transform: rotate(0deg);
-      }
-    }
+  .flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+  }
 
-    @keyframes punch {
-      0% {
-        transform: translateX(0);
-      }
-      50% {
-        transform: translateX(20px);
-      }
-      100% {
-        transform: translateX(0);
-      }
-    }
+  .flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg);
+  }
 
-    .arm-right {
-      animation: punch 2s infinite;
-    }
+  .flip-card-front,
+  .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 15px;
+    overflow: hidden;
+  }
 
-    .leg-kicking {
-      animation: kick 1.5s infinite;
-      transform-origin: 150px 300px;
-    }
+  .flip-card-front {
+    background: linear-gradient(45deg, #ea384c, #000000);
+  }
 
-    /* Drop shadow effect for martial artist animation */
-    .animate-martial-artist {
-      filter: drop-shadow(0 0 15px rgba(234, 56, 76, 0.5));
-    }
+  .flip-card-back {
+    transform: rotateY(180deg);
+    background: linear-gradient(45deg, #000000, #daa520);
+  }
+  
+  /* 3D button hover effect */
+  .btn-3d {
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .btn-3d:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  }
 
-    /* Slide-up animation for elements */
-    @keyframes slideFromBottom {
-      0% {
-        transform: translateY(100px);
-        opacity: 0;
-      }
-      100% {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
+  /* Floating animation for elements */
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  /* Slow floating animation */
+  .animate-float-slow {
+    animation: float-slow 8s ease-in-out infinite;
+  }
 
-    .animate-slide-from-bottom {
-      animation: slideFromBottom 1s ease forwards;
-    }
+  /* Pulse glow animation for elements */
+  .animate-pulse-glow {
+    animation: pulse-glow 2s infinite;
+  }
 
-    /* Navbar show/hide animation */
-    @keyframes slideDown {
-      from {
-        transform: translateY(-100%);
-      }
-      to {
-        transform: translateY(0);
-      }
-    }
+  /* Horizontal sliding gradient effect */
+  .animate-gradient-x {
+    animation: gradient-x 3s infinite;
+  }
+  
+  /* Flip animation */
+  .animate-flip {
+    animation: flip 8s infinite linear;
+  }
+  
+  /* Fade in animation */
+  .animate-fade-in {
+    animation: fade-in 0.5s forwards;
+  }
+  
+  /* Fade in up animation */
+  .animate-fade-in-up {
+    animation: fade-in-up 1s forwards;
+  }
+  
+  /* Rotate animation */
+  .animate-rotate {
+    animation: rotate 8s linear infinite;
+  }
+  
+  /* Bounce animation */
+  .animate-bounce-custom {
+    animation: bounce 2s infinite;
+  }
+  
+  /* Appear animation */
+  .animate-appear {
+    animation: appear 0.5s forwards;
+  }
 
-    .navbar-visible {
-      animation: slideDown 0.3s ease-in-out forwards;
+  /* Animation for martial artist movements */
+  @keyframes kick {
+    0% {
+      transform: rotate(0deg);
     }
+    50% {
+      transform: rotate(-30deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+
+  @keyframes punch {
+    0% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(20px);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  .arm-right {
+    animation: punch 2s infinite;
+  }
+
+  .leg-kicking {
+    animation: kick 1.5s infinite;
+    transform-origin: 150px 300px;
+  }
+
+  /* Drop shadow effect for martial artist animation */
+  .animate-martial-artist {
+    filter: drop-shadow(0 0 15px rgba(234, 56, 76, 0.5));
+  }
+
+  /* Slide-up animation for elements */
+  @keyframes slideFromBottom {
+    0% {
+      transform: translateY(100px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .animate-slide-from-bottom {
+    animation: slideFromBottom 1s ease forwards;
+  }
+
+  /* Navbar show/hide animation */
+  @keyframes slideDown {
+    from {
+      transform: translateY(-100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  .navbar-visible {
+    animation: slideDown 0.3s ease-in-out forwards;
+  }
+  
+  /* 3D hover card effect */
+  .card-3d {
+    transition: transform 0.3s ease;
+    transform-style: preserve-3d;
+  }
+  
+  .card-3d:hover {
+    transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+  }
+  
+  /* 3D button with depth */
+  .btn-depth {
+    position: relative;
+    transition: transform 0.2s ease;
+  }
+  
+  .btn-depth::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: inherit;
+    border-radius: inherit;
+    z-index: -1;
+    transform: translateZ(-10px);
+    filter: blur(10px);
+    opacity: 0.5;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  
+  .btn-depth:hover {
+    transform: translateY(-5px);
+  }
+  
+  .btn-depth:hover::after {
+    transform: translateZ(-15px);
+    opacity: 0.8;
+  }
+  
+  /* Scroll-triggered animation class */
+  .scroll-animate {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  
+  .scroll-animate.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  /* 3D tilt card */
+  .tilt-card {
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease;
+  }
+  
+  .tilt-card-inner {
+    transform-style: preserve-3d;
+  }
+  
+  .tilt-card:hover .tilt-card-inner {
+    transform: translateZ(20px);
   }
 }

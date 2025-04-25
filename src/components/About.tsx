@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from 'react';
+
+import { useEffect, useRef } from 'react';
 
 const About = () => {
   const sectionRef = useRef<HTMLDivElement>(null);

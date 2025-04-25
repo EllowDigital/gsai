@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+
+import { useState, useEffect } from 'react';
 
 interface ImageProps {
   src: string;
@@ -13,6 +14,14 @@ const GalleryImage = ({ src, alt, onClick }: ImageProps) => {
     <div
       onClick={onClick}
       className="relative overflow-hidden rounded-lg cursor-pointer transform transition-all duration-300 hover:scale-105 gallery-animate opacity-0"
+      role="button"
+      tabIndex={0}
+      aria-label={`View ${alt} image`}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          onClick();
+        }
+      }}
     >
       {!isLoaded && (
         <div className="absolute inset-0 bg-gsai-gray-700 animate-pulse flex items-center justify-center">
@@ -21,6 +30,7 @@ const GalleryImage = ({ src, alt, onClick }: ImageProps) => {
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
             <path
               strokeLinecap="round"
@@ -76,7 +86,7 @@ const Gallery = () => {
   const galleryImages = [
     { src: '/images/slider.png', alt: 'National Martial Arts Games 2019' },
     { src: '/images/gallery1.png', alt: 'With Anurag Thakur Sir' },
-    { src: '/images/gallery3.jpg', alt: 'With Parul Chaudhary Ma’am' },
+    { src: '/images/gallery3.jpg', alt: 'With Parul Chaudhary Ma\'am' },
     { src: '/images/gallery3.png', alt: 'International Martial Arts Champion' },
     { src: '/images/gallery4.png', alt: 'Kalaripayattu Nationals 2022' },
     { src: '/images/gallery5.png', alt: 'World Martial Arts Games' },
@@ -115,13 +125,20 @@ const Gallery = () => {
           <div
             className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4"
             onClick={() => setSelectedImage(null)}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Image lightbox"
           >
             <div className="relative max-w-4xl max-h-full">
               <button
                 className="absolute -top-12 right-0 text-white hover:text-gsai-red"
-                onClick={() => setSelectedImage(null)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedImage(null);
+                }}
+                aria-label="Close lightbox"
               >
-                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"

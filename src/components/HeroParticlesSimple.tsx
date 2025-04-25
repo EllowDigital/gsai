@@ -1,120 +1,156 @@
 
-import React, { useEffect, useRef } from "react";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useEffect, useRef } from 'react';
+import { ParticleProps } from './HeroParticles';
 
-interface HeroParticlesProps {
-  parentRef: React.RefObject<HTMLDivElement>;
-}
+const HeroParticlesSimple = ({ parentRef }: ParticleProps) => {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const contextRef = useRef<CanvasRenderingContext2D | null>(null);
+  const particlesRef = useRef<Array<{
+    x: number;
+    y: number;
+    radius: number;
+    color: string;
+    vx: number;
+    vy: number;
+    alpha: number;
+  }>>([]);
+  const animationFrameRef = useRef<number | null>(null);
 
-// Simpler canvas-based particles for mobile
-const HeroParticlesSimple: React.FC<HeroParticlesProps> = ({ parentRef }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const isMobile = useIsMobile();
-  
   useEffect(() => {
+    if (!canvasRef.current || !parentRef.current) return;
+
     const canvas = canvasRef.current;
-    if (!canvas || !parentRef.current) return;
-    
-    const width = parentRef.current.offsetWidth;
-    const height = parentRef.current.offsetHeight;
-    
-    // Set canvas dimensions
-    canvas.width = width;
-    canvas.height = height;
-    
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    
-    // Particle settings
-    const particleCount = isMobile ? 50 : 100;
-    const particles: Particle[] = [];
-    
-    // Create particle class
-    class Particle {
-      x: number;
-      y: number;
-      size: number;
-      speedX: number;
-      speedY: number;
-      color: string;
+
+    contextRef.current = ctx;
+
+    const resizeCanvas = () => {
+      if (!canvas || !parentRef.current) return;
       
-      constructor() {
-        this.x = Math.random() * width;
-        this.y = Math.random() * height;
-        this.size = Math.random() * 3 + 1;
-        this.speedX = (Math.random() - 0.5) * 1;
-        this.speedY = (Math.random() - 0.5) * 1;
-        
-        // Use GSAI colors
-        const colors = ['#ff0000', '#ffcc00', '#ffffff'];
-        this.color = colors[Math.floor(Math.random() * colors.length)];
-      }
-      
-      update() {
-        // Move particles
-        this.x += this.speedX;
-        this.y += this.speedY;
-        
-        // Wrap around edges
-        if (this.x > width) this.x = 0;
-        else if (this.x < 0) this.x = width;
-        
-        if (this.y > height) this.y = 0;
-        else if (this.y < 0) this.y = height;
-      }
-      
-      draw() {
-        if (!ctx) return;
-        ctx.beginPath();
-        ctx.fillStyle = this.color;
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-        
-        // Add glow effect
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = this.color;
-      }
-    }
-    
-    // Initialize particles
-    for (let i = 0; i < particleCount; i++) {
-      particles.push(new Particle());
-    }
-    
-    // Handle resize
-    const handleResize = () => {
-      if (parentRef.current) {
-        canvas.width = parentRef.current.offsetWidth;
-        canvas.height = parentRef.current.offsetHeight;
-      }
+      canvas.width = parentRef.current.clientWidth;
+      canvas.height = parentRef.current.clientHeight;
     };
-    
-    // Animation loop
-    let animationId: number;
-    
-    const animate = () => {
-      ctx.clearRect(0, 0, width, height);
-      
-      // Update and draw particles
-      particles.forEach(particle => {
-        particle.update();
-        particle.draw();
-      });
-      
-      animationId = requestAnimationFrame(animate);
-    };
-    
+
+    // Initial setup
+    resizeCanvas();
+    createParticles();
+
+    // Event listeners
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+      createParticles();
+    });
+
+    // Start animation
     animate();
-    window.addEventListener('resize', handleResize);
-    
-    // Cleanup
+
     return () => {
-      cancelAnimationFrame(animationId);
-      window.removeEventListener('resize', handleResize);
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+      window.removeEventListener('resize', resizeCanvas);
     };
-  }, [parentRef, isMobile]);
-  
-  return <canvas ref={canvasRef} className="absolute inset-0 z-0" />;
+  }, [parentRef]);
+
+  const createParticles = () => {
+    if (!canvasRef.current) return;
+    
+    const canvas = canvasRef.current;
+    const width = canvas.width;
+    const height = canvas.height;
+    const particles = [];
+    const colors = ['#ff5500', '#ffcc00', '#ffffff', '#ff0000'];
+    const particleCount = Math.min(width * height / 10000, 80); // Adjust density based on screen size
+    
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        radius: Math.random() * 2 + 1,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        alpha: Math.random() * 0.5 + 0.5
+      });
+    }
+    
+    particlesRef.current = particles;
+  };
+
+  const animate = () => {
+    if (!contextRef.current || !canvasRef.current) return;
+    
+    const ctx = contextRef.current;
+    const canvas = canvasRef.current;
+    
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Update and draw particles
+    particlesRef.current.forEach(particle => {
+      // Update position
+      particle.x += particle.vx;
+      particle.y += particle.vy;
+      
+      // Boundary check - wrap around
+      if (particle.x < 0) particle.x = canvas.width;
+      if (particle.x > canvas.width) particle.x = 0;
+      if (particle.y < 0) particle.y = canvas.height;
+      if (particle.y > canvas.height) particle.y = 0;
+      
+      // Draw particle
+      ctx.beginPath();
+      ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+      ctx.globalAlpha = particle.alpha;
+      ctx.fillStyle = particle.color;
+      ctx.fill();
+      
+      // Draw connections between particles
+      connectParticles(particle);
+    });
+    
+    // Continue animation
+    animationFrameRef.current = requestAnimationFrame(animate);
+  };
+
+  const connectParticles = (particle: {
+    x: number;
+    y: number;
+    alpha: number;
+  }) => {
+    if (!contextRef.current) return;
+    
+    const ctx = contextRef.current;
+    const connectionRadius = 100; // Maximum distance for connection
+    
+    particlesRef.current.forEach(otherParticle => {
+      if (particle === otherParticle) return;
+      
+      const dx = particle.x - otherParticle.x;
+      const dy = particle.y - otherParticle.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      
+      if (distance < connectionRadius) {
+        // Draw line with opacity based on distance
+        const opacity = 1 - (distance / connectionRadius);
+        ctx.beginPath();
+        ctx.moveTo(particle.x, particle.y);
+        ctx.lineTo(otherParticle.x, otherParticle.y);
+        ctx.strokeStyle = `rgba(255,85,0,${opacity * 0.2})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    });
+  };
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full"
+      aria-hidden="true"
+    />
+  );
 };
 
 export default HeroParticlesSimple;

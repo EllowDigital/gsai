@@ -1,126 +1,123 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { cn } from '@/lib/utils';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Menu } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
+import CTAButton from "./CTAButton";
+import MartialArtistSVG from "./MartialArtistSVG"; // Still unused
+import { motion } from "framer-motion";
+
+const NAV_LINKS = [
+  { label: "About", href: "#about" },
+  { label: "Programs", href: "#programs" },
+  { label: "Testimonials", href: "#testimonials" },
+  { label: "Gallery", href: "#gallery" },
+  { label: "FAQ", href: "#faq" },
+  { label: "Contact", href: "#contact" },
+];
 
 const NavBar = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [visible, setVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
-
-  const toggleMenu = () => setMenuOpen((prev) => !prev);
-
-  const navLinks = useMemo(() => [
-    { name: 'Home', href: '#hero' },
-    { name: 'About', href: '#about' },
-    { name: 'Programs', href: '#programs' },
-    { name: 'Gallery', href: '#gallery' },
-    { name: 'FAQ', href: '#faq' },
-    { name: 'Contact', href: '#contact' },
-  ], []);
-
-  useEffect(() => {
-    const onScroll = () => {
-      const currentScrollY = window.scrollY;
-
-      setScrolled(currentScrollY > 80);
-      setVisible(currentScrollY < lastScrollY);
-      setLastScrollY(currentScrollY);
-    };
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, [lastScrollY]);
+  const isMobile = useIsMobile();
 
   return (
-    <nav
-      className={cn(
-        "fixed w-full z-50 transition-all duration-300",
-        scrolled ? "bg-black bg-opacity-90 backdrop-blur-md shadow-md py-2" : "py-6",
-        visible ? "translate-y-0" : "-translate-y-full"
-      )}
-    >
-      <div className="container mx-auto px-4 md:px-8 flex items-center justify-between">
-        {/* Logo with image */}
-        <a href="#hero" className="flex items-center space-x-3">
+    <header className="sticky top-0 z-50 bg-black/70 backdrop-blur-md shadow-md transition-all duration-300">
+      <div className="gsai-container py-4 flex items-center justify-between">
+        {/* Logo and Brand */}
+        <a
+          href="/"
+          className="flex items-center space-x-3"
+          aria-label="Go to homepage"
+        >
           <img
-            src="/images/logo.png" // Replace with your logo path
-            alt="Ghatak SAI Logo"
-            className="w-12 h-12 object-contain"
+            src="/favicon_io/android-chrome-192x192.png"
+            alt="GSAI Logo"
+            className="h-8 w-8 rounded-full"
           />
-          <span className="text-2xl font-bold text-white">
-            <span className="text-gsai-red">G</span>S
-            <span className="text-gsai-gold">AI</span>
+          <span className="font-bold text-xl text-white">
+            <span className="text-gsai-red">Ghatak</span>
+            <span className="text-gsai-gold"> Sports Academy</span>
           </span>
         </a>
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex items-center space-x-8">
-          {navLinks.map(({ name, href }) => (
-            <a
-              key={name}
-              href={href}
-              className="text-white hover:text-gsai-red transition-colors duration-300 font-medium"
-            >
-              {name}
-            </a>
-          ))}
-          <a href="https://forms.gle/LTYn59kPWkQgC3VR7" className="gsai-btn animate-pulse-glow">
-            Join Now
-          </a>
-        </div>
-
-        {/* Mobile Menu Toggle */}
-        <div className="md:hidden">
-          <button
-            onClick={toggleMenu}
-            className="text-white focus:outline-none"
-            aria-label="Toggle navigation menu"
+        {/* Desktop Nav */}
+        {!isMobile && (
+          <nav
+            className="hidden md:flex space-x-6"
+            aria-label="Main navigation"
           >
-            <svg
-              className={cn("w-6 h-6 transition-transform duration-300", menuOpen && "rotate-90")}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              {menuOpen ? (
-                <path d="M6 18L18 6M6 6l12 12" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-              ) : (
-                <path d="M4 6h16M4 12h16M4 18h16" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-              )}
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile Menu Dropdown */}
-      <div
-        className={cn(
-          "md:hidden overflow-hidden transition-all duration-300 ease-in-out mx-4 mt-2 glass-card",
-          menuOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0 invisible"
+            {NAV_LINKS.map(({ label, href }) => (
+              <a
+                key={href}
+                href={href}
+                className="text-gray-300 hover:text-white transition-colors duration-200"
+              >
+                {label}
+              </a>
+            ))}
+          </nav>
         )}
-      >
-        <div className="flex flex-col space-y-3 p-4">
-          {navLinks.map(({ name, href }) => (
-            <a
-              key={name}
-              href={href}
-              onClick={() => setMenuOpen(false)}
-              className="text-white hover:text-gsai-red transition-colors duration-300 py-2 px-4 rounded"
-            >
-              {name}
-            </a>
-          ))}
-          <a
-            href="#contact"
-            onClick={() => setMenuOpen(false)}
-            className="gsai-btn text-center"
-          >
-            Join Now
-          </a>
+
+        {/* CTA and Mobile Menu */}
+        <div className="flex items-center space-x-4">
+          {!isMobile && (
+            <CTAButton
+              label="Join Now"
+              href="https://forms.gle/LTYn59kPWkQgC3VR7"
+            />
+          )}
+
+          {isMobile && (
+            <Sheet>
+              <SheetTrigger asChild>
+                <button
+                  aria-label="Open mobile menu"
+                  className="transition-colors hover:text-gray-300"
+                >
+                  <Menu className="h-6 w-6 text-white" />
+                </button>
+              </SheetTrigger>
+              <SheetContent
+                side="right"
+                className="bg-gsai-gray-800 text-white"
+              >
+                <SheetHeader>
+                  <SheetTitle>Navigation</SheetTitle>
+                  <SheetDescription>
+                    Explore the academy and find what you need.
+                  </SheetDescription>
+                </SheetHeader>
+                <motion.nav
+                  className="flex flex-col space-y-5 mt-6"
+                  aria-label="Mobile navigation"
+                  initial={{ x: 50, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {NAV_LINKS.map(({ label, href }) => (
+                    <a
+                      key={href}
+                      href={href}
+                      className="hover:text-gsai-red transition-colors"
+                    >
+                      {label}
+                    </a>
+                  ))}
+                  <CTAButton
+                    label="Join Now"
+                    href="https://forms.gle/LTYn59kPWkQgC3VR7"
+                  />
+                </motion.nav>
+              </SheetContent>
+            </Sheet>
+          )}
         </div>
       </div>
-    </nav>
+    </header>
   );
 };
 

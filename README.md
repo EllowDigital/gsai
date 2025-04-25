@@ -1,3 +1,4 @@
+
 # 🌟 Welcome to **Ghatak Sports Academy India™ (GSAI)** 🌟
 
 <div align="center">
@@ -33,7 +34,7 @@ At GSAI, we foster a spirit of **respect, confidence, and excellence**, guiding 
 
 ---
 
-## 👤 Founder’s Message
+## 👤 Founder's Message
 
 ### **Mr. Nitesh Yadav**
 
@@ -54,9 +55,79 @@ We offer specialized programs for all skill levels—from complete beginners to 
 - 🥋 **Kickboxing** – A powerful mix of cardio and combat skills.
 - 🤼 **Grappling** – Close-combat and ground control tactics.
 - 🥋 **MMA** – Comprehensive training in striking and grappling.
-- 🕉️ **Kalaripayattu** – Rediscover India’s ancient warrior tradition.
+- 🕉️ **Kalaripayattu** – Rediscover India's ancient warrior tradition.
 - 🛡️ **Self-Defense** – Practical, real-world safety techniques.
 - 🏋️ **Fat Loss Programs** – Burn fat, build muscle, and gain agility.
+
+---
+
+## 📝 Project Documentation
+
+### Project Structure
+```
+gsai-website/
+├── public/                   # Static assets and files
+│   ├── favicon_io/           # Favicon files
+│   ├── images/               # Image assets
+│   ├── robots.txt            # SEO robots file
+│   └── sitemap.xml           # Site structure for search engines
+├── src/
+│   ├── components/           # Reusable UI components
+│   │   ├── ui/               # ShadCN UI components
+│   │   └── [component].tsx   # Custom components
+│   ├── hooks/                # Custom React hooks
+│   ├── lib/                  # Utility functions and helpers
+│   ├── pages/                # Page components and routes
+│   │   ├── Index.tsx         # Home page
+│   │   ├── NotFound.tsx      # 404 page
+│   │   ├── PrivacyPolicy.tsx # Privacy policy page
+│   │   └── Terms.tsx         # Terms and conditions page
+│   ├── App.tsx               # Main application component
+│   ├── index.css             # Global CSS styles
+│   ├── main.tsx              # Application entry point
+│   └── pwa.tsx               # PWA implementation
+├── vite.config.ts            # Vite configuration
+├── tailwind.config.ts        # Tailwind CSS configuration
+└── tsconfig.json             # TypeScript configuration
+```
+
+### Vite Configuration
+Our `vite.config.ts` includes:
+- Environment-specific base path configuration
+- PWA setup with service worker and manifest
+- Production optimizations (compression, image optimization)
+- Code splitting for optimal loading
+- Development tools configuration
+
+### TypeScript Architecture
+- Strict type checking enabled
+- Interface-driven component props
+- Utility types for common patterns
+- Path aliases for cleaner imports
+
+### Animation Implementation
+- CSS animations for lightweight effects
+- Intersection Observer for scroll-triggered animations
+- 3D effects using CSS transforms and perspective
+- Performance optimization with will-change and transform
+
+### Deployment Guide
+
+**GitHub Pages Deployment:**
+1. Set `DEPLOY_TARGET=github` environment variable
+2. Run `npm run build`
+3. Push the `dist` folder to the `gh-pages` branch
+
+**Netlify Deployment:**
+1. Connect your GitHub repository to Netlify
+2. Set build command: `npm run build`
+3. Set publish directory: `dist`
+4. Configure environment variables if needed
+
+**Vercel Deployment:**
+1. Import your project from GitHub
+2. Vercel will automatically detect Vite configuration
+3. Deploy with the default settings or customize as needed
 
 ---
 
