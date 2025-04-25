@@ -1,5 +1,4 @@
-
-import React, { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import HeroParticles from './HeroParticles';
 import CTAButton from './CTAButton';
 
@@ -64,6 +63,7 @@ const Hero = () => {
           <CTAButton
             label="Join Now"
             href="https://forms.gle/LTYn59kPWkQgC3VR7"
+            onClick={scrollToContact}
           />
         </div>
 

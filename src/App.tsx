@@ -20,7 +20,11 @@ const App = () => {
 
   useEffect(() => {
     // Check if page is being reloaded
-    if (performance.getEntriesByType("navigation")[0]?.type === "reload") {
+    const navigationEntries = performance.getEntriesByType("navigation");
+    const isReload = navigationEntries.length > 0 && 
+                     (navigationEntries[0] as PerformanceNavigationTiming).type === "reload";
+    
+    if (isReload) {
       setShowPreloader(false);
       setContentLoaded(true);
       return;

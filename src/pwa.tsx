@@ -1,46 +1,38 @@
+
 import { useEffect, useState } from "react";
-import { useRegisterSW } from "virtual:pwa-register/react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle, RefreshCw, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "@/components/ui/sonner"; // ✅ Toast notification
 
+// Temporary dummy implementation until PWA is properly setup
 const PWA = () => {
   const [show, setShow] = useState(false);
 
-  const {
-    needRefresh,
-    updateServiceWorker,
-  } = useRegisterSW({
-    onRegisteredSW(swUrl, registration) {
-      console.log("✅ Service Worker registered:", swUrl);
-    },
-    onRegisterError(error) {
-      console.error("❌ SW registration error:", error);
-    },
-    onNeedRefresh() {
-      console.info("🔄 New version available");
-      setShow(true);
-    },
-  });
-
+  // Mock update function
   const handleRefresh = () => {
     toast("🔄 Updating to the latest version...");
-    updateServiceWorker(true);
     setShow(false);
+    window.location.reload();
   };
 
   const handleDismiss = () => {
     setShow(false);
   };
 
+  // For development purposes, let the message show after 10 seconds
   useEffect(() => {
-    if (show) {
-      const timer = setTimeout(() => setShow(false), 10000);
-      return () => clearTimeout(timer);
-    }
-  }, [show]);
+    const timer = setTimeout(() => {
+      // In development, we'll show this message briefly for testing
+      if (import.meta.env.DEV) {
+        setShow(true);
+        setTimeout(() => setShow(false), 5000);
+      }
+    }, 10000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <AnimatePresence>
