@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Sheet,
   SheetContent,
@@ -9,7 +10,6 @@ import {
 import { Menu } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import CTAButton from "./CTAButton";
-import MartialArtistSVG from "./MartialArtistSVG"; // Still unused
 import { motion } from "framer-motion";
 
 const NAV_LINKS = [
@@ -23,101 +23,104 @@ const NAV_LINKS = [
 
 const NavBar = () => {
   const isMobile = useIsMobile();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleNavClick = (href: string) => {
+    setIsOpen(false);
+    const target = document.querySelector(href);
+    if (target) {
+      setTimeout(() => {
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 300); // Delay to allow Sheet to close first
+    }
+  };
 
   return (
-    <header className="sticky top-0 z-50 bg-black/70 backdrop-blur-md shadow-md transition-all duration-300">
-      <div className="gsai-container py-4 flex items-center justify-between">
-        {/* Logo and Brand */}
-        <a
-          href="/"
-          className="flex items-center space-x-3"
-          aria-label="Go to homepage"
-        >
+    <motion.header
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="sticky top-0 z-50 w-full bg-black/60 backdrop-blur-lg border-b border-white/10 shadow-xl"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+        {/* Logo */}
+        <a href="/" className="flex items-center gap-3" aria-label="Homepage">
           <img
             src="/favicon_io/android-chrome-192x192.png"
             alt="GSAI Logo"
-            className="h-8 w-8 rounded-full"
+            className="h-10 w-10 rounded-full object-cover shadow-md"
           />
-          <span className="font-bold text-xl text-white">
-            <span className="text-gsai-red">Ghatak</span>
-            <span className="text-gsai-gold"> Sports Academy</span>
+          <span className="font-extrabold text-lg sm:text-xl text-white drop-shadow-sm whitespace-nowrap">
+            <span className="text-gsai-red">Ghatak</span>{" "}
+            <span className="text-gsai-gold">Sports Academy</span>
           </span>
         </a>
 
         {/* Desktop Nav */}
-        {!isMobile && (
-          <nav
-            className="hidden md:flex space-x-6"
-            aria-label="Main navigation"
-          >
-            {NAV_LINKS.map(({ label, href }) => (
-              <a
-                key={href}
-                href={href}
-                className="text-gray-300 hover:text-white transition-colors duration-200"
-              >
-                {label}
-              </a>
-            ))}
-          </nav>
-        )}
+        <nav className="hidden md:flex gap-6 items-center">
+          {NAV_LINKS.map(({ label, href }) => (
+            <a
+              key={href}
+              href={href}
+              className="text-gray-300 hover:text-white font-medium transition-colors"
+            >
+              {label}
+            </a>
+          ))}
+          <CTAButton
+            label="Join Now"
+            href="https://forms.gle/LTYn59kPWkQgC3VR7"
+          />
+        </nav>
 
-        {/* CTA and Mobile Menu */}
-        <div className="flex items-center space-x-4">
-          {!isMobile && (
-            <CTAButton
-              label="Join Now"
-              href="https://forms.gle/LTYn59kPWkQgC3VR7"
-            />
-          )}
-
-          {isMobile && (
-            <Sheet>
-              <SheetTrigger asChild>
-                <button
-                  aria-label="Open mobile menu"
-                  className="transition-colors hover:text-gray-300"
-                >
-                  <Menu className="h-6 w-6 text-white" />
-                </button>
-              </SheetTrigger>
-              <SheetContent
-                side="right"
-                className="bg-gsai-gray-800 text-white"
+        {/* Mobile Nav */}
+        <div className="md:hidden flex items-center">
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+            <SheetTrigger asChild>
+              <button
+                aria-label="Open mobile menu"
+                className="text-white hover:text-gray-300 transition"
               >
-                <SheetHeader>
-                  <SheetTitle>Navigation</SheetTitle>
-                  <SheetDescription>
-                    Explore the academy and find what you need.
-                  </SheetDescription>
-                </SheetHeader>
-                <motion.nav
-                  className="flex flex-col space-y-5 mt-6"
-                  aria-label="Mobile navigation"
-                  initial={{ x: 50, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {NAV_LINKS.map(({ label, href }) => (
-                    <a
-                      key={href}
-                      href={href}
-                      className="hover:text-gsai-red transition-colors"
-                    >
-                      {label}
-                    </a>
-                  ))}
-                  <CTAButton
-                    label="Join Now"
-                    href="https://forms.gle/LTYn59kPWkQgC3VR7"
-                  />
-                </motion.nav>
-              </SheetContent>
-            </Sheet>
-          )}
+                <Menu className="w-7 h-7" />
+              </button>
+            </SheetTrigger>
+            <SheetContent side="right" className="bg-black/90 text-white">
+              <SheetHeader>
+                <SheetTitle className="text-white text-xl">
+                  Menu
+                </SheetTitle>
+                <SheetDescription className="text-gray-400">
+                  Navigate the site
+                </SheetDescription>
+              </SheetHeader>
+              <motion.nav
+                className="flex flex-col gap-5 mt-6"
+                initial={{ x: 30, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ duration: 0.4 }}
+              >
+                {NAV_LINKS.map(({ label, href }) => (
+                  <button
+                    key={href}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleNavClick(href);
+                    }}
+                    className="text-left hover:text-gsai-red text-lg transition"
+                  >
+                    {label}
+                  </button>
+                ))}
+                <CTAButton
+                  label="Join Now"
+                  href="https://forms.gle/LTYn59kPWkQgC3VR7"
+                />
+              </motion.nav>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
-    </header>
+    </motion.header>
   );
 };
 
