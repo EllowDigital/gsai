@@ -1,9 +1,9 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
 
+// Testimonial interface
 interface Testimonial {
   id: number;
   name: string;
@@ -14,7 +14,8 @@ interface Testimonial {
   image?: string;
 }
 
-const testimonials: Testimonial[] = [
+// Testimonial data
+const testimonialsData: Testimonial[] = [
   {
     id: 1,
     name: "Rahul Sharma",
@@ -66,6 +67,15 @@ const Testimonials = () => {
     threshold: 0.1,
     animationType: "fade",
   });
+
+  const [sortedTestimonials, setSortedTestimonials] = useState(testimonialsData);
+
+  // Sort testimonials based on rating (high to low)
+  useEffect(() => {
+    const sorted = [...testimonialsData].sort((a, b) => b.rating - a.rating);
+    setSortedTestimonials(sorted);
+  }, []);
+
   const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -84,9 +94,9 @@ const Testimonials = () => {
   const handlePrevious = () => {
     setDirection(-1);
     setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? testimonials.length - 1 : prevIndex - 1
+      prevIndex === 0 ? sortedTestimonials.length - 1 : prevIndex - 1
     );
-    
+
     // Reset autoplay timer
     if (autoPlayRef.current) {
       clearInterval(autoPlayRef.current);
@@ -97,9 +107,9 @@ const Testimonials = () => {
   const handleNext = () => {
     setDirection(1);
     setCurrentIndex((prevIndex) =>
-      prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1
+      prevIndex === sortedTestimonials.length - 1 ? 0 : prevIndex + 1
     );
-    
+
     // Reset autoplay timer
     if (autoPlayRef.current) {
       clearInterval(autoPlayRef.current);
@@ -107,7 +117,7 @@ const Testimonials = () => {
     }
   };
 
-  const currentTestimonial = testimonials[currentIndex];
+  const currentTestimonial = sortedTestimonials[currentIndex];
 
   const variants = {
     enter: (direction: number) => ({
@@ -173,11 +183,10 @@ const Testimonials = () => {
                           <Star
                             key={i}
                             size={16}
-                            className={`${
-                              i < currentTestimonial.rating
+                            className={`${i < currentTestimonial.rating
                                 ? "text-gsai-gold fill-gsai-gold"
                                 : "text-gray-400"
-                            }`}
+                              }`}
                           />
                         ))}
                         {currentTestimonial.location && (
@@ -192,9 +201,7 @@ const Testimonials = () => {
                       </blockquote>
 
                       <div className="mt-auto">
-                        <p className="font-semibold text-white">
-                          {currentTestimonial.name}
-                        </p>
+                        <p className="font-semibold text-white">{currentTestimonial.name}</p>
                         <p className="text-gsai-red">{currentTestimonial.role}</p>
                       </div>
                     </div>
@@ -213,18 +220,17 @@ const Testimonials = () => {
             >
               <ChevronLeft size={24} />
             </button>
-            
+
             <div className="flex items-center gap-2">
-              {testimonials.map((_, idx) => (
+              {sortedTestimonials.map((_, idx) => (
                 <button
                   key={idx}
                   onClick={() => {
                     setDirection(idx > currentIndex ? 1 : -1);
                     setCurrentIndex(idx);
                   }}
-                  className={`w-2 h-2 rounded-full transition-colors ${
-                    idx === currentIndex ? "bg-gsai-red" : "bg-gray-500"
-                  }`}
+                  className={`w-2 h-2 rounded-full transition-colors ${idx === currentIndex ? "bg-gsai-red" : "bg-gray-500"
+                    }`}
                   aria-label={`Go to testimonial ${idx + 1}`}
                   aria-current={idx === currentIndex ? "true" : "false"}
                 />

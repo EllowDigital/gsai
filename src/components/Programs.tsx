@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import { cn } from '@/lib/utils';
 
-interface ProgramProps {
+interface ProgramCardProps {
   title: string;
   icon: React.ReactNode;
   description: string;
   index: number;
 }
 
-const Program = ({ title, icon, description, index }: ProgramProps) => {
+const ProgramCard = ({ title, icon, description, index }: ProgramCardProps) => {
   return (
     <div
       className={cn(
@@ -235,7 +235,7 @@ const Programs = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {programsData.map((program, index) => (
-            <Program
+            <ProgramCard
               key={program.title}
               title={program.title}
               icon={program.icon}

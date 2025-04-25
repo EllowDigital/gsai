@@ -1,80 +1,73 @@
-
 import { useEffect, useRef } from 'react';
+
+interface Value {
+  icon: JSX.Element;
+  title: string;
+  description: string;
+}
 
 const About = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const target = entry.target as HTMLElement;
-            target.classList.add('animate-fade-in-up');
-            target.style.visibility = 'visible';
-            target.style.opacity = '1';
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    const elements = document.querySelectorAll('.about-animate');
-    elements.forEach((el) => observer.observe(el));
-
-    // Ensure the section itself is visible
-    if (sectionRef.current) {
-      sectionRef.current.style.visibility = 'visible';
-      sectionRef.current.style.position = 'relative';
-      sectionRef.current.style.zIndex = '1';
-    }
-
-    return () => {
-      elements.forEach((el) => observer.unobserve(el));
-    };
-  }, []);
-
-  const values = [
+  const values: Value[] = [
     {
       icon: (
-        <svg className="w-12 h-12 text-gsai-red mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-        </svg>
+        <SvgIcon path="M12 6v6m0 0v6m0-6h6m-6 0H6" />,
       ),
       title: 'Respect',
       description: 'We foster mutual respect among all members of our community.'
     },
     {
       icon: (
-        <svg className="w-12 h-12 text-gsai-red mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-        </svg>
+        <SvgIcon path="M13 10V3L4 14h7v7l9-11h-7z" />,
       ),
       title: 'Confidence',
       description: 'Building self-confidence through disciplined training and achievement.'
     },
     {
       icon: (
-        <svg className="w-12 h-12 text-gsai-red mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-        </svg>
+        <SvgIcon path="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />,
       ),
       title: 'Excellence',
       description: 'Striving for excellence in all aspects of martial arts and personal growth.'
     }
   ];
 
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const target = entry.target as HTMLElement;
+        if (entry.isIntersecting) {
+          target.classList.add('animate-fade-in-up');
+          target.style.visibility = 'visible';
+          target.style.opacity = '1';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    const elements = document.querySelectorAll('.about-animate');
+    elements.forEach((el) => observer.observe(el));
+
+    // Ensure the section itself is visible
+    const section = sectionRef.current;
+    if (section) {
+      section.style.visibility = 'visible';
+      section.style.position = 'relative';
+      section.style.zIndex = '1';
+    }
+
+    // Cleanup observer on unmount
+    return () => {
+      elements.forEach((el) => observer.unobserve(el));
+    };
+  }, []);
+
   return (
-    <section
-      id="about"
-      ref={sectionRef}
-      className="py-20 bg-gradient-to-b from-black to-gsai-gray-900 section-visible"
-    >
+    <section id="about" ref={sectionRef} className="py-20 bg-gradient-to-b from-black to-gsai-gray-900 section-visible">
       <div className="gsai-container">
         <div className="text-center mb-16">
           <h2 className="section-title text-white about-animate opacity-0">About Us</h2>
-          <div className="w-24 h-1 bg-gsai-red mx-auto mt-4 mb-8"></div>
-
+          <div className="w-24 h-1 bg-gsai-red mx-auto mt-4 mb-8" />
           <div className="max-w-3xl mx-auto about-animate opacity-0" style={{ animationDelay: '0.2s' }}>
             <p className="text-gray-300 text-lg mb-6">
               Ghatak Sports Academy India™ (GSAI) is a premier martial arts institution dedicated to transforming lives through disciplined training and personal development.
@@ -109,5 +102,11 @@ const About = () => {
     </section>
   );
 };
+
+const SvgIcon = ({ path }: { path: string }) => (
+  <svg className="w-12 h-12 text-gsai-red mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={path} />
+  </svg>
+);
 
 export default About;

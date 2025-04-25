@@ -1,36 +1,45 @@
+import { useEffect, useRef, useState } from 'react';
 
-import { useEffect, useRef } from 'react';
+// Define affiliation types for better type safety
+interface Affiliation {
+  name: string;
+  logo: string;
+}
 
 const Affiliations = () => {
   const carouselRef = useRef<HTMLDivElement>(null);
+  const [isHovered, setIsHovered] = useState(false);
 
+  // Intersection Observer for fade-in animation
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('animate-fade-in-up');
-            // Ensure visibility
-            if (entry.target instanceof HTMLElement) {
-              entry.target.style.visibility = 'visible';
-              entry.target.style.opacity = '1';
-            }
+            const target = entry.target as HTMLElement;
+            target.classList.add('animate-fade-in-up');
+            target.style.visibility = 'visible';
+            target.style.opacity = '1';
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 } // Trigger when 10% of the element is in view
     );
 
+    // Observe elements with the 'affiliation-animate' class
     const elements = document.querySelectorAll('.affiliation-animate');
     elements.forEach((el) => observer.observe(el));
 
+    // Cleanup observer on component unmount
     return () => {
       elements.forEach((el) => observer.unobserve(el));
     };
   }, []);
 
+  // Auto-scroll carousel with pause on hover
   useEffect(() => {
     let scrollInterval: ReturnType<typeof setInterval>;
+
     const carousel = carouselRef.current;
 
     const startCarousel = () => {
@@ -50,20 +59,22 @@ const Affiliations = () => {
       clearInterval(scrollInterval);
     };
 
+    // Start the carousel
     startCarousel();
 
-    // Pause on hover
-    carousel?.addEventListener('mouseenter', stopCarousel);
-    carousel?.addEventListener('mouseleave', startCarousel);
+    // Pause carousel on hover
+    carousel?.addEventListener('mouseenter', () => setIsHovered(true));
+    carousel?.addEventListener('mouseleave', () => setIsHovered(false));
 
+    // Cleanup event listeners and interval
     return () => {
       clearInterval(scrollInterval);
-      carousel?.removeEventListener('mouseenter', stopCarousel);
-      carousel?.removeEventListener('mouseleave', startCarousel);
+      carousel?.removeEventListener('mouseenter', () => setIsHovered(true));
+      carousel?.removeEventListener('mouseleave', () => setIsHovered(false));
     };
-  }, []);
+  }, [isHovered]);
 
-  const affiliations = [
+  const affiliations: Affiliation[] = [
     { name: 'Government of India', logo: '/images/india.png' },
     { name: 'Ministry of Youth Affairs and Sports', logo: '/images/ministry.png' },
     { name: 'MSME Certification', logo: '/images/MSME.png' },
@@ -84,7 +95,10 @@ const Affiliations = () => {
         <div className="text-center mb-16">
           <h2 className="section-title text-white affiliation-animate opacity-0">Recognitions & Affiliations</h2>
           <div className="w-24 h-1 bg-gsai-red mx-auto mt-4 mb-8"></div>
-          <p className="text-gray-300 max-w-2xl mx-auto affiliation-animate opacity-0" style={{ animationDelay: '0.2s' }}>
+          <p
+            className="text-gray-300 max-w-2xl mx-auto affiliation-animate opacity-0"
+            style={{ animationDelay: '0.2s' }}
+          >
             Ghatak Sports Academy India™ is proud to be recognized and affiliated with these prestigious organizations.
           </p>
         </div>

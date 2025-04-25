@@ -16,7 +16,7 @@ const HeroParticles: React.FC<HeroParticlesProps> = ({ parentRef }) => {
   let clock = new THREE.Clock();
 
   const particleSize = 4;
-  const deepRedColor = new THREE.Color(0.8, 0.0, 0.0);
+  const whiteColor = new THREE.Color(1.0, 1.0, 1.0); // Change to white color
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -35,14 +35,14 @@ const HeroParticles: React.FC<HeroParticlesProps> = ({ parentRef }) => {
     renderer.setSize(width, height);
 
     // ✨ Create Particles
-    const particleCount = isMobile ? 300 : 500;
+    const particleCount = isMobile ? 1000 : 2000; // Increased particle count
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const velocities = new Float32Array(particleCount * 3);
     const opacities = new Float32Array(particleCount);
     const colors = new Float32Array(particleCount * 3);
 
-    // Set particles to deep red color (RGB: 0.8, 0.0, 0.0)
+    // Set particles to white color (RGB: 1.0, 1.0, 1.0)
     for (let i = 0; i < particleCount; i++) {
       positions[i * 3] = (Math.random() - 0.5) * 400;
       positions[i * 3 + 1] = (Math.random() - 0.5) * 400;
@@ -54,10 +54,10 @@ const HeroParticles: React.FC<HeroParticlesProps> = ({ parentRef }) => {
 
       opacities[i] = Math.random();
 
-      // Fixed deep red color (RGB: 0.8, 0.0, 0.0)
-      colors[i * 3] = deepRedColor.r; // Red
-      colors[i * 3 + 1] = deepRedColor.g; // Green
-      colors[i * 3 + 2] = deepRedColor.b; // Blue
+      // Fixed white color (RGB: 1.0, 1.0, 1.0)
+      colors[i * 3] = whiteColor.r; // Red
+      colors[i * 3 + 1] = whiteColor.g; // Green
+      colors[i * 3 + 2] = whiteColor.b; // Blue
     }
 
     geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
@@ -85,10 +85,8 @@ const HeroParticles: React.FC<HeroParticlesProps> = ({ parentRef }) => {
 
       for (let i = 0; i < particleCount; i++) {
         positionAttr.array[i * 3] += velocityAttr.array[i * 3] * delta * 100;
-        positionAttr.array[i * 3 + 1] +=
-          velocityAttr.array[i * 3 + 1] * delta * 100;
-        positionAttr.array[i * 3 + 2] +=
-          velocityAttr.array[i * 3 + 2] * delta * 100;
+        positionAttr.array[i * 3 + 1] += velocityAttr.array[i * 3 + 1] * delta * 100;
+        positionAttr.array[i * 3 + 2] += velocityAttr.array[i * 3 + 2] * delta * 100;
 
         opacityAttr.array[i] = Math.abs(
           Math.sin(clock.getElapsedTime() * 2 + i * 0.1)

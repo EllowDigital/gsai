@@ -1,5 +1,4 @@
-
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './Preloader.css';
 
 interface PreloaderProps {
@@ -7,26 +6,26 @@ interface PreloaderProps {
 }
 
 const Preloader: React.FC<PreloaderProps> = ({ isVisible }) => {
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const [fadeOut, setFadeOut] = useState(false);
 
   useEffect(() => {
-    // Hide the raw HTML preloader on mount
-    const htmlPreloader = document.getElementById('initial-preloader');
-    if (htmlPreloader) {
-      htmlPreloader.style.display = 'none';
-    }
+    // Hide initial raw HTML preloader if any
+    const initial = document.getElementById('initial-preloader');
+    if (initial) initial.style.display = 'none';
 
-    // Set body to not scroll during preloader
+    // Prevent page scroll during preloader
     document.body.style.overflow = isVisible ? 'hidden' : '';
 
     if (!isVisible) {
       setFadeOut(true);
       const timeout = setTimeout(() => {
-        const el = document.getElementById('preloader-container');
-        if (el) el.style.display = 'none';
-      }, 1000); // Same as fade-out duration
+        if (containerRef.current) {
+          containerRef.current.style.display = 'none';
+        }
+      }, 1000); // Match CSS fade-out time
 
-      return () => clearTimeout(timeout); // Clean up if unmounted early
+      return () => clearTimeout(timeout);
     }
   }, [isVisible]);
 
@@ -34,13 +33,14 @@ const Preloader: React.FC<PreloaderProps> = ({ isVisible }) => {
 
   return (
     <div
+      ref={containerRef}
       id="preloader-container"
       className={`preloader-container ${fadeOut ? 'fade-out' : ''}`}
     >
       <div className="preloader-wrapper">
-        <div className="preloader-circle"></div>
+        <div className="preloader-ring"></div>
         <div className="preloader-text">Ghatak Sports Academy</div>
-        <div className="preloader-subtext">Loading experience...</div>
+        <div className="preloader-subtext">Getting the field ready for action...</div>
       </div>
     </div>
   );

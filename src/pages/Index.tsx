@@ -25,7 +25,7 @@ const SectionLoader = () => (
 const Index = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [visibleSections, setVisibleSections] = useState<Record<string, boolean>>({});
-  
+
   // Optimized observer setup
   const setupIntersectionObserver = useCallback(() => {
     const observer = new IntersectionObserver(
@@ -52,21 +52,21 @@ const Index = () => {
 
     return observer;
   }, []);
-  
+
   // Handle section visibility with staggered timing
   useEffect(() => {
     setIsMounted(true);
-    
+
     const sectionIds = ['about', 'founder', 'programs', 'testimonials', 'gallery', 'faq', 'contact', 'affiliations', 'footer'];
-    
+
     // Use requestIdleCallback for non-critical operations
     const scheduleVisibility = (index: number) => {
       if (index >= sectionIds.length) return;
-      
+
       const scheduleNext = () => {
         setTimeout(() => scheduleVisibility(index + 1), 200);
       };
-      
+
       if ('requestIdleCallback' in window) {
         window.requestIdleCallback(() => {
           setVisibleSections(prev => ({
@@ -85,14 +85,14 @@ const Index = () => {
         }, 200 * index);
       }
     };
-    
+
     scheduleVisibility(0);
   }, []);
 
   // Set up intersection observer for animations
   useEffect(() => {
     if (!isMounted) return;
-    
+
     const observer = setupIntersectionObserver();
 
     return () => {
@@ -104,8 +104,8 @@ const Index = () => {
     <>
       <Helmet>
         <title>Ghatak Sports Academy | Top Martial Arts Training in India</title>
-        <meta name="description" 
-              content="Join Ghatak Sports Academy - India's premier martial arts training center. Expert coaching in karate, taekwondo, self-defense, and more." />
+        <meta name="description"
+          content="Join Ghatak Sports Academy - India's premier martial arts training center. Expert coaching in karate, taekwondo, self-defense, and more." />
         <link rel="canonical" href="https://ghatakgsai.netlify.app" />
         {/* Structured data added through Helmet */}
         <script type="application/ld+json">{`

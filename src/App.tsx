@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, Suspense } from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -8,8 +7,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from 'react-helmet-async';
 import Preloader from './components/Preloader';
 import PWA from './pwa';
+import RefundPolicy from './pages/refundpolicy';
+import About from './components/About';
+import Programs from './components/Programs';
+import Gallery from './components/Gallery';
+import FAQ from './components/FAQ';
+import Testimonials from './components/Testimonials';
 
-// Lazy load pages
+// Lazy load pages with error boundaries
 const Index = React.lazy(() => import("./pages/Index"));
 const NotFound = React.lazy(() => import("./pages/NotFound"));
 const PrivacyPolicy = React.lazy(() => import("./pages/PrivacyPolicy"));
@@ -33,7 +38,6 @@ const App = () => {
   const [contentLoaded, setContentLoaded] = useState(false);
 
   useEffect(() => {
-    // Check if page is being reloaded
     const navigationEntries = performance.getEntriesByType("navigation");
     const isReload = navigationEntries.length > 0 &&
       (navigationEntries[0] as PerformanceNavigationTiming).type === "reload";
@@ -44,21 +48,17 @@ const App = () => {
       return;
     }
 
-    // Critical resources to preload
     const preloadImages = ['/images/logo.png', '/images/founder.webp', '/images/india.png'];
     let loadedCount = 0;
     let minWaitComplete = false;
 
-    // Use Promise.all with timeout for better performance
     Promise.all(
-      preloadImages.map(
-        src => new Promise(resolve => {
-          const img = new Image();
-          img.src = src;
-          img.onload = resolve;
-          img.onerror = resolve; // Continue even if image fails
-        })
-      )
+      preloadImages.map(src => new Promise(resolve => {
+        const img = new Image();
+        img.src = src;
+        img.onload = resolve;
+        img.onerror = resolve; // Continue even if image fails
+      }))
     ).then(() => {
       if (minWaitComplete) {
         setShowPreloader(false);
@@ -68,7 +68,6 @@ const App = () => {
       }
     });
 
-    // Minimum loading time for better UX
     setTimeout(() => {
       minWaitComplete = true;
       if (loadedCount === preloadImages.length) {
@@ -77,7 +76,6 @@ const App = () => {
       }
     }, 1500);
 
-    // Fallback in case images don't load
     const fallbackTimer = setTimeout(() => {
       setShowPreloader(false);
       setTimeout(() => setContentLoaded(true), 300);
@@ -86,25 +84,17 @@ const App = () => {
     return () => clearTimeout(fallbackTimer);
   }, []);
 
-  // Track page load metrics
   useEffect(() => {
     if (contentLoaded) {
       const recordPageMetrics = () => {
-        // Report Core Web Vitals
         if (window.performance && 'PerformanceObserver' in window) {
           try {
-            // This is just for logging - metrics object is not used elsewhere
             const performanceEntries = performance.getEntriesByType('navigation');
-
-            if ('getEntriesByName' in performance) {
-              const navEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-              if (navEntry) {
-                const pageLoadTime = navEntry.loadEventEnd - navEntry.startTime;
-                console.log(`Full page load: ${pageLoadTime.toFixed(0)}ms`);
-              }
+            const navEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+            if (navEntry) {
+              const pageLoadTime = navEntry.loadEventEnd - navEntry.startTime;
+              console.log(`Full page load: ${pageLoadTime.toFixed(0)}ms`);
             }
-
-            // Log performance in console for debugging
             console.log('Performance metrics collected');
           } catch (err) {
             console.error('Error measuring performance:', err);
@@ -112,7 +102,6 @@ const App = () => {
         }
       };
 
-      // Wait for the page to be fully loaded
       if (document.readyState === 'complete') {
         recordPageMetrics();
       } else {
@@ -143,6 +132,12 @@ const App = () => {
                   <Route path="/" element={<Index />} />
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                   <Route path="/terms" element={<Terms />} />
+                  <Route path="/refund-policy" element={<RefundPolicy />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/programs" element={<Programs />} />
+                  <Route path="/gallery" element={<Gallery />} />
+                  <Route path="/faq" element={<FAQ />} />
+                  <Route path="/testimonials" element={<Testimonials />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </Suspense>

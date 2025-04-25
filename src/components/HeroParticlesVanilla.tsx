@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, RefObject } from "react";
 
 interface HeroParticlesProps {
@@ -9,35 +8,36 @@ const HeroParticlesVanilla = ({ parentRef }: HeroParticlesProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!containerRef.current || !parentRef.current) return;
-
     const container = containerRef.current;
     const parentElement = parentRef.current;
+
+    if (!container || !parentElement) return;
+
     const containerWidth = parentElement.offsetWidth;
     const containerHeight = parentElement.offsetHeight;
 
-    // Create particles
+    // Define the number of particles based on screen size
     const particleCount = window.innerWidth < 768 ? 50 : 100;
     const particles: HTMLDivElement[] = [];
-    
+
     // Clean any previous particles
     container.innerHTML = '';
-    
+
     // Create particle elements
     for (let i = 0; i < particleCount; i++) {
       const particle = document.createElement('div');
-      
+
       // GSAI color scheme
       const colors = ['#ff0000', '#ffcc00', '#ffffff'];
       const randomColor = colors[Math.floor(Math.random() * colors.length)];
-      
+
       // Random size and position
       const size = Math.random() * 5 + 2;
       const x = Math.random() * containerWidth;
       const y = Math.random() * containerHeight;
       const depth = Math.random() * 5;
-      
-      // Apply styles
+
+      // Apply styles to particle
       particle.className = 'gsai-particle';
       particle.style.position = 'absolute';
       particle.style.width = `${size}px`;
@@ -50,95 +50,91 @@ const HeroParticlesVanilla = ({ parentRef }: HeroParticlesProps) => {
       particle.style.opacity = (0.3 + Math.random() * 0.7).toString();
       particle.style.zIndex = Math.floor(depth).toString();
       particle.style.transform = `translateZ(${depth * 50}px)`;
-      
+
       // Store initial position and velocity
       particle.dataset.vx = (Math.random() - 0.5).toString();
       particle.dataset.vy = (Math.random() - 0.5).toString();
       particle.dataset.x = x.toString();
       particle.dataset.y = y.toString();
-      
+
       container.appendChild(particle);
       particles.push(particle);
     }
-    
+
     // Animation loop
     let animationFrameId: number;
-    
-    const animate = () => {
-      particles.forEach(p => {
-        // Get current position and velocity
-        const x = parseFloat(p.dataset.x || '0');
-        const y = parseFloat(p.dataset.y || '0');
-        const vx = parseFloat(p.dataset.vx || '0');
-        const vy = parseFloat(p.dataset.vy || '0');
-        
-        // Update position
+
+    const animateParticles = () => {
+      particles.forEach(particle => {
+        const x = parseFloat(particle.dataset.x || '0');
+        const y = parseFloat(particle.dataset.y || '0');
+        const vx = parseFloat(particle.dataset.vx || '0');
+        const vy = parseFloat(particle.dataset.vy || '0');
+
+        // Update position with velocity
         let newX = x + vx;
         let newY = y + vy;
-        
-        // Boundary check
-        if (newX > containerWidth) newX = 0;
-        if (newX < 0) newX = containerWidth;
-        if (newY > containerHeight) newY = 0;
-        if (newY < 0) newY = containerHeight;
-        
-        // Apply new position
-        p.style.left = `${newX}px`;
-        p.style.top = `${newY}px`;
-        
+
+        // Boundary check (loop particles around)
+        newX = newX > containerWidth ? 0 : newX < 0 ? containerWidth : newX;
+        newY = newY > containerHeight ? 0 : newY < 0 ? containerHeight : newY;
+
+        // Update particle position
+        particle.style.left = `${newX}px`;
+        particle.style.top = `${newY}px`;
+
         // Store updated position
-        p.dataset.x = newX.toString();
-        p.dataset.y = newY.toString();
+        particle.dataset.x = newX.toString();
+        particle.dataset.y = newY.toString();
       });
-      
-      animationFrameId = requestAnimationFrame(animate);
+
+      // Request next animation frame
+      animationFrameId = requestAnimationFrame(animateParticles);
     };
-    
-    animate();
-    
+
+    animateParticles();
+
     // Handle window resize
     const handleResize = () => {
-      if (parentElement) {
-        const newWidth = parentElement.offsetWidth;
-        const newHeight = parentElement.offsetHeight;
-        
-        particles.forEach(p => {
-          // Reposition particles that would be outside new dimensions
-          const x = parseFloat(p.dataset.x || '0');
-          const y = parseFloat(p.dataset.y || '0');
-          
-          if (x > newWidth) p.dataset.x = (x % newWidth).toString();
-          if (y > newHeight) p.dataset.y = (y % newHeight).toString();
-        });
-      }
+      const newWidth = parentElement.offsetWidth;
+      const newHeight = parentElement.offsetHeight;
+
+      particles.forEach(particle => {
+        const x = parseFloat(particle.dataset.x || '0');
+        const y = parseFloat(particle.dataset.y || '0');
+
+        // Reposition particles that are outside the new dimensions
+        if (x > newWidth) particle.dataset.x = (x % newWidth).toString();
+        if (y > newHeight) particle.dataset.y = (y % newHeight).toString();
+      });
     };
-    
+
     window.addEventListener('resize', handleResize);
-    
-    // Cursor interaction - optional
+
+    // Cursor interaction (attraction/repulsion)
     const handleMouseMove = (e: MouseEvent) => {
       const mouseX = e.clientX;
       const mouseY = e.clientY;
       const rect = parentElement.getBoundingClientRect();
-      
-      particles.forEach(p => {
-        const x = parseFloat(p.dataset.x || '0');
-        const y = parseFloat(p.dataset.y || '0');
+
+      particles.forEach(particle => {
+        const x = parseFloat(particle.dataset.x || '0');
+        const y = parseFloat(particle.dataset.y || '0');
         const dx = mouseX - rect.left - x;
         const dy = mouseY - rect.top - y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        
-        // Apply subtle attraction/repulsion based on distance
+
+        // Attraction/repulsion effect based on proximity
         if (dist < 100) {
           const force = 0.05 / Math.max(1, dist);
-          p.dataset.vx = (parseFloat(p.dataset.vx || '0') - dx * force).toString();
-          p.dataset.vy = (parseFloat(p.dataset.vy || '0') - dy * force).toString();
+          particle.dataset.vx = (parseFloat(particle.dataset.vx || '0') - dx * force).toString();
+          particle.dataset.vy = (parseFloat(particle.dataset.vy || '0') - dy * force).toString();
         }
       });
     };
-    
+
     container.addEventListener('mousemove', handleMouseMove);
-    
+
     // Cleanup on unmount
     return () => {
       cancelAnimationFrame(animationFrameId);
@@ -148,10 +144,10 @@ const HeroParticlesVanilla = ({ parentRef }: HeroParticlesProps) => {
   }, [parentRef]);
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className="absolute inset-0 perspective-1000 overflow-hidden"
-      style={{ 
+      style={{
         perspective: '1000px',
         transformStyle: 'preserve-3d'
       }}

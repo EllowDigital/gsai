@@ -10,19 +10,20 @@ interface FAQItemProps {
 
 const FAQItem = ({ question, answer, index, isOpen, onClick }: FAQItemProps) => {
   return (
-    <div 
+    <div
       className="glass-card mb-4 overflow-hidden faq-animate opacity-0"
       style={{ animationDelay: `${0.1 * index}s` }}
     >
       <button
         className="w-full py-4 px-6 text-left flex justify-between items-center"
         onClick={onClick}
+        aria-expanded={isOpen}
+        aria-controls={`faq-answer-${index}`}
       >
         <span className="font-semibold text-white text-lg">{question}</span>
         <svg
-          className={`w-5 h-5 text-gsai-red transition-transform ${
-            isOpen ? 'rotate-180' : ''
-          }`}
+          className={`w-5 h-5 text-gsai-red transition-transform ${isOpen ? 'rotate-180' : ''
+            }`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -36,9 +37,9 @@ const FAQItem = ({ question, answer, index, isOpen, onClick }: FAQItemProps) => 
         </svg>
       </button>
       <div
-        className={`overflow-hidden transition-all duration-300 ${
-          isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-        }`}
+        id={`faq-answer-${index}`}
+        className={`overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
+        aria-hidden={!isOpen}
       >
         <div className="py-2 px-6 border-t border-white/10 text-gray-300">
           {answer}
@@ -61,7 +62,6 @@ const FAQ = () => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add('animate-fade-in-up');
-            // Ensure visibility
             if (entry.target instanceof HTMLElement) {
               entry.target.style.visibility = 'visible';
               entry.target.style.opacity = '1';

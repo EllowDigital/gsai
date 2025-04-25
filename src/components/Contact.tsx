@@ -348,7 +348,7 @@ const Contact = () => {
                 </p>
               )}
 
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit} netlify>
                 <input type="hidden" name="_captcha" value="false" />
 
                 <div className="mb-4">
@@ -471,9 +471,8 @@ const Contact = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className={`gsai-btn w-full transition-opacity duration-300 ${
-                    isSubmitting ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
+                  className={`gsai-btn w-full transition-opacity duration-300 ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
                 >
                   {isSubmitting ? "Sending..." : "Send Message"}
                 </button>

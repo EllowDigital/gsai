@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { useScrollAnimation } from '@/hooks/use-scroll-animation';
 
@@ -13,13 +12,13 @@ const Footer = () => {
   return (
     <footer ref={footerRef} className="bg-black text-white pt-16 pb-8 border-t border-gray-800">
       <div className="gsai-container">
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           <div>
-            <h3 className="text-xl font-bold mb-4 text-gsai-gold">About GSAI</h3>
-            <p className="text-gray-300 mb-4">
+            <h3 className="text-2xl font-bold mb-4 text-gsai-gold">About GSAI</h3>
+            <p className="text-gray-300 mb-4 text-sm md:text-base">
               Government-recognized and ISO 9001:2015 certified martial arts academy empowering individuals through world-class training.
             </p>
-            <div className="flex space-x-4">
+            <div className="flex space-x-4 mt-4">
               <a href="https://facebook.com" aria-label="Facebook" className="text-gray-400 hover:text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-facebook">
                   <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
@@ -45,10 +44,10 @@ const Footer = () => {
               </a>
             </div>
           </div>
-          
+
           <div>
-            <h3 className="text-xl font-bold mb-4 text-gsai-gold">Quick Links</h3>
-            <ul className="space-y-2">
+            <h3 className="text-2xl font-bold mb-4 text-gsai-gold">Quick Links</h3>
+            <ul className="space-y-2 text-sm md:text-base">
               <li><a href="#about" className="text-gray-300 hover:text-white transition-colors">About Us</a></li>
               <li><a href="#programs" className="text-gray-300 hover:text-white transition-colors">Programs</a></li>
               <li><a href="#gallery" className="text-gray-300 hover:text-white transition-colors">Gallery</a></li>
@@ -56,10 +55,10 @@ const Footer = () => {
               <li><a href="#testimonials" className="text-gray-300 hover:text-white transition-colors">Testimonials</a></li>
             </ul>
           </div>
-          
+
           <div>
-            <h3 className="text-xl font-bold mb-4 text-gsai-gold">Contact</h3>
-            <ul className="space-y-2">
+            <h3 className="text-2xl font-bold mb-4 text-gsai-gold">Contact</h3>
+            <ul className="space-y-2 text-sm md:text-base">
               <li className="flex items-start space-x-2">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gsai-red mt-0.5" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
@@ -81,10 +80,10 @@ const Footer = () => {
               </li>
             </ul>
           </div>
-          
+
           <div>
-            <h3 className="text-xl font-bold mb-4 text-gsai-gold">Legal</h3>
-            <ul className="space-y-2">
+            <h3 className="text-2xl font-bold mb-4 text-gsai-gold">Legal</h3>
+            <ul className="space-y-2 text-sm md:text-base">
               <li>
                 <Link to="/privacy-policy" className="text-gray-300 hover:text-white transition-colors">Privacy Policy</Link>
               </li>
@@ -92,12 +91,12 @@ const Footer = () => {
                 <Link to="/terms" className="text-gray-300 hover:text-white transition-colors">Terms and Conditions</Link>
               </li>
               <li>
-                <a href="#contact" className="text-gray-300 hover:text-white transition-colors">Refund Policy</a>
+                <a href="/refund-policy" className="text-gray-300 hover:text-white transition-colors">Refund Policy</a>
               </li>
             </ul>
           </div>
         </div>
-        
+
         <div className="mt-12 border-t border-gray-800 pt-6 text-center">
           <p className="text-gray-400 text-sm">
             © {currentYear} Ghatak Sports Academy India™. All rights reserved.

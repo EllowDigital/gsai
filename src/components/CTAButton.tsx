@@ -7,6 +7,7 @@ interface CTAButtonProps {
   onClick?: () => void;
   href?: string;
   variant?: "primary" | "secondary";
+  icon?: React.ReactNode; // New prop for optional icons
 }
 
 const CTAButton = ({
@@ -14,6 +15,7 @@ const CTAButton = ({
   onClick,
   href,
   variant = "primary",
+  icon,
 }: CTAButtonProps) => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -57,9 +59,8 @@ const CTAButton = ({
     "aria-label": label,
   };
 
-  const sharedStyle = `relative inline-block py-3 px-6 rounded-md font-bold uppercase tracking-wider overflow-hidden transition-transform shadow-lg group ${
-    variant === "primary" ? "bg-gsai-red text-white" : "bg-gsai-gold text-black"
-  }`;
+  const sharedStyle = `relative inline-block py-3 px-6 rounded-md font-bold uppercase tracking-wider overflow-hidden transition-transform shadow-lg group text-center ${variant === "primary" ? "bg-gsai-red text-white" : "bg-gsai-gold text-black"
+    }`;
 
   const shineStyle = {
     position: "absolute" as const,
@@ -91,37 +92,18 @@ const CTAButton = ({
     <>
       <div style={shineStyle} />
       <div style={innerShadowStyle} />
+      {icon && <span className="mr-2">{icon}</span>} {/* Render icon if provided */}
       <span className="relative z-10">{label}</span>
     </>
   );
 
-  if (href) {
-    return (
-      <motion.a
-        href={href}
-        onClick={(e) => {
-          if (onClick) {
-            e.preventDefault();
-            onClick();
-          }
-        }}
-        className={sharedStyle}
-        style={{
-          rotateX: smoothRotateX,
-          rotateY: smoothRotateY,
-          transformStyle: "preserve-3d",
-        }}
-        whileTap={{ scale: 0.96 }}
-        {...commonProps}
-      >
-        {content}
-      </motion.a>
-    );
-  }
+  const ButtonComponent = href ? motion.a : motion.button;
+  const buttonProps = href
+    ? { href, onClick: (e: MouseEvent) => onClick && e.preventDefault() && onClick() }
+    : { onClick };
 
   return (
-    <motion.button
-      onClick={onClick}
+    <ButtonComponent
       className={sharedStyle}
       style={{
         rotateX: smoothRotateX,
@@ -130,9 +112,10 @@ const CTAButton = ({
       }}
       whileTap={{ scale: 0.96 }}
       {...commonProps}
+      {...buttonProps}
     >
       {content}
-    </motion.button>
+    </ButtonComponent>
   );
 };
 

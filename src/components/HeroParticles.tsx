@@ -1,26 +1,29 @@
-
-import { useIsMobile } from "@/hooks/use-mobile";
+import { RefObject } from "react";
 import HeroParticlesSimple from "./HeroParticlesSimple";
 import HeroParticlesVanilla from "./HeroParticlesVanilla";
-import { RefObject } from "react";
+import HeroParticlesAdvanced from "./HeroParticlesAdvanced";
+import { useDeviceType } from "@/hooks/use-device-type"; // Custom hook to detect device type
 
 interface HeroParticlesProps {
   parentRef: RefObject<HTMLDivElement>;
 }
 
-// Define consistent props interfaces for both particle components
 export interface ParticleProps {
   parentRef: RefObject<HTMLDivElement>;
 }
 
 const HeroParticles = ({ parentRef }: HeroParticlesProps) => {
-  const isMobile = useIsMobile();
+  const deviceType = useDeviceType(); // returns "mobile" | "tablet" | "desktop"
 
-  return isMobile ? (
-    <HeroParticlesSimple parentRef={parentRef} />
-  ) : (
-    <HeroParticlesVanilla parentRef={parentRef} />
-  );
+  switch (deviceType) {
+    case "mobile":
+      return <HeroParticlesSimple parentRef={parentRef} />;
+    case "tablet":
+      return <HeroParticlesVanilla parentRef={parentRef} />;
+    case "desktop":
+    default:
+      return <HeroParticlesAdvanced parentRef={parentRef} />;
+  }
 };
 
 export default HeroParticles;

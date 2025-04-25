@@ -51,8 +51,9 @@ const NavBar = () => {
             className="h-10 w-10 rounded-full object-cover shadow-md"
           />
           <span className="font-extrabold text-lg sm:text-xl text-white drop-shadow-sm whitespace-nowrap">
-            <span className="text-gsai-red">Ghatak</span>{" "}
-            <span className="text-gsai-gold">Sports Academy</span>
+            <span className="text-gsai-red">G</span>
+            <span className="text-gsai-gold">SA</span>
+            <span className="text-gsai-#ffffff">I</span>
           </span>
         </a>
 

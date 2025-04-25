@@ -1,13 +1,14 @@
 import { defineConfig } from "vite";
 import path from "path";
 import react from "@vitejs/plugin-react-swc";
-import { componentTagger } from "lovable-tagger";
 import { VitePWA } from "vite-plugin-pwa";
+import { componentTagger } from "lovable-tagger";
 
-// https://vitejs.dev/config/
+// Vite Configuration
 export default defineConfig(async ({ mode }) => {
   const isDev = mode === "development";
   const isGitHub = process.env.DEPLOY_TARGET === "github";
+
   const base = isDev ? "/" : isGitHub ? "/gsai-webv3/" : "/";
 
   const plugins = [
@@ -67,7 +68,7 @@ export default defineConfig(async ({ mode }) => {
               cacheName: "html-cache",
               expiration: {
                 maxEntries: 10,
-                maxAgeSeconds: 24 * 60 * 60,
+                maxAgeSeconds: 86400, // 1 day
               },
             },
           },
@@ -78,7 +79,7 @@ export default defineConfig(async ({ mode }) => {
               cacheName: "image-cache",
               expiration: {
                 maxEntries: 50,
-                maxAgeSeconds: 30 * 24 * 60 * 60,
+                maxAgeSeconds: 2592000, // 30 days
               },
             },
           },
@@ -87,7 +88,7 @@ export default defineConfig(async ({ mode }) => {
     }),
   ];
 
-  // Dev-only enhancements
+  // Dev-only plugins
   if (isDev) {
     try {
       const { tempo } = await import("tempo-devtools/dist/vite");

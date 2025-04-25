@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 
 interface ImageProps {
@@ -131,7 +130,7 @@ const Gallery = () => {
           >
             <div className="relative max-w-4xl max-h-full">
               <button
-                className="absolute -top-12 right-0 text-white hover:text-gsai-red"
+                className="absolute top-2 right-2 text-white hover:text-gsai-red"
                 onClick={(e) => {
                   e.stopPropagation();
                   setSelectedImage(null);
