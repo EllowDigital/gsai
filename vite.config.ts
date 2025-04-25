@@ -1,15 +1,13 @@
+
 import { defineConfig } from "vite";
 import path from "path";
 import react from "@vitejs/plugin-react-swc";
 import { componentTagger } from "lovable-tagger";
 import { VitePWA } from "vite-plugin-pwa";
-<<<<<<< HEAD
-import viteCompression from "vite-plugin-compression";
-import { createHtmlPlugin } from "vite-plugin-html";
-import { viteStaticCopy } from "vite-plugin-static-copy";
-import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
-=======
->>>>>>> parent of 3785fdc (Refactor: Optimize website for SEO, performance, and accessibility)
+import viteCompression from 'vite-plugin-compression';
+import { createHtmlPlugin } from 'vite-plugin-html';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
+import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 
 // https://vitejs.dev/config/
 export default defineConfig((env) => {
@@ -18,10 +16,7 @@ export default defineConfig((env) => {
   const base = isDev ? "/" : isGitHub ? "/gsai-webv3/" : "/";
 
   const plugins = [
-    // React SWC plugin
     react(),
-
-    // PWA configuration
     VitePWA({
       registerType: "autoUpdate",
       includeAssets: [
@@ -94,21 +89,17 @@ export default defineConfig((env) => {
         ],
       },
     }),
-<<<<<<< HEAD
-
-    // Production optimizations: Gzip and Brotli compression
-    !isDev &&
-      viteCompression({
-        algorithm: "gzip",
-        ext: ".gz",
-      }),
-    !isDev &&
-      viteCompression({
-        algorithm: "brotliCompress",
-        ext: ".br",
-      }),
-
-    // HTML Minification
+    
+    // Production optimizations
+    !isDev && viteCompression({
+      algorithm: 'gzip',
+      ext: '.gz',
+    }),
+    !isDev && viteCompression({
+      algorithm: 'brotliCompress',
+      ext: '.br',
+    }),
+    
     createHtmlPlugin({
       minify: !isDev && {
         collapseWhitespace: true,
@@ -121,51 +112,43 @@ export default defineConfig((env) => {
         minifyJS: true,
       },
     }),
-
+    
     // Image optimization (production only)
-    !isDev &&
-      ViteImageOptimizer({
-        jpg: {
-          quality: 80,
-        },
-        png: {
-          quality: 80,
-        },
-        webp: {
-          lossless: true,
-        },
-      }),
-
-    // Copy static files (robots.txt and sitemap.xml)
+    !isDev && ViteImageOptimizer({
+      jpg: {
+        quality: 80,
+      },
+      png: {
+        quality: 80,
+      },
+      webp: {
+        lossless: true,
+      },
+    }),
+    
+    // Copy robots.txt and sitemap.xml to the output directory
     viteStaticCopy({
       targets: [
         {
-          src: "public/robots.txt",
-          dest: "",
+          src: 'public/robots.txt',
+          dest: '',
         },
         {
-          src: "public/sitemap.xml",
-          dest: "",
+          src: 'public/sitemap.xml',
+          dest: '',
         },
       ],
     }),
-=======
->>>>>>> parent of 3785fdc (Refactor: Optimize website for SEO, performance, and accessibility)
   ];
 
-  // Add development-only enhancements (e.g., component tagging)
+  // Dev-only enhancements
   if (isDev) {
-    try {
-      // Dynamic import for dev-only dependencies would go here but we'll use a simpler approach
-      plugins.push(componentTagger());
-    } catch (e) {
-      console.warn("⚠️ componentTagger not found. Skipping...");
-    }
+    plugins.push(componentTagger());
   }
 
   return {
     base,
-    plugins,
+    plugins: plugins.filter(Boolean),
     resolve: {
       preserveSymlinks: true,
       alias: {
@@ -184,19 +167,15 @@ export default defineConfig((env) => {
       emptyOutDir: true,
       minify: isDev ? false : "esbuild",
       sourcemap: isDev,
-<<<<<<< HEAD
       rollupOptions: {
         output: {
           manualChunks: {
-            react: ["react", "react-dom"],
-            vendor: ["three"],
-            // Ensure the path to ui is correct and points to an entry file
-            ui: path.resolve(__dirname, "src/components/ui/index.ts"), // Entry file
-          },
-        },
+            react: ['react', 'react-dom'],
+            ui: ['@/components/ui'],
+            vendor: ['three']
+          }
+        }
       },
-=======
->>>>>>> parent of 3785fdc (Refactor: Optimize website for SEO, performance, and accessibility)
     },
     optimizeDeps: {
       include: ["three"],

@@ -5,16 +5,26 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HelmetProvider } from 'react-helmet-async';
 import Preloader from './components/Preloader'; 
 import PWA from './pwa';
 
 // Lazy load pages
 const Index = React.lazy(() => import("./pages/Index"));
 const NotFound = React.lazy(() => import("./pages/NotFound"));
-const PrivacyPolicy = React.lazy(() => import("./pages/PrivacyPolicy"));
-const Terms = React.lazy(() => import("./pages/Terms"));
 
-const queryClient = new QueryClient();
+// Create QueryClient with optimized settings
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 60 * 1000, // 1 minute
+      gcTime: 5 * 60 * 1000, // 5 minutes
+      retry: 1,
+      refetchOnWindowFocus: false,
+      refetchOnMount: false
+    }
+  }
+});
 
 const App = () => {
   const [showPreloader, setShowPreloader] = useState(true);
@@ -32,43 +42,47 @@ const App = () => {
       return;
     }
 
-    // Preload essential assets
+    // Critical resources to preload
     const preloadImages = ['/images/logo.png', '/images/founder.webp', '/images/india.png'];
     let loadedCount = 0;
-
-    preloadImages.forEach(src => {
-      const img = new Image();
-      img.src = src;
-      img.onload = () => {
-        loadedCount++;
-        if (loadedCount === preloadImages.length) {
-          // Minimum loading time for better UX
-          setTimeout(() => {
-            setShowPreloader(false);
-            setTimeout(() => setContentLoaded(true), 500);
-          }, 1800);
-        }
-      };
-      img.onerror = () => {
-        loadedCount++;
-        if (loadedCount === preloadImages.length) {
-          setTimeout(() => {
-            setShowPreloader(false);
-            setTimeout(() => setContentLoaded(true), 500);
-          }, 1800);
-        }
-      };
+    let minWaitComplete = false;
+    
+    // Use Promise.all with timeout for better performance
+    Promise.all(
+      preloadImages.map(
+        src => new Promise(resolve => {
+          const img = new Image();
+          img.src = src;
+          img.onload = resolve;
+          img.onerror = resolve; // Continue even if image fails
+        })
+      )
+    ).then(() => {
+      if (minWaitComplete) {
+        setShowPreloader(false);
+        setTimeout(() => setContentLoaded(true), 300);
+      } else {
+        loadedCount = preloadImages.length;
+      }
     });
+
+    // Minimum loading time for better UX
+    setTimeout(() => {
+      minWaitComplete = true;
+      if (loadedCount === preloadImages.length) {
+        setShowPreloader(false);
+        setTimeout(() => setContentLoaded(true), 300);
+      }
+    }, 1500);
 
     // Fallback in case images don't load
     const fallbackTimer = setTimeout(() => {
       setShowPreloader(false);
-      setTimeout(() => setContentLoaded(true), 500);
-    }, 3000);
+      setTimeout(() => setContentLoaded(true), 300);
+    }, 2500);
 
     return () => clearTimeout(fallbackTimer);
   }, []);
-<<<<<<< HEAD
   
   // Track page load metrics
   useEffect(() => {
@@ -77,8 +91,12 @@ const App = () => {
         // Report Core Web Vitals
         if (window.performance && 'PerformanceObserver' in window) {
           try {
-            // This is just for logging - metrics object is not used elsewhere
-            const performanceEntries = performance.getEntriesByType('navigation');
+            const metrics = {
+              FCP: 0,
+              LCP: 0,
+              CLS: 0,
+              FID: 0,
+            };
             
             if ('getEntriesByName' in performance) {
               const navEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
@@ -105,11 +123,9 @@ const App = () => {
       }
     }
   }, [contentLoaded]);
-=======
->>>>>>> parent of 3785fdc (Refactor: Optimize website for SEO, performance, and accessibility)
 
   return (
-    <>
+    <HelmetProvider>
       <Preloader isVisible={showPreloader} />
 
       {(contentLoaded || !showPreloader) && (
@@ -119,21 +135,14 @@ const App = () => {
             <Sonner />
             <BrowserRouter>
               <Suspense fallback={
-<<<<<<< HEAD
                 <div className="w-full h-screen flex items-center justify-center bg-black" aria-label="Loading page">
                   <div className="animate-pulse-glow w-12 h-12 rounded-full bg-gsai-red" role="status">
-                    <span className="sr-only">Loading...</span>
+                    <span className="visually-hidden">Loading...</span>
                   </div>
-=======
-                <div className="w-full h-screen flex items-center justify-center bg-black">
-                  <div className="animate-pulse-glow w-12 h-12 rounded-full bg-gsai-red"></div>
->>>>>>> parent of 3785fdc (Refactor: Optimize website for SEO, performance, and accessibility)
                 </div>
               }>
                 <Routes>
                   <Route path="/" element={<Index />} />
-                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                  <Route path="/terms" element={<Terms />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </Suspense>
@@ -142,7 +151,7 @@ const App = () => {
           </TooltipProvider>
         </QueryClientProvider>
       )}
-    </>
+    </HelmetProvider>
   );
 };
 

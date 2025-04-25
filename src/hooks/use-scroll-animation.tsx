@@ -5,10 +5,13 @@ interface ScrollAnimationOptions {
   threshold?: number;
   rootMargin?: string;
   once?: boolean;
+  delay?: number;
+  animationType?: 'fade' | 'slide' | 'zoom' | 'flip';
+  direction?: 'up' | 'down' | 'left' | 'right';
 }
 
 /**
- * Hook to add scroll-triggered animations to elements
+ * Enhanced hook to add scroll-triggered animations to elements with improved performance
  */
 export const useScrollAnimation = <T extends HTMLElement>(
   options: ScrollAnimationOptions = {}
@@ -17,39 +20,68 @@ export const useScrollAnimation = <T extends HTMLElement>(
   const { 
     threshold = 0.1, 
     rootMargin = '0px 0px -10% 0px',
-    once = true
+    once = true,
+    delay = 0,
+    animationType = 'fade',
+    direction = 'up'
   } = options;
 
   useEffect(() => {
     const element = elementRef.current;
     if (!element) return;
 
+    // Add appropriate classes based on animation type
+    element.classList.add('scroll-animate');
+    element.classList.add(`animate-${animationType}-${direction}`);
+    
+    // Apply delay if specified
+    if (delay > 0) {
+      element.style.transitionDelay = `${delay}ms`;
+    }
+    
+    // Use Intersection Observer API for better performance than scroll listeners
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
+          // Use requestAnimationFrame to optimize the timing of class changes
           if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            if (once) {
-              observer.unobserve(entry.target);
-            }
+            requestAnimationFrame(() => {
+              entry.target.classList.add('visible');
+              // Add will-change before animation starts
+              entry.target.style.willChange = 'opacity, transform';
+              
+              // Set a timeout to remove will-change after animation completes
+              setTimeout(() => {
+                if (entry.target instanceof HTMLElement) {
+                  entry.target.style.willChange = 'auto';
+                }
+              }, 1000); // Typical animation duration
+              
+              if (once) {
+                observer.unobserve(entry.target);
+              }
+            });
           } else if (!once) {
-            entry.target.classList.remove('visible');
+            requestAnimationFrame(() => {
+              entry.target.classList.remove('visible');
+            });
           }
         });
       },
       { threshold, rootMargin }
     );
 
-    // Add scroll-animate class for initial state and observer
-    element.classList.add('scroll-animate');
-    observer.observe(element);
+    // Batch DOM operations
+    requestAnimationFrame(() => {
+      observer.observe(element);
+    });
 
     return () => {
       if (element) {
         observer.unobserve(element);
       }
     };
-  }, [threshold, rootMargin, once]);
+  }, [threshold, rootMargin, once, delay, animationType, direction]);
 
   return elementRef;
 };

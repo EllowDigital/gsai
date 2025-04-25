@@ -1,32 +1,40 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "lib": ["ES2023", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "skipLibCheck": true,
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "isolatedModules": true,
-    "moduleDetection": "force",
-    "noEmit": true,
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true,
-    "incremental": true,
-    "skipDefaultLibCheck": true
+    "target": "ES2022", // Target the latest JavaScript features supported by modern environments
+    "lib": ["ES2023", "DOM", "DOM.Iterable"], // Include latest ECMAScript and DOM libraries
+    "module": "ESNext", // Use the latest module system (ES Modules)
+    "skipLibCheck": true, // Skip type checking of declaration files to improve performance
+
+    /* Bundler Mode */
+    "moduleResolution": "bundler", // Use bundler mode for better compatibility with bundlers like Vite
+    "allowImportingTsExtensions": true, // Allow TypeScript file extensions in imports
+    "isolatedModules": true, // Ensure each file can be safely transpiled in isolation
+    "moduleDetection": "force", // Enforce module detection
+    "noEmit": true, // Do not emit output (useful in projects using bundlers)
+
+    /* Linting and Type Safety */
+    "strict": true, // Enable strict mode for better type safety
+    "noUnusedLocals": true, // Disallow unused local variables
+    "noUnusedParameters": true, // Disallow unused function parameters
+    "noFallthroughCasesInSwitch": true, // Enforce no fall-through cases in switch statements
+    "noImplicitAny": true, // Ensure explicit typing, no implicit 'any' types
+    "noImplicitReturns": true, // Ensure functions return a value in all code paths
+    "noImplicitThis": true, // Ensure 'this' is explicitly typed
+
+    /* Interoperability */
+    "esModuleInterop": true, // Enable compatibility with CommonJS modules
+    "allowSyntheticDefaultImports": true, // Allow default imports from modules that don't have a default export
+    "resolveJsonModule": true, // Allow importing of JSON files as modules
+
+    /* Performance Optimizations */
+    "incremental": true, // Enable incremental compilation for faster builds
+    "skipDefaultLibCheck": true // Skip checking of default library files to improve compilation speed
   },
   "include": [
-    "vite.config.ts"
+    "vite.config.ts" // Include only necessary files, for example, Vite config file
   ],
   "exclude": [
-    "node_modules",
-    "dist"
+    "node_modules", // Exclude unnecessary directories like node_modules
+    "dist" // Exclude build output directory
   ]
 }
