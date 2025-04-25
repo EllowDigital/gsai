@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 
 interface PWAProps {
@@ -7,31 +6,45 @@ interface PWAProps {
 
 const PWA = ({ className = "" }: PWAProps) => {
   const [isUpdateAvailable, setIsUpdateAvailable] = useState(false);
-  
-  // Simple PWA update checker implementation
+
+  // Effect to register the service worker and handle update
   useEffect(() => {
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').then(registration => {
-        registration.addEventListener('updatefound', () => {
-          const newWorker = registration.installing;
-          if (newWorker) {
-            newWorker.addEventListener('statechange', () => {
-              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                setIsUpdateAvailable(true);
-              }
-            });
+      const handleServiceWorkerUpdate = (registration: ServiceWorkerRegistration) => {
+        const newWorker = registration.installing;
+        if (newWorker) {
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              setIsUpdateAvailable(true);
+            }
+          });
+        }
+      };
+
+      // Register the service worker and detect updates
+      navigator.serviceWorker
+        .register('/sw.js') // Ensure sw.js is located in the public folder
+        .then((registration) => {
+          // Check if there’s already a waiting worker (i.e., update available)
+          if (registration.waiting) {
+            setIsUpdateAvailable(true);
           }
+          registration.addEventListener('updatefound', () => handleServiceWorkerUpdate(registration));
+        })
+        .catch((error) => {
+          console.error('Service worker registration failed:', error);
         });
-      }).catch(error => {
-        console.error('Service worker registration failed:', error);
-      });
     }
   }, []);
 
+  // Trigger service worker update
   const handleUpdate = () => {
-    if (isUpdateAvailable) {
-      window.location.reload();
+    if (navigator.serviceWorker.controller) {
+      // Send a message to the service worker to skip waiting and activate the new version
+      navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
     }
+    // Reload the page to get the updated service worker
+    window.location.reload();
   };
 
   if (!isUpdateAvailable) return null;

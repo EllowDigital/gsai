@@ -6,7 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from 'react-helmet-async';
-import Preloader from './components/Preloader'; 
+import Preloader from './components/Preloader';
 import PWA from './pwa';
 
 // Lazy load pages
@@ -35,9 +35,9 @@ const App = () => {
   useEffect(() => {
     // Check if page is being reloaded
     const navigationEntries = performance.getEntriesByType("navigation");
-    const isReload = navigationEntries.length > 0 && 
-                     (navigationEntries[0] as PerformanceNavigationTiming).type === "reload";
-    
+    const isReload = navigationEntries.length > 0 &&
+      (navigationEntries[0] as PerformanceNavigationTiming).type === "reload";
+
     if (isReload) {
       setShowPreloader(false);
       setContentLoaded(true);
@@ -48,7 +48,7 @@ const App = () => {
     const preloadImages = ['/images/logo.png', '/images/founder.webp', '/images/india.png'];
     let loadedCount = 0;
     let minWaitComplete = false;
-    
+
     // Use Promise.all with timeout for better performance
     Promise.all(
       preloadImages.map(
@@ -85,7 +85,7 @@ const App = () => {
 
     return () => clearTimeout(fallbackTimer);
   }, []);
-  
+
   // Track page load metrics
   useEffect(() => {
     if (contentLoaded) {
@@ -95,7 +95,7 @@ const App = () => {
           try {
             // This is just for logging - metrics object is not used elsewhere
             const performanceEntries = performance.getEntriesByType('navigation');
-            
+
             if ('getEntriesByName' in performance) {
               const navEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
               if (navEntry) {
@@ -103,7 +103,7 @@ const App = () => {
                 console.log(`Full page load: ${pageLoadTime.toFixed(0)}ms`);
               }
             }
-            
+
             // Log performance in console for debugging
             console.log('Performance metrics collected');
           } catch (err) {
@@ -111,7 +111,7 @@ const App = () => {
           }
         }
       };
-      
+
       // Wait for the page to be fully loaded
       if (document.readyState === 'complete') {
         recordPageMetrics();
