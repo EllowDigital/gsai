@@ -1,129 +1,138 @@
-
-import { useState, MouseEvent } from 'react';
+import { MouseEvent, useEffect, useState } from "react";
+import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
+import throttle from "lodash.throttle";
 
 interface CTAButtonProps {
   label: string;
   onClick?: () => void;
   href?: string;
-  variant?: 'primary' | 'secondary';
+  variant?: "primary" | "secondary";
 }
 
 const CTAButton = ({
   label,
   onClick,
   href,
-  variant = 'primary'
+  variant = "primary",
 }: CTAButtonProps) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const [tiltCoordinates, setTiltCoordinates] = useState({ x: 0, y: 0 });
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const [hovered, setHovered] = useState(false);
 
-  const handleMouseMove = (e: MouseEvent<HTMLAnchorElement | HTMLButtonElement>) => {
-    const el = e.currentTarget;
-    const rect = el.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    // Calculate tilt values -10 to 10 degrees
-    const tiltX = (y / rect.height - 0.5) * 20;
-    const tiltY = (x / rect.width - 0.5) * -20;
-    
-    setTiltCoordinates({ x: tiltX, y: tiltY });
-  };
-  
-  const resetTilt = () => {
-    setTiltCoordinates({ x: 0, y: 0 });
-    setIsHovered(false);
-  };
+  const rotateX = useTransform(y, [0, 1], [10, -10]);
+  const rotateY = useTransform(x, [0, 1], [-10, 10]);
 
-  const buttonClasses = `
-    relative 
-    ${variant === 'primary' ? 'bg-gsai-red text-white' : 'bg-gsai-gold text-black'}
-    py-3 px-6 
-    rounded-md 
-    font-bold 
-    uppercase 
-    tracking-wider
-    overflow-hidden
-    transform-gpu
-    transition-all 
-    duration-300 
-    shadow-lg
-  `;
-  
-  // 3D styles
-  const buttonStyle = {
-    transform: `perspective(1000px) rotateX(${tiltCoordinates.x}deg) rotateY(${tiltCoordinates.y}deg) ${isHovered ? 'scale3d(1.05, 1.05, 1.05)' : 'scale3d(1, 1, 1)'}`,
-    transformStyle: 'preserve-3d' as const,
-    boxShadow: isHovered
-      ? `0 10px 25px rgba(0, 0, 0, 0.3), 
-         0 0 20px ${variant === 'primary' ? 'rgba(234, 56, 76, 0.5)' : 'rgba(255, 204, 0, 0.5)'}`
-      : `0 4px 15px rgba(0, 0, 0, 0.2)`,
+  const smoothRotateX = useSpring(rotateX, { stiffness: 200, damping: 20 });
+  const smoothRotateY = useSpring(rotateY, { stiffness: 200, damping: 20 });
+
+  const handleMouseMove = throttle(
+    (e: MouseEvent<HTMLAnchorElement | HTMLButtonElement>) => {
+      const el = e.currentTarget;
+      const rect = el.getBoundingClientRect();
+      const relX = (e.clientX - rect.left) / rect.width;
+      const relY = (e.clientY - rect.top) / rect.height;
+
+      x.set(relX);
+      y.set(relY);
+    },
+    16,
+    { leading: true, trailing: true }
+  );
+
+  const handleMouseLeave = () => {
+    setHovered(false);
+    x.set(0.5);
+    y.set(0.5);
   };
 
-  // Shine effect
+  useEffect(() => {
+    x.set(0.5);
+    y.set(0.5);
+  }, []);
+
+  const commonProps = {
+    onMouseMove: handleMouseMove,
+    onMouseEnter: () => setHovered(true),
+    onMouseLeave: handleMouseLeave,
+    "aria-label": label,
+  };
+
+  const sharedStyle = `relative inline-block py-3 px-6 rounded-md font-bold uppercase tracking-wider overflow-hidden transition-transform shadow-lg group ${
+    variant === "primary" ? "bg-gsai-red text-white" : "bg-gsai-gold text-black"
+  }`;
+
   const shineStyle = {
-    position: 'absolute' as const,
+    position: "absolute" as const,
     top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    backgroundImage: `linear-gradient(
-      135deg,
-      rgba(255,255,255,0.25) 0%,
-      rgba(255,255,255,0) 60%
-    )`,
-    transform: isHovered ? 'translateX(0)' : 'translateX(-100%)',
-    transition: 'transform 0.5s ease',
+    left: "-75%",
+    width: "150%",
+    height: "100%",
+    background: "linear-gradient(120deg, rgba(255,255,255,0.4), rgba(255,255,255,0))",
+    transform: hovered ? "translateX(100%)" : "translateX(0)",
+    transition: "transform 0.8s ease-in-out",
+    zIndex: 1,
+    pointerEvents: "none",
   };
 
-  // Inner shadow effect
   const innerShadowStyle = {
-    position: 'absolute' as const,
+    position: "absolute" as const,
     top: 0,
     left: 0,
-    width: '100%',
-    height: '100%',
-    boxShadow: 'inset 0 0 10px rgba(0,0,0,0.3)',
-    borderRadius: '0.375rem',
+    width: "100%",
+    height: "100%",
+    boxShadow: "inset 0 0 10px rgba(0,0,0,0.3)",
+    borderRadius: "0.375rem",
     opacity: 0.5,
+    zIndex: 1,
+    pointerEvents: "none",
   };
+
+  const content = (
+    <>
+      <div style={shineStyle} />
+      <div style={innerShadowStyle} />
+      <span className="relative z-10">{label}</span>
+    </>
+  );
 
   if (href) {
     return (
-      <a
+      <motion.a
         href={href}
-        className={buttonClasses}
         onClick={(e) => {
           if (onClick) {
             e.preventDefault();
             onClick();
           }
         }}
-        onMouseMove={handleMouseMove}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={resetTilt}
-        style={buttonStyle}
+        className={sharedStyle}
+        style={{
+          rotateX: smoothRotateX,
+          rotateY: smoothRotateY,
+          transformStyle: "preserve-3d",
+        }}
+        whileTap={{ scale: 0.96 }}
+        {...commonProps}
       >
-        <div style={shineStyle} />
-        <div style={innerShadowStyle} />
-        <span style={{ position: 'relative', zIndex: 2 }}>{label}</span>
-      </a>
+        {content}
+      </motion.a>
     );
   }
 
   return (
-    <button
-      className={buttonClasses}
+    <motion.button
       onClick={onClick}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={resetTilt}
-      style={buttonStyle}
+      className={sharedStyle}
+      style={{
+        rotateX: smoothRotateX,
+        rotateY: smoothRotateY,
+        transformStyle: "preserve-3d",
+      }}
+      whileTap={{ scale: 0.96 }}
+      {...commonProps}
     >
-      <div style={shineStyle} />
-      <div style={innerShadowStyle} />
-      <span style={{ position: 'relative', zIndex: 2 }}>{label}</span>
-    </button>
+      {content}
+    </motion.button>
   );
 };
 

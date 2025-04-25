@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
@@ -19,7 +18,8 @@ const testimonials: Testimonial[] = [
     id: 1,
     name: "Rahul Sharma",
     role: "Student, 2 years",
-    quote: "GSAI has transformed my life! Not only have I learned self-defense, but I've also gained confidence in all areas of my life. The instructors are world-class and truly care about each student's progress.",
+    quote:
+      "GSAI has transformed my life! Not only have I learned self-defense, but I've also gained confidence in all areas of my life. The instructors are world-class and truly care about each student's progress.",
     rating: 5,
     location: "Lucknow",
     image: "/images/gallery1.png",
@@ -28,7 +28,8 @@ const testimonials: Testimonial[] = [
     id: 2,
     name: "Priya Patel",
     role: "Parent of Junior Student",
-    quote: "My 8-year-old son has been attending classes for a year, and the improvement in his discipline, focus, and physical fitness is remarkable. The academy provides a supportive and safe environment for children to flourish.",
+    quote:
+      "My 8-year-old son has been attending classes for a year, and the improvement in his discipline, focus, and physical fitness is remarkable. The academy provides a supportive and safe environment for children to flourish.",
     rating: 5,
     location: "Kanpur",
   },
@@ -36,7 +37,8 @@ const testimonials: Testimonial[] = [
     id: 3,
     name: "Amit Verma",
     role: "Professional Athlete",
-    quote: "As a professional athlete, I've trained at many facilities, but GSAI stands out for its technical excellence and personalized coaching. The mix of traditional wisdom and modern training methods is perfect.",
+    quote:
+      "As a professional athlete, I've trained at many facilities, but GSAI stands out for its technical excellence and personalized coaching. The mix of traditional wisdom and modern training methods is perfect.",
     rating: 5,
     location: "Delhi",
     image: "/images/gallery2.png",
@@ -45,7 +47,8 @@ const testimonials: Testimonial[] = [
     id: 4,
     name: "Sunita Yadav",
     role: "Self-defense Student",
-    quote: "After joining GSAI's women's self-defense program, I feel empowered and secure. The practical techniques and supportive community have given me skills I hope to never use, but am grateful to possess.",
+    quote:
+      "After joining GSAI's women's self-defense program, I feel empowered and secure. The practical techniques and supportive community have given me skills I hope to never use, but am grateful to possess.",
     rating: 5,
     location: "Lucknow",
   },
@@ -53,7 +56,8 @@ const testimonials: Testimonial[] = [
     id: 5,
     name: "Rajesh Kumar",
     role: "Corporate Client",
-    quote: "We hired GSAI for corporate wellness sessions, and the response from our employees has been overwhelmingly positive. The team-building aspects and stress-relief techniques have improved workplace morale.",
+    quote:
+      "We hired GSAI for corporate wellness sessions, and the response from our employees has been overwhelmingly positive. The team-building aspects and stress-relief techniques have improved workplace morale.",
     rating: 4,
     location: "Noida",
   },
@@ -68,46 +72,29 @@ const Testimonials = () => {
   });
   const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
 
+  const handlePrevious = () => {
+    setDirection(-1);
+    setCurrentIndex((prev) =>
+      prev === 0 ? testimonials.length - 1 : prev - 1
+    );
+  };
+
+  const handleNext = () => {
+    setDirection(1);
+    setCurrentIndex((prev) =>
+      prev === testimonials.length - 1 ? 0 : prev + 1
+    );
+  };
+
   useEffect(() => {
-    // Auto-advance testimonials
     autoPlayRef.current = setInterval(() => {
       handleNext();
     }, 8000);
 
     return () => {
-      if (autoPlayRef.current) {
-        clearInterval(autoPlayRef.current);
-      }
+      if (autoPlayRef.current) clearInterval(autoPlayRef.current);
     };
-  }, [currentIndex]);
-
-  const handlePrevious = () => {
-    setDirection(-1);
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? testimonials.length - 1 : prevIndex - 1
-    );
-    
-    // Reset autoplay timer
-    if (autoPlayRef.current) {
-      clearInterval(autoPlayRef.current);
-      autoPlayRef.current = setInterval(handleNext, 8000);
-    }
-  };
-
-  const handleNext = () => {
-    setDirection(1);
-    setCurrentIndex((prevIndex) =>
-      prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1
-    );
-    
-    // Reset autoplay timer
-    if (autoPlayRef.current) {
-      clearInterval(autoPlayRef.current);
-      autoPlayRef.current = setInterval(handleNext, 8000);
-    }
-  };
-
-  const currentTestimonial = testimonials[currentIndex];
+  }, []);
 
   const variants = {
     enter: (direction: number) => ({
@@ -124,12 +111,18 @@ const Testimonials = () => {
     }),
   };
 
+  const currentTestimonial = testimonials[currentIndex];
+
   return (
-    <section id="testimonials" className="py-20 bg-gradient-to-b from-black to-gray-900">
+    <section
+      id="testimonials"
+      className="py-20 bg-gradient-to-br from-black/70 to-#2b2a2a-800/50"
+    >
       <div className="gsai-container" ref={containerRef}>
-        <h2 className="text-4xl font-bold mb-16 text-center">
+        <h2 className="text-4xl font-bold mb-16 text-center text-white">
           <span className="text-gsai-red">Student</span>{" "}
-          <span className="text-white">Testimonials</span>
+          <span>Testimonials</span>
+          <div className="w-24 h-1 bg-gsai-red mx-auto mt-4 mb-8"></div>
         </h2>
 
         <div className="relative max-w-4xl mx-auto px-4">
@@ -155,7 +148,7 @@ const Testimonials = () => {
                 }}
                 className="absolute inset-0"
               >
-                <div className="bg-gray-900/70 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-800 h-full">
+                <div className="bg-black/70 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-800 h-full">
                   <div className="flex flex-col md:flex-row gap-6 h-full">
                     {currentTestimonial.image && (
                       <div className="md:w-1/3 flex-shrink-0 flex justify-center">
@@ -167,7 +160,11 @@ const Testimonials = () => {
                       </div>
                     )}
 
-                    <div className={currentTestimonial.image ? "md:w-2/3" : "w-full"}>
+                    <div
+                      className={
+                        currentTestimonial.image ? "md:w-2/3" : "w-full"
+                      }
+                    >
                       <div className="flex items-center mb-4">
                         {[...Array(5)].map((_, i) => (
                           <Star
@@ -195,7 +192,9 @@ const Testimonials = () => {
                         <p className="font-semibold text-white">
                           {currentTestimonial.name}
                         </p>
-                        <p className="text-gsai-red">{currentTestimonial.role}</p>
+                        <p className="text-gsai-red">
+                          {currentTestimonial.role}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -213,7 +212,7 @@ const Testimonials = () => {
             >
               <ChevronLeft size={24} />
             </button>
-            
+
             <div className="flex items-center gap-2">
               {testimonials.map((_, idx) => (
                 <button
