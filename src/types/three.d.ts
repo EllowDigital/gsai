@@ -48,6 +48,7 @@ declare module 'three' {
     constructor(array: ArrayLike<number>, itemSize: number);
     array: ArrayLike<number>;
     needsUpdate: boolean;
+    setXYZ(index: number, x: number, y: number, z: number): BufferAttribute;
   }
   
   export class Vector3 {

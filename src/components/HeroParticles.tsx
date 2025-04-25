@@ -1,13 +1,14 @@
-import React from "react";
+
 import { useIsMobile } from "@/hooks/use-mobile";
 import HeroParticlesSimple from "./HeroParticlesSimple";
 import HeroParticlesAdvanced from "./HeroParticlesAdvanced";
+import { RefObject } from "react";
 
 interface HeroParticlesProps {
-  parentRef: React.RefObject<HTMLDivElement>;
+  parentRef: RefObject<HTMLDivElement>;
 }
 
-const HeroParticles: React.FC<HeroParticlesProps> = ({ parentRef }) => {
+const HeroParticles = ({ parentRef }: HeroParticlesProps) => {
   const isMobile = useIsMobile();
 
   return isMobile ? (

@@ -1,8 +1,9 @@
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, RefObject } from 'react';
 import * as THREE from 'three';
 
 interface ParticleProps {
+  parentRef: RefObject<HTMLDivElement>;
   count?: number;
   size?: number;
   color?: string;
@@ -11,6 +12,7 @@ interface ParticleProps {
 }
 
 const HeroParticlesAdvanced = ({
+  parentRef,
   count = 3000,
   size = 0.02,
   color = '#ffffff',
@@ -92,9 +94,15 @@ const HeroParticlesAdvanced = ({
 
       if (pointsRef.current && pointsRef.current.geometry.attributes.position) {
         const positions = pointsRef.current.geometry.attributes.position;
-        for (let i = 0; i < positions.array.length; i += 3) {
-          positions.array[i + 1] += Math.sin(elapsedTime + i) * speed * 0.001;
-          positions.array[i] += Math.cos(elapsedTime + i) * speed * 0.001;
+        const positionsArray = positions.array;
+        
+        for (let i = 0; i < positionsArray.length; i += 3) {
+          // Use a temporary variable to avoid direct modification
+          const newY = Number(positionsArray[i + 1]) + Math.sin(elapsedTime + i) * speed * 0.001;
+          const newX = Number(positionsArray[i]) + Math.cos(elapsedTime + i) * speed * 0.001;
+          
+          // Update using set method for BufferAttribute
+          positions.setXYZ(i / 3, newX, newY, positionsArray[i + 2]);
         }
         positions.needsUpdate = true;
       }

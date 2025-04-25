@@ -1,13 +1,13 @@
 
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef, RefObject } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface HeroParticlesProps {
-  parentRef: React.RefObject<HTMLDivElement>;
+  parentRef: RefObject<HTMLDivElement>;
 }
 
 // Simpler canvas-based particles for mobile
-const HeroParticlesSimple: React.FC<HeroParticlesProps> = ({ parentRef }) => {
+const HeroParticlesSimple = ({ parentRef }: HeroParticlesProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const isMobile = useIsMobile();
   

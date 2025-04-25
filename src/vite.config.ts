@@ -1,5 +1,5 @@
 
-import { defineConfig, Plugin } from "vite";
+import { defineConfig } from "vite";
 import path from "path";
 import react from "@vitejs/plugin-react-swc";
 import { componentTagger } from "lovable-tagger";
@@ -83,7 +83,7 @@ export default defineConfig({
       },
     }),
     // Conditionally apply dev-only plugins
-    ...(process.env.NODE_ENV === "development" ? [componentTagger() as Plugin] : []),
+    ...(process.env.NODE_ENV === "development" ? [componentTagger()] : []),
   ],
   resolve: {
     preserveSymlinks: true,
