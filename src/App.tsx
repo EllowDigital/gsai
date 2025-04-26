@@ -89,7 +89,6 @@ const App = () => {
       const recordPageMetrics = () => {
         if (window.performance && 'PerformanceObserver' in window) {
           try {
-            const performanceEntries = performance.getEntriesByType('navigation');
             const navEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
             if (navEntry) {
               const pageLoadTime = navEntry.loadEventEnd - navEntry.startTime;

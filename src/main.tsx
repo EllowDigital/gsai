@@ -1,6 +1,7 @@
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
+import './styles/glassmorphism.css';
 
 // Performance monitoring function to log metrics
 const reportWebVitals = (metric: any) => {

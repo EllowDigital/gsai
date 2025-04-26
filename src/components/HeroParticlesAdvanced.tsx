@@ -115,6 +115,10 @@ const HeroParticles: React.FC<HeroParticlesProps> = ({ parentRef }) => {
       window.removeEventListener("mousemove", handleMouseMove);
       if (renderer) {
         renderer.dispose();
+        scene.clear();
+        camera = null;
+        renderer = null;
+        particles = null;
       }
     };
   }, [parentRef, isMobile]);
