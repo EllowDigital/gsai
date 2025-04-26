@@ -14,27 +14,29 @@
   transition: filter 300ms ease, transform 300ms ease;
 }
 
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-  transform: scale(1.05); /* Add scale effect on hover */
+.logo:hover,
+.logo.react:hover {
+  transform: scale(1.05);
 }
 
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
-  transform: scale(1.05); /* React-specific hover effect */
 }
 
-/* Logo spin animation */
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+
+/* Logo spin animation (only on preference) */
 @keyframes logo-spin {
-  from {
+  0% {
     transform: rotate(0deg);
   }
-  to {
+  100% {
     transform: rotate(360deg);
   }
 }
 
-/* Enable animation if motion preference allows */
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
@@ -44,14 +46,14 @@
 /* Card component */
 .card {
   padding: 2em;
-  border-radius: 0.5rem; /* Rounded corners for a soft look */
+  border-radius: 0.5rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 300ms ease, box-shadow 300ms ease;
 }
 
 .card:hover {
-  transform: translateY(-5px); /* Lift effect on hover */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 /* Documentation text */
@@ -59,7 +61,7 @@
   color: #888;
 }
 
-/* Add this CSS for animations and responsiveness */
+/* Animation for martial artist */
 @keyframes martial-artist {
   0% {
     transform: rotate(0deg);
@@ -78,11 +80,11 @@
 
 @media (max-width: 768px) {
   .animate-martial-artist {
-    animation: none; /* Disable animation on mobile to improve performance */
+    animation: none;
   }
 }
 
-/* Make sure the SVG scales nicely */
+/* SVG scaling */
 svg {
   display: block;
   max-width: 100%;
@@ -91,31 +93,31 @@ svg {
 }
 
 svg:hover {
-  transform: scale(1.05); /* Scale effect on hover for SVGs */
+  transform: scale(1.05);
 }
 
-/* Keyframe animation for the martial artist kick */
+/* Martial artist animation */
 @keyframes martial-kick {
   0% {
     transform: rotate(0deg);
   }
   50% {
-    transform: rotate(30deg); /* Kick position */
+    transform: rotate(30deg);
   }
   100% {
-    transform: rotate(0deg); /* Back to normal */
+    transform: rotate(0deg);
   }
 }
 
 @keyframes arm-swing {
   0% {
-    transform: rotate(0deg); /* Initial arm position */
+    transform: rotate(0deg);
   }
   50% {
-    transform: rotate(45deg); /* Arm swing position */
+    transform: rotate(45deg);
   }
   100% {
-    transform: rotate(0deg); /* Back to normal */
+    transform: rotate(0deg);
   }
 }
 
@@ -133,55 +135,48 @@ svg:hover {
   animation: martial-kick 2s ease-in-out infinite;
 }
 
-/* Optional - Add smooth transitions */
-* {
-  transition: transform 0.3s ease-in-out;
-}
-
 /* Contact text animation */
 .contact-animate {
-  text-decoration: none; /* Remove any underline from the text */
+  text-decoration: none;
   color: #fff;
-  transition: color 0.3s ease; /* Smooth transition for color change */
+  transition: color 0.3s ease;
 }
 
 .contact-animate:hover {
-  color: #61dafb; /* Change color on hover */
+  color: #61dafb;
 }
 
-/* GLOBAL FIX FOR ALL h2 HEADERS */
+/* Global styles for h2 */
 h2,
 h2::before,
 h2::after {
   all: unset;
   display: block;
-  font-size: 2.25rem; /* Tailwind text-4xl */
-  font-weight: 800; /* Tailwind font-extrabold */
+  font-size: 2.25rem;
+  font-weight: 800;
   color: white;
   margin: 0 auto;
   text-align: center;
 }
 
-/* Clean up all underlines or border under h2 */
+/* Clean up underlines for h2 */
 .section-title,
-.section-title::before,
-.section-title::after,
 .contact-animate,
-.contact-animate::before,
-.contact-animate::after {
+.section-title::before,
+.section-title::after {
   text-decoration: none !important;
   border: none !important;
   box-shadow: none !important;
   background-image: none !important;
 }
 
-/* Optional - Remove inherited red gradient from somewhere (if using bg-clip-text or gradient) */
 .section-title {
   background: none !important;
   -webkit-background-clip: initial !important;
   -webkit-text-fill-color: inherit !important;
 }
 
+/* Fade-in animation */
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -197,27 +192,12 @@ h2::after {
   animation: fade-in 0.4s ease-out forwards;
 }
 
-/* General Container for GSai */
+/* GSai Container */
 .gsai-container {
   max-width: 7xl;
   margin: 0 auto;
   padding: 1rem;
-  @apply px-4 sm:px-6 lg:px-8;
   box-sizing: border-box;
-}
-
-/* Hover effect for cards, buttons, and sections */
-.card,
-.button,
-.section {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card:hover,
-.button:hover,
-.section:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 @media (max-width: 1024px) {
@@ -231,4 +211,22 @@ h2::after {
   .gsai-container {
     padding: 1rem;
   }
+}
+
+/* Hover effects for cards, buttons, and sections */
+.card,
+.button,
+.section {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover,
+.button:hover,
+.section:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+* {
+  transition: transform 0.3s ease-in-out;
 }

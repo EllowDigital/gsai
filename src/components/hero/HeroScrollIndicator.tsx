@@ -1,38 +1,28 @@
-
 import React from 'react';
 
-const HeroScrollIndicator = () => {
-  return (
-    <div
-      className="mt-8 sm:mt-12 md:mt-16"
-      style={{
-        animation: "bounce 2s infinite",
-      }}
+const HeroScrollIndicator = () => (
+  <div className="relative flex flex-col items-center justify-end mt-auto mb-16">
+    <a
+      href="#about"
+      className="block text-white/70 hover:text-white transition-colors duration-300 animate-bounce"
+      aria-label="Scroll down to about section"
     >
-      <a
-        href="#about"
-        className="text-white/70 hover:text-white transition-colors duration-300"
-        style={{
-          display: "block",
-        }}
+      <svg
+        className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
       >
-        <svg
-          className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 14l-7 7m0 0l-7-7m7 7V3"
-          />
-        </svg>
-      </a>
-    </div>
-  );
-};
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M19 14l-7 7m0 0l-7-7m7 7V3"
+        />
+      </svg>
+    </a>
+  </div>
+);
 
 export default HeroScrollIndicator;

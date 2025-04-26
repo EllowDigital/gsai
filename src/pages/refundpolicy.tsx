@@ -31,25 +31,28 @@ const RefundPolicy = () => {
 
             <ScrollArea className="h-[70vh] rounded-md border p-6 bg-black/30">
               <div className="space-y-8 text-left">
+                {/* Introduction Section */}
                 <section>
                   <h2 className="text-2xl font-semibold mb-4 text-gsai-gold">Introduction</h2>
                   <p className="mb-4">
-                    At Ghatak Sports Academy India™ (GSAI), we strive to provide high-quality services and products to our members. If you're not satisfied with your purchase, this refund policy explains your options for a refund or exchange.
+                    At Ghatak Sports Academy India™ (GSAI), we are committed to providing high-quality services and products. If you are not completely satisfied with your purchase, this refund policy outlines the process for requesting a refund or exchange.
                   </p>
                 </section>
 
+                {/* Eligibility for Refund */}
                 <section>
                   <h2 className="text-2xl font-semibold mb-4 text-gsai-gold">Eligibility for Refund</h2>
                   <p className="mb-4">
-                    You may be eligible for a refund under the following conditions:
+                    You may be eligible for a refund under the following circumstances:
                   </p>
                   <ul className="list-disc pl-5 space-y-2">
                     <li>If you cancel your registration or membership within 7 days of the purchase date.</li>
-                    <li>If you have purchased a product that is defective or damaged.</li>
+                    <li>If you purchased a product that is defective or damaged.</li>
                     <li>If the service or program was not delivered as described.</li>
                   </ul>
                 </section>
 
+                {/* Refund Process */}
                 <section>
                   <h2 className="text-2xl font-semibold mb-4 text-gsai-gold">Refund Process</h2>
                   <p className="mb-4">
@@ -57,12 +60,13 @@ const RefundPolicy = () => {
                   </p>
                   <ol className="list-decimal pl-5 space-y-2">
                     <li>Contact our customer support team via email or phone within 7 days of your purchase.</li>
-                    <li>Provide your purchase details, including order number, product/service, and reason for the refund request.</li>
+                    <li>Provide purchase details including your order number, product/service purchased, and the reason for your refund request.</li>
                     <li>Our team will review your request and issue the refund if it meets our refund criteria.</li>
-                    <li>Refunds will be processed to the original method of payment, and it may take up to 10 business days to reflect in your account.</li>
+                    <li>Refunds will be processed to the original payment method, and it may take up to 10 business days for the refund to reflect in your account.</li>
                   </ol>
                 </section>
 
+                {/* Non-Refundable Items */}
                 <section>
                   <h2 className="text-2xl font-semibold mb-4 text-gsai-gold">Non-Refundable Items</h2>
                   <p className="mb-4">
@@ -70,17 +74,19 @@ const RefundPolicy = () => {
                   </p>
                   <ul className="list-disc pl-5 space-y-2">
                     <li>Courses, memberships, or services that have already been used or completed.</li>
-                    <li>Products or services that are marked as non-refundable at the time of purchase.</li>
+                    <li>Products or services that are explicitly marked as non-refundable at the time of purchase.</li>
                   </ul>
                 </section>
 
+                {/* Exchanges */}
                 <section>
                   <h2 className="text-2xl font-semibold mb-4 text-gsai-gold">Exchanges</h2>
                   <p className="mb-4">
-                    In some cases, instead of a refund, we may offer an exchange or store credit for a future purchase. This is typically for defective products or services that are part of an exchange program.
+                    In certain cases, rather than issuing a refund, we may offer an exchange or store credit for a future purchase. This typically applies to defective products or services that fall under an exchange program.
                   </p>
                 </section>
 
+                {/* Changes to Refund Policy */}
                 <section>
                   <h2 className="text-2xl font-semibold mb-4 text-gsai-gold">Changes to Our Refund Policy</h2>
                   <p className="mb-4">
@@ -88,10 +94,11 @@ const RefundPolicy = () => {
                   </p>
                 </section>
 
+                {/* Contact Information */}
                 <section>
                   <h2 className="text-2xl font-semibold mb-4 text-gsai-gold">Contact Information</h2>
                   <p className="mb-4">
-                    If you have any questions or concerns about our refund policy, please contact us:
+                    If you have any questions or concerns regarding our refund policy, please reach out to us:
                   </p>
                   <p><strong>Email:</strong> ghatakgsai@gmail.com</p>
                   <p><strong>Phone:</strong> +91-639-413-5988</p>

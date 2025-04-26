@@ -135,10 +135,10 @@ const Testimonials = () => {
   };
 
   return (
-    <section id="testimonials" className="py-20 bg-gradient-to-b from-black to-gray-900">
+    <section id="testimonials" className="py-20 bg-black text-white">
       <div className="gsai-container" ref={containerRef}>
         <h2 className="text-4xl font-bold mb-16 text-center">
-          <span className="text-gsai-red">Student</span>{" "}
+          <span className="text-gsai-gold">Student</span>{" "}
           <span className="text-white">Testimonials</span>
         </h2>
 
@@ -184,8 +184,8 @@ const Testimonials = () => {
                             key={i}
                             size={16}
                             className={`${i < currentTestimonial.rating
-                                ? "text-gsai-gold fill-gsai-gold"
-                                : "text-gray-400"
+                              ? "text-gsai-gold fill-gsai-gold"
+                              : "text-gray-400"
                               }`}
                           />
                         ))}

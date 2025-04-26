@@ -27,9 +27,7 @@ const PrivacyPolicy = () => {
 
         <main className="gsai-container py-16">
           <div ref={sectionRef} className="max-w-4xl mx-auto">
-            <h1 className="text-4xl font-bold mb-10 text-center">
-              Privacy Policy
-            </h1>
+            <h1 className="text-4xl font-bold mb-10 text-center">Privacy Policy</h1>
 
             <ScrollArea className="h-[70vh] rounded-md border p-6 bg-black/30">
               <div className="space-y-8 text-left">

@@ -1,6 +1,7 @@
 import { Suspense, lazy } from 'react';
 import SectionLoader from './SectionLoader';
 
+// Lazy load the components
 const About = lazy(() => import('@/components/About'));
 const Founder = lazy(() => import('@/components/Founder'));
 const Programs = lazy(() => import('@/components/Programs'));
@@ -11,85 +12,63 @@ const Contact = lazy(() => import('@/components/Contact'));
 const Affiliations = lazy(() => import('@/components/Affiliations'));
 const Footer = lazy(() => import('@/components/Footer'));
 
-interface MainContentProps {
-  isMounted: boolean;
-  visibleSections: Record<string, boolean>;
-}
-
-const MainContent = ({ isMounted, visibleSections }: MainContentProps) => {
+const MainContent = () => {
   return (
     <div className="relative z-20">
       {/* Sections */}
-      <section id="aboutSection" className="section-animate opacity-0">
-        {(isMounted && visibleSections.about) && (
-          <Suspense fallback={<SectionLoader />}>
-            <About />
-          </Suspense>
-        )}
+      <section id="aboutSection">
+        <Suspense fallback={<SectionLoader />}>
+          <About />
+        </Suspense>
       </section>
 
-      <section id="founderSection" className="section-animate opacity-0">
-        {(isMounted && visibleSections.founder) && (
-          <Suspense fallback={<SectionLoader />}>
-            <Founder />
-          </Suspense>
-        )}
+      <section id="founderSection">
+        <Suspense fallback={<SectionLoader />}>
+          <Founder />
+        </Suspense>
       </section>
 
-      <section id="programsSection" className="section-animate opacity-0">
-        {(isMounted && visibleSections.programs) && (
-          <Suspense fallback={<SectionLoader />}>
-            <Programs />
-          </Suspense>
-        )}
+      <section id="programsSection">
+        <Suspense fallback={<SectionLoader />}>
+          <Programs />
+        </Suspense>
       </section>
 
-      <section id="testimonialsSection" className="section-animate opacity-0">
-        {(isMounted && visibleSections.testimonials) && (
-          <Suspense fallback={<SectionLoader />}>
-            <Testimonials />
-          </Suspense>
-        )}
+      <section id="testimonialsSection">
+        <Suspense fallback={<SectionLoader />}>
+          <Testimonials />
+        </Suspense>
       </section>
 
-      <section id="gallerySection" className="section-animate opacity-0">
-        {(isMounted && visibleSections.gallery) && (
-          <Suspense fallback={<SectionLoader />}>
-            <Gallery />
-          </Suspense>
-        )}
+      <section id="gallerySection">
+        <Suspense fallback={<SectionLoader />}>
+          <Gallery />
+        </Suspense>
       </section>
 
-      <section id="faqSection" className="section-animate opacity-0">
-        {(isMounted && visibleSections.faq) && (
-          <Suspense fallback={<SectionLoader />}>
-            <FAQ />
-          </Suspense>
-        )}
+      <section id="faqSection">
+        <Suspense fallback={<SectionLoader />}>
+          <FAQ />
+        </Suspense>
       </section>
 
-      <section id="contactSection" className="section-animate opacity-0">
-        {(isMounted && visibleSections.contact) && (
-          <Suspense fallback={<SectionLoader />}>
-            <Contact />
-          </Suspense>
-        )}
+      <section id="contactSection">
+        <Suspense fallback={<SectionLoader />}>
+          <Contact />
+        </Suspense>
       </section>
 
-      <section id="affiliationsSection" className="section-animate opacity-0">
-        {(isMounted && visibleSections.affiliations) && (
-          <Suspense fallback={<SectionLoader />}>
-            <Affiliations />
-          </Suspense>
-        )}
+      <section id="affiliationsSection">
+        <Suspense fallback={<SectionLoader />}>
+          <Affiliations />
+        </Suspense>
       </section>
 
-      <section id="footerSection" className="section-animate opacity-0">
-        {(isMounted && visibleSections.footer) && (
-          <Suspense fallback={<SectionLoader />}>
-            <Footer />
-          </Suspense>
-        )}
+      {/* Ensure footer is always rendered */}
+      <section id="footerSection">
+        <Suspense fallback={<SectionLoader />}>
+          <Footer />
+        </Suspense>
       </section>
     </div>
   );

@@ -45,7 +45,7 @@ const Index = () => {
         {/* Add preload for critical resources */}
         <link rel="preload" href="/images/logo.png" as="image" />
         <link rel="preload" href="/images/founder.webp" as="image" />
-        
+
         {/* Add optimized performance settings */}
         <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />

@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { useParallax } from '@/hooks/use-parallax';
 import Card3D from './ui/3d-card';
@@ -14,10 +13,7 @@ const GalleryImage = ({ src, alt, onClick }: ImageProps) => {
   const imageRef = useParallax<HTMLDivElement>({ speed: 0.05, direction: 'vertical' });
 
   return (
-    <Card3D
-      className="overflow-hidden rounded-lg"
-      intensity={10}
-    >
+    <Card3D className="overflow-hidden rounded-lg" intensity={10}>
       <div
         ref={imageRef}
         onClick={onClick}
@@ -55,6 +51,7 @@ const GalleryImage = ({ src, alt, onClick }: ImageProps) => {
           className={`w-full h-full object-cover transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
           onLoad={() => setIsLoaded(true)}
           loading="lazy"
+          decoding="async"
         />
         <div className="absolute inset-0 bg-black bg-opacity-30 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
           <p className="text-white font-semibold text-lg">{alt}</p>
@@ -68,7 +65,7 @@ const Gallery = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedImageAlt, setSelectedImageAlt] = useState<string>('');
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  
+
   const titleRef = useParallax<HTMLHeadingElement>({ speed: 0.1 });
   const lightboxRef = useRef<HTMLDivElement>(null);
 
@@ -140,7 +137,7 @@ const Gallery = () => {
         if (e.key === 'ArrowLeft') navigateImage('prev');
       }
     };
-    
+
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedImage, currentIndex]);
@@ -149,7 +146,7 @@ const Gallery = () => {
     <section id="gallery" className="py-20 bg-gradient-to-b from-gsai-gray-900 to-black">
       <div className="gsai-container">
         <div className="text-center mb-16">
-          <h2 
+          <h2
             ref={titleRef}
             className="section-title text-white gallery-animate opacity-0"
           >
@@ -186,7 +183,7 @@ const Gallery = () => {
             aria-modal="true"
             aria-label="Image lightbox"
           >
-            <div 
+            <div
               className="relative max-w-4xl max-h-full"
               onClick={(e) => e.stopPropagation()}
             >

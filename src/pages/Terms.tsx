@@ -27,9 +27,7 @@ const Terms = () => {
 
         <main className="gsai-container py-16">
           <div ref={sectionRef} className="max-w-4xl mx-auto">
-            <h1 className="text-4xl font-bold mb-10 text-center">
-              Terms and Conditions
-            </h1>
+            <h1 className="text-4xl font-bold mb-10 text-center">Terms and Conditions</h1>
 
             <ScrollArea className="h-[70vh] rounded-md border p-6 bg-black/30">
               <div className="space-y-8 text-left">
@@ -38,27 +36,25 @@ const Terms = () => {
                   <p className="mb-4">
                     These Terms and Conditions constitute a legally binding agreement made between you, the user of our website and services, and Ghatak Sports Academy India™ (GSAI). By accessing our website and/or using our services, you agree to be bound by these Terms and Conditions.
                   </p>
-                  <p>
-                    If you disagree with any part of these terms, you may not access the website or use our services.
-                  </p>
+                  <p>If you disagree with any part of these terms, you may not access the website or use our services.</p>
                 </section>
 
                 <section>
                   <h2 className="text-2xl font-semibold mb-4 text-gsai-gold">Enrollment and Membership</h2>
-                  <p className="mb-4">By enrolling in GSAI:</p>
+                  <p className="mb-4">By enrolling in GSAI, you agree to:</p>
                   <ul className="list-disc pl-5 space-y-2">
-                    <li>You agree to follow all academy rules, regulations, and safety protocols</li>
-                    <li>You understand that martial arts training involves physical contact and inherent risks</li>
-                    <li>You commit to paying the agreed fees according to the selected payment schedule</li>
-                    <li>You acknowledge that membership is non-transferable without prior written approval</li>
-                    <li>You agree to provide accurate medical information and acknowledge fitness for training</li>
+                    <li>Follow all academy rules, regulations, and safety protocols</li>
+                    <li>Understand that martial arts training involves physical contact and inherent risks</li>
+                    <li>Pay the agreed fees according to the selected payment schedule</li>
+                    <li>Acknowledge that membership is non-transferable without prior written approval</li>
+                    <li>Provide accurate medical information and acknowledge fitness for training</li>
                   </ul>
                 </section>
 
                 <section>
                   <h2 className="text-2xl font-semibold mb-4 text-gsai-gold">Intellectual Property Rights</h2>
                   <p className="mb-4">
-                    The GSAI website and all its content, features, and functionality (including but not limited to text, graphics, videos, and logos) are owned by Ghatak Sports Academy India™ and are protected by Indian and international copyright, trademark, and other intellectual property laws.
+                    The GSAI website and all its content, features, and functionality (including text, graphics, videos, and logos) are owned by Ghatak Sports Academy India™ and are protected by Indian and international copyright, trademark, and other intellectual property laws.
                   </p>
                 </section>
 

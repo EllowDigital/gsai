@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import CTAButton from "./CTAButton";
@@ -25,8 +18,9 @@ const NavBar = () => {
   const isMobile = useIsMobile();
   const [isOpen, setIsOpen] = useState(false);
 
+  // Handle navigation on click for both mobile and desktop
   const handleNavClick = (href: string) => {
-    setIsOpen(false);
+    setIsOpen(false); // Close the mobile menu
     const target = document.querySelector(href);
     if (target) {
       setTimeout(() => {
@@ -53,7 +47,7 @@ const NavBar = () => {
           <span className="font-extrabold text-lg sm:text-xl text-white drop-shadow-sm whitespace-nowrap">
             <span className="text-gsai-red">G</span>
             <span className="text-gsai-gold">SA</span>
-            <span className="text-gsai-#ffffff">I</span>
+            <span className="text-white">I</span>
           </span>
         </a>
 
@@ -63,6 +57,10 @@ const NavBar = () => {
             <a
               key={href}
               href={href}
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavClick(href);
+              }}
               className="text-gray-300 hover:text-white font-medium transition-colors"
             >
               {label}
@@ -87,12 +85,7 @@ const NavBar = () => {
             </SheetTrigger>
             <SheetContent side="right" className="bg-black/90 text-white">
               <SheetHeader>
-                <SheetTitle className="text-white text-xl">
-                  Menu
-                </SheetTitle>
-                <SheetDescription className="text-gray-400">
-                  Navigate the site
-                </SheetDescription>
+                <SheetTitle className="text-white text-xl">Menu</SheetTitle>
               </SheetHeader>
               <motion.nav
                 className="flex flex-col gap-5 mt-6"

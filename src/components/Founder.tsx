@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import Card3D from './ui/3d-card';
 
@@ -25,31 +24,32 @@ const Founder = () => {
 
         <div className="flex flex-col md:flex-row items-center justify-center gap-12">
           <div className="founder-animate opacity-0">
-            <Card3D 
-              className="w-[300px] h-[400px]"
-              shadow 
+            <Card3D
+              className="w-[300px] h-[400px] group"
+              shadow
               glare
               intensity={20}
             >
-              <div className="flex flex-col h-full">
-                <div className="front-card p-6 flex flex-col items-center justify-center h-full">
-                  <div className="mb-6">
+              <div className="flex flex-col h-full relative">
+                <div className="front-card p-6 flex flex-col items-center justify-center h-full relative">
+                  <div className="mb-6 relative w-full h-full overflow-hidden rounded-lg">
                     <img
                       src="/images/founder.webp"
                       alt="Founder - Nitesh Yadav"
-                      className="w-24 h-24 rounded-full mx-auto object-cover border-2 border-gsai-gold shadow-lg shadow-gsai-red/20"
+                      className="w-[90%] h-[90%] object-cover object-center border-2 border-gsai-gold shadow-lg shadow-gsai-red/20"
                     />
                   </div>
                   <h3 className="text-2xl font-bold text-white mb-2">Mr. Nitesh Yadav</h3>
                   <p className="text-gsai-gold">Founder & Chief Instructor</p>
                   <p className="text-white/70 mt-4 text-sm italic">Hover to reveal message</p>
                 </div>
-                
-                <div className="absolute inset-0 bg-gradient-to-r from-black to-gsai-gray-900 p-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="text-center">
+
+                {/* Philosophy Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-r from-black to-gsai-gray-900 p-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 overflow-hidden">
+                  <div className="text-center w-full h-full overflow-hidden p-4">
                     <h3 className="text-2xl font-bold text-white mb-4">Our Philosophy</h3>
-                    <p className="text-white/90 italic">
-                      "The true essence of martial arts lies not in defeating others, but in conquering oneself. 
+                    <p className="text-white/90 italic overflow-hidden text-ellipsis">
+                      "The true essence of martial arts lies not in defeating others, but in conquering oneself.
                       At GSAI, we transform individuals by building their character alongside their physical abilities."
                     </p>
                     <p className="text-gsai-gold mt-6 font-bold">- Nitesh Yadav</p>

@@ -43,11 +43,6 @@
         "src": "/favicon_io/favicon-16x16.png",
         "sizes": "16x16",
         "type": "image/png"
-      },
-      {
-        "src": "/favicon_io/favicon.ico",
-        "sizes": "any",
-        "type": "image/x-icon"
       }
     ]
   }

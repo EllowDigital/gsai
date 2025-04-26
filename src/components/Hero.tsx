@@ -1,4 +1,3 @@
-
 import { useRef, useEffect, useState, useCallback } from "react";
 import HeroParticles from "./HeroParticles";
 import CTAButton from "./CTAButton";
@@ -11,11 +10,11 @@ const Hero = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  
+
   const contentEffect = use3DEffect({
     intensity: 10,
     perspective: 1200,
-    smooth: 0.15
+    smooth: 0.15,
   });
 
   useEffect(() => {
@@ -42,9 +41,9 @@ const Hero = () => {
 
   const scrollToContact = () => {
     const contactSection = document.getElementById("contact");
-    contactSection?.scrollIntoView({ 
+    contactSection?.scrollIntoView({
       behavior: "smooth",
-      block: "start"
+      block: "start",
     });
   };
 
@@ -52,7 +51,7 @@ const Hero = () => {
     <div
       id="hero"
       ref={heroRef}
-      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-black"
+      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-black px-4 sm:px-8 lg:px-16" // Added padding for mobile responsiveness
     >
       <div className="absolute inset-0 z-0">
         <HeroParticles parentRef={heroRef} />
@@ -71,20 +70,20 @@ const Hero = () => {
         onMouseEnter={contentEffect.handleMouseEnter}
         onMouseLeave={contentEffect.handleMouseLeave}
         onMouseMove={contentEffect.handleMouseMove}
-        className={`relative text-center z-40 flex flex-col items-center transition-all duration-1000 ease-in-out ${
-          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-        }`}
+        className={`relative text-center z-40 flex flex-col items-center transition-all duration-1000 ease-in-out ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+          }`}
         style={{
           ...contentEffect.style,
           transition: "transform 0.3s ease-out, opacity 1s ease, translate 1s ease",
         }}
       >
-        <div className="glass-card backdrop-blur-lg bg-black/30 border border-white/20 p-8 md:p-12 w-full max-w-4xl mx-auto rounded-2xl shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+        {/* Removed the glass-card and all associated styles */}
+        <div className="w-full max-w-4xl mx-auto">
           <HeroTitle />
           <HeroSubtitle />
 
           <div
-            className="transform-gpu hover:scale-110 transition-transform duration-300"
+            className="transform-gpu hover:scale-110 transition-transform duration-300 mb-12" // Added bottom margin for spacing
             style={{
               animation: "float 3s ease-in-out infinite 0.4s",
               transform: `perspective(1000px) rotateY(${mousePosition.x * 0.05}deg) rotateX(${mousePosition.y * -0.05}deg)`,
@@ -102,13 +101,14 @@ const Hero = () => {
             />
           </div>
 
+          {/* Centered Scroll Indicator with extra space */}
           <HeroScrollIndicator />
         </div>
       </div>
 
       {/* 3D floating decorative elements */}
       <div className="absolute hidden lg:block">
-        <div 
+        <div
           className="absolute -top-20 -right-20 w-40 h-40 opacity-20"
           style={{
             animation: "float 8s ease-in-out infinite",
@@ -117,8 +117,8 @@ const Hero = () => {
         >
           <div className="w-full h-full rounded-full bg-gradient-to-br from-gsai-red/30 to-transparent blur-xl"></div>
         </div>
-        
-        <div 
+
+        <div
           className="absolute top-40 -left-20 w-32 h-32 opacity-20"
           style={{
             animation: "float 6s ease-in-out infinite 1s",

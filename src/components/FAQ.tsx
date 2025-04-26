@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { useParallax } from '@/hooks/use-parallax';
@@ -62,7 +61,7 @@ const FAQ = () => {
     <section id="faq" className="py-20 bg-black">
       <div className="gsai-container">
         <div className="text-center mb-16">
-          <h2 
+          <h2
             ref={titleRef}
             className="section-title text-white faq-animate opacity-0"
           >
@@ -84,13 +83,13 @@ const FAQ = () => {
             <div className="p-1">
               <Accordion type="single" collapsible className="w-full">
                 {faqData.map((faq, index) => (
-                  <AccordionItem 
-                    key={index} 
+                  <AccordionItem
+                    key={index}
                     value={`item-${index}`}
                     className="faq-animate opacity-0 mb-4 overflow-hidden border-b border-white/10"
                     style={{ animationDelay: `${0.1 * index}s` }}
                   >
-                    <AccordionTrigger className="py-4 px-6 text-left font-semibold text-white text-lg hover:text-gsai-red transition-colors">
+                    <AccordionTrigger className="py-4 px-6 text-left font-semibold text-white text-lg hover:text-gsai-red transition-colors duration-300 ease-in-out">
                       {faq.question}
                     </AccordionTrigger>
                     <AccordionContent className="py-2 px-6 text-gray-300">
@@ -107,9 +106,9 @@ const FAQ = () => {
           <p className="text-gray-400 mb-4 faq-animate opacity-0" style={{ animationDelay: '0.8s' }}>
             Still have questions?
           </p>
-          <a 
-            href="#contact" 
-            className="gsai-btn faq-animate opacity-0" 
+          <a
+            href="#contact"
+            className="gsai-btn faq-animate opacity-0"
             style={{ animationDelay: '0.9s' }}
           >
             Contact Us

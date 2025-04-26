@@ -10,10 +10,12 @@ interface ScrollAnimationOptions {
 }
 
 /**
- * Enhanced hook to add scroll-triggered animations to elements with improved performance
+ * Enhanced hook to add scroll-triggered animations to elements with improved performance.
  */
 export const useScrollAnimation = <T extends HTMLElement>(options: ScrollAnimationOptions = {}): RefObject<T> => {
   const elementRef = useRef<T>(null);
+
+  // Destructuring options with default values
   const {
     threshold = 0.1,
     rootMargin = '0px 0px -10% 0px',
@@ -27,39 +29,40 @@ export const useScrollAnimation = <T extends HTMLElement>(options: ScrollAnimati
     const element = elementRef.current;
     if (!element) return;
 
-    // Add appropriate classes based on animation type
-    element.classList.add('scroll-animate');
-    element.classList.add(`animate-${animationType}-${direction}`);
+    // Add appropriate initial animation classes
+    element.classList.add('scroll-animate', `animate-${animationType}-${direction}`);
 
     // Apply delay if specified
     if (delay > 0) {
       element.style.transitionDelay = `${delay}ms`;
     }
 
-    // Use Intersection Observer API for better performance than scroll listeners
+    // Intersection Observer to trigger animations when the element enters the viewport
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          // Use requestAnimationFrame to optimize the timing of class changes
           if (entry.isIntersecting) {
             requestAnimationFrame(() => {
-              (entry.target as HTMLElement).classList.add('visible');
-              // Add will-change before animation starts
-              (entry.target as HTMLElement).style.willChange = 'opacity, transform';
+              const target = entry.target as HTMLElement;
 
-              // Remove will-change after animation completes (setTimeout could be adjusted to suit your animation timing)
+              // Add visibility class to trigger animation
+              target.classList.add('visible');
+              target.style.willChange = 'opacity, transform';
+
+              // Remove will-change after animation completes to optimize performance
               setTimeout(() => {
-                (entry.target as HTMLElement).style.willChange = 'auto';
-              }, 1000); // Duration should match your CSS animation duration
+                target.style.willChange = 'auto';
+              }, 1000); // Timeout should match animation duration
 
-              // Stop observing once element is in view (if `once` is true)
+              // If 'once' is true, stop observing after first visibility
               if (once) {
-                observer.unobserve(entry.target);
+                observer.unobserve(target);
               }
             });
           } else if (!once) {
             requestAnimationFrame(() => {
-              (entry.target as HTMLElement).classList.remove('visible');
+              const target = entry.target as HTMLElement;
+              target.classList.remove('visible');
             });
           }
         });
@@ -67,13 +70,11 @@ export const useScrollAnimation = <T extends HTMLElement>(options: ScrollAnimati
       { threshold, rootMargin }
     );
 
-    // Batch DOM operations
-    requestAnimationFrame(() => {
-      observer.observe(element);
-    });
+    // Start observing the element
+    observer.observe(element);
 
     return () => {
-      // Cleanup observer if element is no longer present
+      // Cleanup observer on component unmount or when element is no longer present
       if (element) {
         observer.unobserve(element);
       }

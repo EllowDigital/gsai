@@ -1,9 +1,11 @@
 import * as React from "react";
 import type { ToastActionElement, ToastProps } from "@/components/ui/toast";
 
+// Constants
 const TOAST_LIMIT = 1;
-const TOAST_REMOVE_DELAY = 1000000; // In milliseconds, set as a long delay for simulation
+const TOAST_REMOVE_DELAY = 1000000; // Long delay for simulation
 
+// Types
 type ToasterToast = ToastProps & {
   id: string;
   title?: React.ReactNode;
@@ -11,12 +13,19 @@ type ToasterToast = ToastProps & {
   action?: ToastActionElement;
 };
 
-const actionTypes = {
+type ActionType = {
+  ADD_TOAST: "ADD_TOAST";
+  UPDATE_TOAST: "UPDATE_TOAST";
+  DISMISS_TOAST: "DISMISS_TOAST";
+  REMOVE_TOAST: "REMOVE_TOAST";
+};
+
+const actionTypes: ActionType = {
   ADD_TOAST: "ADD_TOAST",
   UPDATE_TOAST: "UPDATE_TOAST",
   DISMISS_TOAST: "DISMISS_TOAST",
   REMOVE_TOAST: "REMOVE_TOAST",
-} as const;
+};
 
 let toastCount = 0;
 function generateId() {
@@ -24,17 +33,19 @@ function generateId() {
   return toastCount.toString();
 }
 
-type ActionType = typeof actionTypes;
+// Action Types
 type Action =
   | { type: ActionType["ADD_TOAST"]; toast: ToasterToast }
   | { type: ActionType["UPDATE_TOAST"]; toast: Partial<ToasterToast> }
-  | { type: ActionType["DISMISS_TOAST"]; toastId?: ToasterToast["id"] }
-  | { type: ActionType["REMOVE_TOAST"]; toastId?: ToasterToast["id"] };
+  | { type: ActionType["DISMISS_TOAST"]; toastId?: string }
+  | { type: ActionType["REMOVE_TOAST"]; toastId?: string };
 
+// State Interface
 interface State {
   toasts: ToasterToast[];
 }
 
+// Timeout management
 const toastTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
 
 const enqueueRemoval = (toastId: string) => {
@@ -47,6 +58,7 @@ const enqueueRemoval = (toastId: string) => {
   }
 };
 
+// Reducer Function
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "ADD_TOAST":
@@ -63,13 +75,12 @@ const reducer = (state: State, action: Action): State => {
         ),
       };
 
-    case "DISMISS_TOAST": {
+    case "DISMISS_TOAST":
       const { toastId } = action;
       const toDismiss = toastId
         ? [toastId]
         : state.toasts.map((toast) => toast.id);
-
-      toDismiss.forEach((id) => enqueueRemoval(id));
+      toDismiss.forEach(enqueueRemoval);
 
       return {
         ...state,
@@ -77,7 +88,6 @@ const reducer = (state: State, action: Action): State => {
           toDismiss.includes(toast.id) ? { ...toast, open: false } : toast
         ),
       };
-    }
 
     case "REMOVE_TOAST":
       return {
@@ -92,17 +102,17 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
+// Listener management for state changes
 const listeners: Array<(state: State) => void> = [];
 let currentState: State = { toasts: [] };
 
-function dispatch(action: Action) {
+const dispatch = (action: Action) => {
   currentState = reducer(currentState, action);
   listeners.forEach((listener) => listener(currentState));
-}
+};
 
-type Toast = Omit<ToasterToast, "id">;
-
-function toast({ ...props }: Toast) {
+// Toast function to add/update/dismiss toasts
+function toast({ ...props }: Omit<ToasterToast, "id">) {
   const id = generateId();
 
   const update = (newProps: ToasterToast) =>
@@ -128,6 +138,7 @@ function toast({ ...props }: Toast) {
   return { id, dismiss, update };
 }
 
+// Custom Hook to manage toast state
 function useToast() {
   const [state, setState] = React.useState<State>(currentState);
 

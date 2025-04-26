@@ -1,14 +1,13 @@
-
 import React from 'react';
 
 const HeroTitle = () => {
   return (
-    <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-4 text-white">
+    <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white mb-4 text-center px-4">
       <div
         className="relative inline-block transform-gpu"
         style={{
           animation: "float 3s ease-in-out infinite",
-          textShadow: "0 0 15px rgba(255,255,255,0.2)",
+          textShadow: "0 0 20px rgba(255, 255, 255, 0.2)", // Improved text shadow
         }}
       >
         Welcome to
@@ -17,29 +16,29 @@ const HeroTitle = () => {
         className="mt-2 relative transform-gpu"
         style={{
           animation: "float 3s ease-in-out infinite 0.2s",
-          textShadow: "2px 2px 8px rgba(0,0,0,0.8)",
+          textShadow: "2px 2px 10px rgba(0, 0, 0, 0.8)", // Enhanced shadow for more depth
         }}
       >
         <span
           className="text-gsai-red"
           style={{
-            textShadow: "0 0 10px rgba(255,0,0,0.5)",
+            textShadow: "0 0 15px rgba(255, 0, 0, 0.5)", // Stronger red glow
             display: "inline-block",
             animation: "pulse-glow 2s infinite",
           }}
         >
           Ghatak{" "}
         </span>
-        <span className="text-white"> Sports Academy</span>
+        <span className="text-white mx-2"> Sports Academy</span> {/* Added mx-2 for spacing */}
         <span
           className="text-gsai-gold"
           style={{
-            textShadow: "0 0 10px rgba(255,204,0,0.5)",
+            textShadow: "0 0 15px rgba(255, 204, 0, 0.5)", // Stronger gold glow
             display: "inline-block",
             animation: "pulse-glow 2.5s infinite",
           }}
         >
-          &nbsp;India™
+          India™
         </span>
 
         <div

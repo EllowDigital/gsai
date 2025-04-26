@@ -1,84 +1,96 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 interface PWAProps {
   className?: string;
   updateMessage?: string;
-  autoUpdateTimeout?: number; // Time before auto update
+  autoUpdateTimeout?: number; // Time before auto update in milliseconds
 }
 
 const PWA = ({
   className = "",
   updateMessage = "New version available!",
-  autoUpdateTimeout = 30000, // 30 seconds default timeout
+  autoUpdateTimeout = 30000, // 30 seconds default
 }: PWAProps) => {
   const [isUpdateAvailable, setIsUpdateAvailable] = useState(false);
-  const [countdown, setCountdown] = useState(autoUpdateTimeout / 1000); // Convert ms to seconds
+  const [countdown, setCountdown] = useState(autoUpdateTimeout / 1000); // in seconds
   const [updateInProgress, setUpdateInProgress] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
 
   useEffect(() => {
-    if ('serviceWorker' in navigator) {
+    if ("serviceWorker" in navigator) {
       const handleServiceWorkerUpdate = (registration: ServiceWorkerRegistration) => {
         const newWorker = registration.installing;
         if (newWorker) {
-          newWorker.addEventListener('statechange', () => {
-            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+          newWorker.addEventListener("statechange", () => {
+            if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
               setIsUpdateAvailable(true);
             }
           });
         }
       };
 
-      // Register the service worker and detect updates
       navigator.serviceWorker
-        .register('/sw.js') // Ensure sw.js is located in the public folder
+        .register("/sw.js")
         .then((registration) => {
-          // Check if there’s already a waiting worker (i.e., update available)
           if (registration.waiting) {
             setIsUpdateAvailable(true);
           }
-          registration.addEventListener('updatefound', () => handleServiceWorkerUpdate(registration));
+          registration.addEventListener("updatefound", () => handleServiceWorkerUpdate(registration));
         })
         .catch((error) => {
-          console.error('Service worker registration failed:', error);
+          console.error("Service Worker registration failed:", error);
         });
     }
   }, []);
 
-  // Countdown timer for auto update
   useEffect(() => {
+    if (isUpdateAvailable) {
+      setShowNotification(true);
+    }
+
     if (isUpdateAvailable && countdown > 0 && !updateInProgress) {
       const timer = setInterval(() => {
-        setCountdown((prevCountdown) => prevCountdown - 1);
+        setCountdown((prev) => prev - 1);
       }, 1000);
-
       return () => clearInterval(timer);
     }
   }, [isUpdateAvailable, countdown, updateInProgress]);
 
-  // Trigger service worker update
   const handleUpdate = () => {
     if (navigator.serviceWorker.controller) {
-      // Send a message to the service worker to skip waiting and activate the new version
-      navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
+      navigator.serviceWorker.controller.postMessage({ type: "SKIP_WAITING" });
     }
-    // Reload the page to get the updated service worker
-    window.location.reload();
     setUpdateInProgress(true);
+    window.location.reload();
   };
 
-  // Close the update notification
   const handleClose = () => {
     setIsUpdateAvailable(false);
-    setCountdown(autoUpdateTimeout / 1000); // Reset the countdown
+    setShowNotification(false);
+    setCountdown(autoUpdateTimeout / 1000); // Reset countdown
   };
+
+  const progressPercentage = (countdown / (autoUpdateTimeout / 1000)) * 100;
 
   if (!isUpdateAvailable) return null;
 
   return (
-    <div className={`fixed bottom-4 right-4 p-4 bg-black bg-opacity-80 rounded-lg shadow-lg z-50 text-white ${className}`}>
+    <div
+      className={`fixed bottom-4 right-4 p-4 bg-black bg-opacity-80 rounded-lg shadow-lg z-50 text-white transform transition-transform ${showNotification ? "translate-y-0" : "translate-y-full"
+        } ${className}`}
+      style={{ transition: "transform 0.5s ease-in-out" }}
+    >
       <p className="mb-2 font-medium">{updateMessage}</p>
       {countdown > 0 && !updateInProgress && (
-        <p className="mb-2 text-sm">Auto update in {countdown} seconds...</p>
+        <div className="mb-2 text-sm">
+          Auto-update in {countdown} seconds...
+          <div className="mt-2 h-2 bg-gray-600 rounded-full">
+            <div
+              className="h-full bg-green-500 rounded-full"
+              style={{ width: `${progressPercentage}%` }}
+            ></div>
+          </div>
+        </div>
       )}
       <div className="flex items-center gap-2">
         <button

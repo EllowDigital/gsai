@@ -14,18 +14,18 @@ import Gallery from './components/Gallery';
 import FAQ from './components/FAQ';
 import Testimonials from './components/Testimonials';
 
-// Lazy load pages with error boundaries
+// Lazy loading pages with error boundaries
 const Index = React.lazy(() => import("./pages/Index"));
 const NotFound = React.lazy(() => import("./pages/NotFound"));
 const PrivacyPolicy = React.lazy(() => import("./pages/PrivacyPolicy"));
 const Terms = React.lazy(() => import("./pages/Terms"));
 
-// Create QueryClient with optimized settings
+// Optimized QueryClient configuration
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 60 * 1000, // 1 minute
-      gcTime: 5 * 60 * 1000, // 5 minutes
+      staleTime: 60000, // 1 minute
+      cacheTime: 300000, // 5 minutes
       retry: 1,
       refetchOnWindowFocus: false,
       refetchOnMount: false
@@ -133,6 +133,7 @@ const App = () => {
                   <Route path="/terms" element={<Terms />} />
                   <Route path="/refund-policy" element={<RefundPolicy />} />
                   <Route path="/about" element={<About />} />
+                
                   <Route path="/programs" element={<Programs />} />
                   <Route path="/gallery" element={<Gallery />} />
                   <Route path="/faq" element={<FAQ />} />

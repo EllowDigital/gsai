@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import Card3D from './ui/3d-card';
@@ -11,10 +10,12 @@ interface ProgramCardProps {
 }
 
 const ProgramCard = ({ title, icon, description, index }: ProgramCardProps) => {
+  const cardAnimationDelay = `${0.1 * index}s`;
+
   return (
-    <Card3D 
+    <Card3D
       className="glass-card program-animate opacity-0 group h-full bg-black/20"
-      style={{ animationDelay: `${0.1 * index}s` }}
+      style={{ animationDelay: cardAnimationDelay }}
       innerClassName="p-6 rounded-xl transition-all duration-500 flex flex-col h-full"
     >
       <div className="p-4 bg-gradient-to-br from-gsai-red/20 to-black/50 rounded-lg inline-block mb-4 transform-gpu group-hover:scale-110 transition-transform duration-300">
@@ -25,12 +26,22 @@ const ProgramCard = ({ title, icon, description, index }: ProgramCardProps) => {
         <span className="absolute -bottom-1 left-0 w-0 group-hover:w-full h-0.5 bg-gradient-to-r from-gsai-red via-gsai-gold to-gsai-red transition-all duration-500"></span>
       </h3>
       <p className="text-gray-300 flex-grow">{description}</p>
-      
+
       <div className="mt-4 pt-2 border-t border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-4 group-hover:translate-y-0">
         <span className="text-sm text-gsai-gold flex items-center">
-          Learn More 
-          <svg className="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+          Learn More
+          <svg
+            className="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              fillRule="evenodd"
+              d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
+              clipRule="evenodd"
+            />
           </svg>
         </span>
       </div>
@@ -220,17 +231,17 @@ const Programs = () => {
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
-          aria-label="Fat Loss Programs Icon"
+          aria-label="Fat Loss Icon"
         >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={2}
-            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+            d="M6 2l12 20M6 22h12"
           />
         </svg>
       ),
-      description: 'Tailored fitness programs combining martial arts training with cardio workouts for effective weight loss.',
+      description: 'Specialized programs designed to help you lose fat and get in better shape.',
     },
   ];
 
@@ -258,8 +269,8 @@ const Programs = () => {
         </div>
 
         <div className="text-center mt-16">
-          <a 
-            href="https://forms.gle/LTYn59kPWkQgC3VR7" 
+          <a
+            href="https://forms.gle/LTYn59kPWkQgC3VR7"
             className="gsai-btn program-animate opacity-0 relative overflow-hidden group"
             style={{ animationDelay: '0.9s' }}
           >

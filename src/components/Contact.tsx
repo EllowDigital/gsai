@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import Card3D from "./ui/3d-card";
-import { useParallax } from '@/hooks/use-parallax';
+import { useParallax } from "@/hooks/use-parallax";
 
 const initialFormData = {
   name: "",
@@ -22,7 +22,9 @@ const Contact = () => {
   const mapRef = useParallax<HTMLDivElement>({ speed: 0.05 });
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -92,7 +94,10 @@ const Contact = () => {
       payload.append("_honeypot", "name");
       payload.append("_honeypot", "message");
       payload.append("_template", "table");
-      payload.append("_autoresponse", "Thank you for reaching out! We'll get back to you soon.");
+      payload.append(
+        "_autoresponse",
+        "Thank you for reaching out! We'll get back to you soon."
+      );
 
       payload.append("_blacklist", "spammy term, banned term");
       payload.append("_captcha", "false");
@@ -165,7 +170,7 @@ const Contact = () => {
     >
       <div className="gsai-container">
         <div className="text-center mb-16">
-          <h2 
+          <h2
             ref={titleRef}
             className="section-title text-white contact-animate text-4xl font-extrabold opacity-0"
           >
@@ -186,12 +191,7 @@ const Contact = () => {
             className="contact-animate opacity-0"
             style={{ animationDelay: "0.3s" }}
           >
-            <Card3D 
-              className="h-full"
-              intensity={15}
-              shadow
-              glare
-            >
+            <Card3D className="h-full" intensity={15} shadow glare>
               <div className="p-8 h-full">
                 <h3 className="text-2xl font-bold text-white mb-6">
                   Get In Touch
@@ -306,9 +306,9 @@ const Contact = () => {
                       <p className="text-sm text-gray-400">Address</p>
                       <p className="text-white">
                         {" "}
-                        Fitness & Fun Arena (TCC): Hardasi Kheda, Deva Road, near
-                        Baba Hospital Road, City Colony, Matiyari, Lucknow, Uttar
-                        Pradesh (Second Branch)
+                        Fitness & Fun Arena (TCC): Hardasi Kheda, Deva Road,
+                        near Baba Hospital Road, City Colony, Matiyari, Lucknow,
+                        Uttar Pradesh (Second Branch)
                       </p>
                     </div>
                   </div>
@@ -337,11 +337,7 @@ const Contact = () => {
             className="contact-animate opacity-0"
             style={{ animationDelay: "0.5s" }}
           >
-            <Card3D
-              className="w-full"
-              intensity={10}
-              shadow
-            >
+            <Card3D className="w-full" intensity={10} shadow>
               <div className="p-8">
                 <h3 className="text-2xl font-bold text-white mb-6">
                   Send Us a Message
@@ -353,9 +349,11 @@ const Contact = () => {
                   </p>
                 )}
 
-                <form onSubmit={handleSubmit} action="https://formsubmit.co/ellowdigitals@gmail.com"
-                  method="POST" netlify>
-
+                <form
+                  onSubmit={handleSubmit}
+                  action="https://formsubmit.co/ellowdigitals@gmail.com"
+                  method="POST"
+                >
                   <div className="mb-4">
                     <label htmlFor="name" className="block text-gray-300 mb-2">
                       Your Name
@@ -390,7 +388,9 @@ const Contact = () => {
                       required
                     />
                     {errors.email && (
-                      <p className="text-red-400 text-sm mt-1">{errors.email}</p>
+                      <p className="text-red-400 text-sm mt-1">
+                        {errors.email}
+                      </p>
                     )}
                   </div>
 
@@ -409,12 +409,17 @@ const Contact = () => {
                       required
                     />
                     {errors.phone && (
-                      <p className="text-red-400 text-sm mt-1">{errors.phone}</p>
+                      <p className="text-red-400 text-sm mt-1">
+                        {errors.phone}
+                      </p>
                     )}
                   </div>
 
                   <div className="mb-4">
-                    <label htmlFor="program" className="block text-gray-300 mb-2">
+                    <label
+                      htmlFor="program"
+                      className="block text-gray-300 mb-2"
+                    >
                       Interested Program
                     </label>
                     <select
@@ -447,12 +452,17 @@ const Contact = () => {
                       ))}
                     </select>
                     {errors.program && (
-                      <p className="text-red-400 text-sm mt-1">{errors.program}</p>
+                      <p className="text-red-400 text-sm mt-1">
+                        {errors.program}
+                      </p>
                     )}
                   </div>
 
                   <div className="mb-4">
-                    <label htmlFor="message" className="block text-gray-300 mb-2">
+                    <label
+                      htmlFor="message"
+                      className="block text-gray-300 mb-2"
+                    >
                       Message (Optional)
                     </label>
                     <textarea
@@ -465,14 +475,17 @@ const Contact = () => {
                       placeholder="Enter your message"
                     ></textarea>
                     {errors.message && (
-                      <p className="text-red-400 text-sm mt-1">{errors.message}</p>
+                      <p className="text-red-400 text-sm mt-1">
+                        {errors.message}
+                      </p>
                     )}
                   </div>
 
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className={`gsai-btn w-full transition-opacity duration-300 ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
+                    className={`gsai-btn w-full transition-opacity duration-300 ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                   >
                     {isSubmitting ? "Sending..." : "Send Message"}
                   </button>
@@ -488,26 +501,25 @@ const Contact = () => {
         >
           <h3 className="text-2xl font-semibold text-white">Our Location</h3>
           <div className="w-24 h-1 bg-gsai-red mx-auto mt-4 mb-8"></div>
-          <div 
-            ref={mapRef} 
-            className="relative w-full h-96 rounded-lg overflow-hidden"
-          >
-            <Card3D
-              className="w-full h-full"
-              intensity={5}
-              border
-            >
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3557.7127555156358!2d81.02444217597154!3d26.912609860094033!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3999596def6ea9c7%3A0x23d2ceb539bff92!2sGhatak%20Sports%20Academy%20India!5e0!3m2!1sen!2sin!4v1739461937485!5m2!1sen!2sin"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-              ></iframe>
-            </Card3D>
+          <div className="relative w-full h-96 rounded-lg overflow-hidden">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3557.7127555156358!2d81.02444217597154!3d26.912609860094033!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3999596def6ea9c7%3A0x23d2ceb539bff92!2sGhatak%20Sports%20Academy%20India!5e0!3m2!1sen!2sin!4v1739461937485!5m2!1sen!2sin"
+              width="100%"
+              height="100%"
+              style={{
+                border: 0,
+                position: "absolute",
+                top: 0,
+                left: 0,
+                objectFit: "cover", // Ensures the map covers the container without being distorted
+              }}
+              allowFullScreen
+              loading="lazy"
+            ></iframe>
           </div>
         </div>
+
+
       </div>
     </section>
   );
