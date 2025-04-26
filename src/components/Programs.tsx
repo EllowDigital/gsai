@@ -1,5 +1,7 @@
+
 import React, { useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import Card3D from './ui/3d-card';
 
 interface ProgramCardProps {
   title: string;
@@ -10,19 +12,29 @@ interface ProgramCardProps {
 
 const ProgramCard = ({ title, icon, description, index }: ProgramCardProps) => {
   return (
-    <div
-      className={cn(
-        "glass-card p-6 rounded-xl transition-all duration-500 hover:scale-105 hover:shadow-2xl",
-        "border border-white/10 hover:border-gsai-red/50 program-animate opacity-0"
-      )}
+    <Card3D 
+      className="glass-card program-animate opacity-0 group h-full bg-black/20"
       style={{ animationDelay: `${0.1 * index}s` }}
+      innerClassName="p-6 rounded-xl transition-all duration-500 flex flex-col h-full"
     >
-      <div className="p-4 bg-gradient-to-br from-gsai-red/20 to-black/50 rounded-lg inline-block mb-4">
+      <div className="p-4 bg-gradient-to-br from-gsai-red/20 to-black/50 rounded-lg inline-block mb-4 transform-gpu group-hover:scale-110 transition-transform duration-300">
         {icon}
       </div>
-      <h3 className="text-xl font-bold text-white mb-3">{title}</h3>
-      <p className="text-gray-300">{description}</p>
-    </div>
+      <h3 className="text-xl font-bold text-white mb-3 relative">
+        {title}
+        <span className="absolute -bottom-1 left-0 w-0 group-hover:w-full h-0.5 bg-gradient-to-r from-gsai-red via-gsai-gold to-gsai-red transition-all duration-500"></span>
+      </h3>
+      <p className="text-gray-300 flex-grow">{description}</p>
+      
+      <div className="mt-4 pt-2 border-t border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-4 group-hover:translate-y-0">
+        <span className="text-sm text-gsai-gold flex items-center">
+          Learn More 
+          <svg className="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+          </svg>
+        </span>
+      </div>
+    </Card3D>
   );
 };
 
@@ -40,7 +52,7 @@ const Programs = () => {
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.1, rootMargin: '0px 0px -10% 0px' }
     );
 
     const elements = document.querySelectorAll('.program-animate');
@@ -246,8 +258,13 @@ const Programs = () => {
         </div>
 
         <div className="text-center mt-16">
-          <a href="https://forms.gle/LTYn59kPWkQgC3VR7" className="gsai-btn program-animate opacity-0" style={{ animationDelay: '0.9s' }}>
-            Register Now
+          <a 
+            href="https://forms.gle/LTYn59kPWkQgC3VR7" 
+            className="gsai-btn program-animate opacity-0 relative overflow-hidden group"
+            style={{ animationDelay: '0.9s' }}
+          >
+            <span className="relative z-10">Register Now</span>
+            <span className="absolute inset-0 bg-gradient-to-r from-gsai-red/0 via-white/20 to-gsai-red/0 transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
           </a>
         </div>
       </div>
