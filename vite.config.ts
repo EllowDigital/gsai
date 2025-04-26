@@ -5,15 +5,9 @@ import { VitePWA } from "vite-plugin-pwa";
 import { componentTagger } from "lovable-tagger";
 
 // Vite Configuration
-export default defineConfig(async ({ mode }) => {
-  const isDev = mode === "development";
-  const isGitHub = process.env.DEPLOY_TARGET === "github";
-
-  const base = isDev ? "/" : isGitHub ? "/gsai-webv3/" : "/";
-
-  const plugins = [
+export default defineConfig({
+  plugins: [
     react(),
-
     VitePWA({
       registerType: "autoUpdate",
       includeAssets: [
@@ -27,7 +21,7 @@ export default defineConfig(async ({ mode }) => {
         short_name: "GSAI",
         description:
           "Train in martial arts at Ghatak Sports Academy, India's leading martial arts and self-defense school.",
-        start_url: base,
+        start_url: "/",
         display: "standalone",
         background_color: "#ffffff",
         theme_color: "#ff4500",
@@ -86,45 +80,29 @@ export default defineConfig(async ({ mode }) => {
         ],
       },
     }),
-  ];
-
-  // Dev-only plugins
-  if (isDev) {
-    try {
-      const { tempo } = await import("tempo-devtools/dist/vite");
-      plugins.push(tempo());
-    } catch {
-      console.warn("⚠️ tempo-devtools not found. Skipping...");
-    }
-
-    plugins.push(componentTagger());
-  }
-
-  return {
-    base,
-    plugins,
-    resolve: {
-      preserveSymlinks: true,
-      alias: {
-        "@": path.resolve(__dirname, "src"),
-        three: path.resolve(__dirname, "node_modules/three"),
-      },
+    componentTagger(),
+  ],
+  resolve: {
+    preserveSymlinks: true,
+    alias: {
+      "@": path.resolve(__dirname, "src"),
+      three: path.resolve(__dirname, "node_modules/three"),
     },
-    server: {
-      host: "::",
-      port: 8080,
-      open: true,
-      strictPort: true,
-    },
-    build: {
-      outDir: "dist",
-      emptyOutDir: true,
-      minify: "esbuild",
-      sourcemap: isDev,
-    },
-    optimizeDeps: {
-      include: ["three"],
-      entries: ["src/main.tsx", "src/tempobook/**/*"],
-    },
-  };
+  },
+  server: {
+    host: "::",
+    port: 8080,
+    open: true,
+    strictPort: true,
+  },
+  build: {
+    outDir: "dist",
+    emptyOutDir: true,
+    minify: "esbuild",
+    sourcemap: true,
+  },
+  optimizeDeps: {
+    include: ["three"],
+    entries: ["src/main.tsx", "src/tempobook/**/*"],
+  },
 });

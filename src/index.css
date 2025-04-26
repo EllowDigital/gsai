@@ -70,23 +70,52 @@
 @layer base {
   /* Universal reset and layout styling */
   * {
-    @apply border-border; /* Apply default border color */
+    @apply border-border;
   }
 
   body {
-    @apply bg-background text-foreground overflow-x-hidden; /* Background and text color */
-    font-family: "Inter", sans-serif; /* Global font */
+    @apply bg-background text-foreground;
+    font-family: "Inter", sans-serif;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
   }
 
   html {
-    @apply scroll-smooth; /* Smooth scrolling */
+    @apply scroll-smooth;
+    overflow: hidden;
+    height: 100%;
+  }
+
+  /* Single scrollbar customization */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #000;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #ea384c;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #c0292b;
+  }
+
+  /* Firefox scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #ea384c #000;
   }
 }
 
 @layer components {
   /* Utility class for container */
   .gsai-container {
-    @apply container mx-auto px-4 md:px-8; /* Responsive container with padding */
+    @apply container mx-auto px-4 md:px-8;
   }
 
   /* GSAI Button - Red variant */
@@ -116,7 +145,7 @@
   /* Section title with underline */
   /* Section title without underline and consistent font size */
   .section-title {
-    @apply text-4xl font-bold mb-6; /* Same font size for all screen sizes */
+    @apply text-4xl font-bold mb-6;
   }
 }
 
@@ -284,20 +313,20 @@
 
   /* Scrollbar customization for Webkit browsers (Chrome, Safari, Edge) */
   ::-webkit-scrollbar {
-    width: 8px; /* Adjusted width for better visibility */
+    width: 8px;
   }
 
   ::-webkit-scrollbar-track {
-    background: #000; /* Track background color */
+    background: #000;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #ea384c; /* Thumb color */
-    border-radius: 4px; /* Slightly rounded corners for better aesthetics */
+    background: #ea384c;
+    border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #c0292b; /* Thumb hover color */
+    background: #c0292b;
   }
 
   /* Scrollbar customization for Firefox */
@@ -320,8 +349,8 @@
 
   /* Fallback for browsers that don't support Webkit or Firefox scrollbars */
   html {
-    scrollbar-width: thin; /* Firefox and other browsers */
-    scrollbar-color: #ea384c #000; /* Thumb and track color */
+    scrollbar-width: thin;
+    scrollbar-color: #ea384c #000;
   }
 }
 
