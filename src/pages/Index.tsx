@@ -48,7 +48,7 @@ const Index = () => {
         
         {/* Add optimized performance settings */}
         <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
       </Helmet>
 
       <div className="font-sans min-h-screen bg-black">
