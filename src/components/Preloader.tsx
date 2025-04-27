@@ -1,12 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react';
+
+import { useEffect, useRef, useState } from 'react';
+import { cn } from '@/lib/utils';
 import './Preloader.css';
 
 interface PreloaderProps {
   isVisible: boolean;
 }
 
-const Preloader: React.FC<PreloaderProps> = ({ isVisible }) => {
-  const containerRef = useRef<HTMLDivElement | null>(null);
+const Preloader = ({ isVisible }: PreloaderProps) => {
+  const containerRef = useRef<HTMLDivElement>(null);
   const [fadeOut, setFadeOut] = useState(false);
 
   useEffect(() => {
@@ -35,12 +37,26 @@ const Preloader: React.FC<PreloaderProps> = ({ isVisible }) => {
     <div
       ref={containerRef}
       id="preloader-container"
-      className={`preloader-container ${fadeOut ? 'fade-out' : ''}`}
+      className={cn('preloader-container', fadeOut && 'fade-out')}
+      role="progressbar"
+      aria-valuenow={fadeOut ? 100 : 0}
+      aria-valuemin={0}
+      aria-valuemax={100}
     >
       <div className="preloader-wrapper">
-        <div className="preloader-ring"></div>
-        <div className="preloader-text">Ghatak Sports Academy</div>
-        <div className="preloader-subtext">Getting the field ready for action...</div>
+        <div className="preloader-logo-container">
+          <img 
+            src="/images/logo.png" 
+            alt="GSAI Logo"
+            className="preloader-logo"
+            width={120}
+            height={120}
+          />
+        </div>
+        <div className="preloader-content">
+          <h1 className="preloader-title">Ghatak Sports Academy</h1>
+          <p className="preloader-subtitle">Getting the field ready for action...</p>
+        </div>
       </div>
     </div>
   );
