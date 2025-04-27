@@ -68,10 +68,10 @@ const Footer = () => {
           <div>
             <h3 className="text-2xl font-bold mb-4 text-gsai-gold">Quick Links</h3>
             <ul className="space-y-2 text-sm md:text-base">
-              {['About Us', 'Programs', 'Gallery', 'FAQ', 'Testimonials'].map((link) => (
+              {['About', 'Programs', 'Gallery', 'FAQ', 'Testimonials'].map((link) => (
                 <li key={link}>
                   <Link
-                    to={link === 'About Us' ? '/about' : `/${link.toLowerCase().replace(' ', '')}`}
+                    to={`/#${link.toLowerCase()}`}
                     className="text-gray-300 hover:text-white transition-colors"
                   >
                     {link}
@@ -81,8 +81,6 @@ const Footer = () => {
             </ul>
           </div>
 
-
-          {/* Contact Section */}
           <div>
             <h3 className="text-2xl font-bold mb-4 text-gsai-gold">Contact</h3>
             <ul className="space-y-2 text-sm md:text-base">
@@ -108,7 +106,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Legal Section */}
           <div>
             <h3 className="text-2xl font-bold mb-4 text-gsai-gold">Legal</h3>
             <ul className="space-y-2 text-sm md:text-base">
@@ -119,13 +116,12 @@ const Footer = () => {
                 <Link to="/terms" className="text-gray-300 hover:text-white transition-colors">Terms and Conditions</Link>
               </li>
               <li>
-                <a href="/refund-policy" className="text-gray-300 hover:text-white transition-colors">Refund Policy</a>
+                <Link to="/refund-policy" className="text-gray-300 hover:text-white transition-colors">Refund Policy</Link>
               </li>
             </ul>
           </div>
         </div>
 
-        {/* Footer Bottom Section */}
         <div className="mt-12 border-t border-gray-800 pt-6 text-center">
           <p className="text-gray-400 text-sm">
             © {currentYear} Ghatak Sports Academy India™. All rights reserved.

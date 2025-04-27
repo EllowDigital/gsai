@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, Suspense } from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -25,7 +26,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 60000, // 1 minute
-      cacheTime: 300000, // 5 minutes
+      gcTime: 300000, // 5 minutes (replacing cacheTime)
       retry: 1,
       refetchOnWindowFocus: false,
       refetchOnMount: false
@@ -132,12 +133,12 @@ const App = () => {
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                   <Route path="/terms" element={<Terms />} />
                   <Route path="/refund-policy" element={<RefundPolicy />} />
-                  <Route path="/about" element={<About />} />
-                
-                  <Route path="/programs" element={<Programs />} />
-                  <Route path="/gallery" element={<Gallery />} />
-                  <Route path="/faq" element={<FAQ />} />
-                  <Route path="/testimonials" element={<Testimonials />} />
+                  <Route path="/#about" element={<About />} />
+                  <Route path="/#programs" element={<Programs />} />
+                  <Route path="/#gallery" element={<Gallery />} />
+                  <Route path="/#faq" element={<FAQ />} />
+                  <Route path="/#testimonials" element={<Testimonials />} />
+                  <Route path="/#contact" element={<Contact />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </Suspense>

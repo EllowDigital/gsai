@@ -1,3 +1,4 @@
+
 import { Suspense, lazy } from 'react';
 import SectionLoader from './SectionLoader';
 
@@ -12,11 +13,16 @@ const Contact = lazy(() => import('@/components/Contact'));
 const Affiliations = lazy(() => import('@/components/Affiliations'));
 const Footer = lazy(() => import('@/components/Footer'));
 
-const MainContent = () => {
+interface MainContentProps {
+  isMounted?: boolean;
+  visibleSections?: Record<string, boolean>;
+}
+
+const MainContent: React.FC<MainContentProps> = ({ isMounted, visibleSections }) => {
   return (
     <div className="relative z-20">
       {/* Sections */}
-      <section id="aboutSection">
+      <section id="about">
         <Suspense fallback={<SectionLoader />}>
           <About />
         </Suspense>
@@ -28,31 +34,31 @@ const MainContent = () => {
         </Suspense>
       </section>
 
-      <section id="programsSection">
+      <section id="programs">
         <Suspense fallback={<SectionLoader />}>
           <Programs />
         </Suspense>
       </section>
 
-      <section id="testimonialsSection">
+      <section id="testimonials">
         <Suspense fallback={<SectionLoader />}>
           <Testimonials />
         </Suspense>
       </section>
 
-      <section id="gallerySection">
+      <section id="gallery">
         <Suspense fallback={<SectionLoader />}>
           <Gallery />
         </Suspense>
       </section>
 
-      <section id="faqSection">
+      <section id="faq">
         <Suspense fallback={<SectionLoader />}>
           <FAQ />
         </Suspense>
       </section>
 
-      <section id="contactSection">
+      <section id="contact">
         <Suspense fallback={<SectionLoader />}>
           <Contact />
         </Suspense>

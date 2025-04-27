@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+
+import { useState } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import CTAButton from "./CTAButton";
 import { motion } from "framer-motion";
+import { Link, useLocation } from "react-router-dom";
 
 const NAV_LINKS = [
   { label: "About", href: "#about" },
@@ -17,15 +19,22 @@ const NAV_LINKS = [
 const NavBar = () => {
   const isMobile = useIsMobile();
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+  const isHomePage = location.pathname === "/";
 
   // Handle navigation on click for both mobile and desktop
   const handleNavClick = (href: string) => {
     setIsOpen(false); // Close the mobile menu
-    const target = document.querySelector(href);
-    if (target) {
-      setTimeout(() => {
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 300); // Delay to allow Sheet to close first
+    
+    // Check if we're on home page
+    if (isHomePage) {
+      // For same-page navigation
+      const target = document.querySelector(href);
+      if (target) {
+        setTimeout(() => {
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 300); // Delay to allow Sheet to close first
+      }
     }
   };
 
@@ -38,7 +47,7 @@ const NavBar = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
         {/* Logo */}
-        <a href="/" className="flex items-center gap-3" aria-label="Homepage">
+        <Link to="/" className="flex items-center gap-3" aria-label="Homepage">
           <img
             src="/favicon_io/android-chrome-192x192.png"
             alt="GSAI Logo"
@@ -49,22 +58,32 @@ const NavBar = () => {
             <span className="text-gsai-gold">SA</span>
             <span className="text-white">I</span>
           </span>
-        </a>
+        </Link>
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex gap-6 items-center">
           {NAV_LINKS.map(({ label, href }) => (
-            <a
-              key={href}
-              href={href}
-              onClick={(e) => {
-                e.preventDefault();
-                handleNavClick(href);
-              }}
-              className="text-gray-300 hover:text-white font-medium transition-colors"
-            >
-              {label}
-            </a>
+            isHomePage ? (
+              <a
+                key={href}
+                href={href}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick(href);
+                }}
+                className="text-gray-300 hover:text-white font-medium transition-colors"
+              >
+                {label}
+              </a>
+            ) : (
+              <Link 
+                key={href}
+                to={`/${href}`} 
+                className="text-gray-300 hover:text-white font-medium transition-colors"
+              >
+                {label}
+              </Link>
+            )
           ))}
           <CTAButton
             label="Join Now"
@@ -94,16 +113,27 @@ const NavBar = () => {
                 transition={{ duration: 0.4 }}
               >
                 {NAV_LINKS.map(({ label, href }) => (
-                  <button
-                    key={href}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleNavClick(href);
-                    }}
-                    className="text-left hover:text-gsai-red text-lg transition"
-                  >
-                    {label}
-                  </button>
+                  isHomePage ? (
+                    <button
+                      key={href}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleNavClick(href);
+                      }}
+                      className="text-left hover:text-gsai-red text-lg transition"
+                    >
+                      {label}
+                    </button>
+                  ) : (
+                    <Link 
+                      key={href}
+                      to={`/${href}`}
+                      onClick={() => setIsOpen(false)}
+                      className="text-left hover:text-gsai-red text-lg transition"
+                    >
+                      {label}
+                    </Link>
+                  )
                 ))}
                 <CTAButton
                   label="Join Now"
