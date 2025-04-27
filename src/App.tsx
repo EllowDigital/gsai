@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { HelmetProvider } from 'react-helmet-async';
 import Preloader from './components/Preloader';
 import PWA from './pwa';
@@ -134,12 +134,15 @@ const App = () => {
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                   <Route path="/terms" element={<Terms />} />
                   <Route path="/refund-policy" element={<RefundPolicy />} />
-                  <Route path="/#about" element={<About />} />
-                  <Route path="/#programs" element={<Programs />} />
-                  <Route path="/#gallery" element={<Gallery />} />
-                  <Route path="/#faq" element={<FAQ />} />
-                  <Route path="/#testimonials" element={<Testimonials />} />
-                  <Route path="/#contact" element={<Contact />} />
+                  
+                  {/* Redirect section paths to home with hash */}
+                  <Route path="/about" element={<Navigate to="/#about" replace />} />
+                  <Route path="/programs" element={<Navigate to="/#programs" replace />} />
+                  <Route path="/gallery" element={<Navigate to="/#gallery" replace />} />
+                  <Route path="/faq" element={<Navigate to="/#faq" replace />} />
+                  <Route path="/testimonials" element={<Navigate to="/#testimonials" replace />} />
+                  <Route path="/contact" element={<Navigate to="/#contact" replace />} />
+                  
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </Suspense>

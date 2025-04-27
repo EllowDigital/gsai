@@ -1,14 +1,28 @@
 
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import NavBar from '@/components/NavBar';
 import Hero from '@/components/Hero';
 import { Helmet } from 'react-helmet-async';
 import { usePageSections } from '@/hooks/use-page-sections';
 import SectionLoader from '@/components/SectionLoader';
 import MainContent from '@/components/MainContent';
+import { useLocation } from 'react-router-dom';
 
 const Index = () => {
   const { isMounted, visibleSections } = usePageSections();
+  const location = useLocation();
+
+  // Handle direct navigation to a section via URL hash
+  useEffect(() => {
+    if (location.hash) {
+      const element = document.querySelector(location.hash);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 300);
+      }
+    }
+  }, [location.hash]);
 
   return (
     <>
@@ -57,7 +71,7 @@ const Index = () => {
           <div className="relative z-10">
             <Hero />
           </div>
-          <MainContent isMounted={isMounted} visibleSections={visibleSections} />
+          <MainContent />
         </main>
       </div>
     </>

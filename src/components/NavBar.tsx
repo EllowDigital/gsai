@@ -1,11 +1,11 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import CTAButton from "./CTAButton";
 import { motion } from "framer-motion";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const NAV_LINKS = [
   { label: "About", href: "#about" },
@@ -20,23 +20,44 @@ const NavBar = () => {
   const isMobile = useIsMobile();
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const isHomePage = location.pathname === "/";
 
   // Handle navigation on click for both mobile and desktop
   const handleNavClick = (href: string) => {
     setIsOpen(false); // Close the mobile menu
     
-    // Check if we're on home page
+    // If we're already on the home page, just scroll to the section
     if (isHomePage) {
-      // For same-page navigation
       const target = document.querySelector(href);
       if (target) {
         setTimeout(() => {
           target.scrollIntoView({ behavior: "smooth", block: "start" });
-        }, 300); // Delay to allow Sheet to close first
+        }, 100); // Small delay to ensure UI updates first
       }
+    } else {
+      // If we're on another page, navigate to home and then to the section
+      navigate('/', { state: { scrollTo: href.substring(1) } });
     }
   };
+
+  // Handle scroll to section when redirected from another page
+  useEffect(() => {
+    if (isHomePage && location.state && location.state.scrollTo) {
+      const sectionId = `#${location.state.scrollTo}`;
+      const target = document.querySelector(sectionId);
+      
+      if (target) {
+        // Allow time for the page to render before scrolling
+        setTimeout(() => {
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 300);
+      }
+      
+      // Clean up the state so it doesn't scroll again on refresh
+      window.history.replaceState({}, document.title);
+    }
+  }, [isHomePage, location.state]);
 
   return (
     <motion.header
@@ -63,27 +84,13 @@ const NavBar = () => {
         {/* Desktop Nav */}
         <nav className="hidden md:flex gap-6 items-center">
           {NAV_LINKS.map(({ label, href }) => (
-            isHomePage ? (
-              <a
-                key={href}
-                href={href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavClick(href);
-                }}
-                className="text-gray-300 hover:text-white font-medium transition-colors"
-              >
-                {label}
-              </a>
-            ) : (
-              <Link 
-                key={href}
-                to={`/${href}`} 
-                className="text-gray-300 hover:text-white font-medium transition-colors"
-              >
-                {label}
-              </Link>
-            )
+            <button
+              key={href}
+              onClick={() => handleNavClick(href)}
+              className="text-gray-300 hover:text-white font-medium transition-colors"
+            >
+              {label}
+            </button>
           ))}
           <CTAButton
             label="Join Now"
@@ -113,27 +120,13 @@ const NavBar = () => {
                 transition={{ duration: 0.4 }}
               >
                 {NAV_LINKS.map(({ label, href }) => (
-                  isHomePage ? (
-                    <button
-                      key={href}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleNavClick(href);
-                      }}
-                      className="text-left hover:text-gsai-red text-lg transition"
-                    >
-                      {label}
-                    </button>
-                  ) : (
-                    <Link 
-                      key={href}
-                      to={`/${href}`}
-                      onClick={() => setIsOpen(false)}
-                      className="text-left hover:text-gsai-red text-lg transition"
-                    >
-                      {label}
-                    </Link>
-                  )
+                  <button
+                    key={href}
+                    onClick={() => handleNavClick(href)}
+                    className="text-left hover:text-gsai-red text-lg transition"
+                  >
+                    {label}
+                  </button>
                 ))}
                 <CTAButton
                   label="Join Now"
