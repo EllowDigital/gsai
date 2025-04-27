@@ -14,6 +14,7 @@ import Programs from './components/Programs';
 import Gallery from './components/Gallery';
 import FAQ from './components/FAQ';
 import Testimonials from './components/Testimonials';
+import Contact from './components/Contact';
 
 // Lazy loading pages with error boundaries
 const Index = React.lazy(() => import("./pages/Index"));

@@ -18,7 +18,7 @@ interface MainContentProps {
   visibleSections?: Record<string, boolean>;
 }
 
-const MainContent: React.FC<MainContentProps> = ({ isMounted, visibleSections }) => {
+const MainContent: React.FC<MainContentProps> = () => {
   return (
     <div className="relative z-20">
       {/* Sections */}
