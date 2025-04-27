@@ -1,33 +1,27 @@
-
 import React, { useState, useEffect, Suspense } from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from 'react-helmet-async';
+import { ThemeProvider } from './components/ThemeProvider';
 import Preloader from './components/Preloader';
 import PWA from './pwa';
-import RefundPolicy from './pages/refundpolicy';
-import About from './components/About';
-import Programs from './components/Programs';
-import Gallery from './components/Gallery';
-import FAQ from './components/FAQ';
-import Testimonials from './components/Testimonials';
-import Contact from './components/Contact';
 
-// Lazy loading pages with error boundaries
+// Lazy loading pages
 const Index = React.lazy(() => import("./pages/Index"));
 const NotFound = React.lazy(() => import("./pages/NotFound"));
 const PrivacyPolicy = React.lazy(() => import("./pages/PrivacyPolicy"));
 const Terms = React.lazy(() => import("./pages/Terms"));
+const RefundPolicy = React.lazy(() => import("./pages/refundpolicy"));
 
 // Optimized QueryClient configuration
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 60000, // 1 minute
-      gcTime: 300000, // 5 minutes (replacing cacheTime)
+      staleTime: 60000,
+      gcTime: 300000,
       retry: 1,
       refetchOnWindowFocus: false,
       refetchOnMount: false
@@ -114,43 +108,35 @@ const App = () => {
 
   return (
     <HelmetProvider>
-      <Preloader isVisible={showPreloader} />
-
-      {(contentLoaded || !showPreloader) && (
-        <QueryClientProvider client={queryClient}>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <Suspense fallback={
-                <div className="w-full h-screen flex items-center justify-center bg-black" aria-label="Loading page">
-                  <div className="animate-pulse-glow w-12 h-12 rounded-full bg-gsai-red" role="status">
-                    <span className="sr-only">Loading...</span>
+      <ThemeProvider>
+        <Preloader isVisible={showPreloader} />
+        {(contentLoaded || !showPreloader) && (
+          <QueryClientProvider client={queryClient}>
+            <TooltipProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <Suspense fallback={
+                  <div className="w-full h-screen flex items-center justify-center bg-black">
+                    <div className="animate-pulse-glow w-12 h-12 rounded-full bg-gsai-red">
+                      <span className="sr-only">Loading...</span>
+                    </div>
                   </div>
-                </div>
-              }>
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                  <Route path="/terms" element={<Terms />} />
-                  <Route path="/refund-policy" element={<RefundPolicy />} />
-                  
-                  {/* Redirect section paths to home with hash */}
-                  <Route path="/about" element={<Navigate to="/#about" replace />} />
-                  <Route path="/programs" element={<Navigate to="/#programs" replace />} />
-                  <Route path="/gallery" element={<Navigate to="/#gallery" replace />} />
-                  <Route path="/faq" element={<Navigate to="/#faq" replace />} />
-                  <Route path="/testimonials" element={<Navigate to="/#testimonials" replace />} />
-                  <Route path="/contact" element={<Navigate to="/#contact" replace />} />
-                  
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </Suspense>
-            </BrowserRouter>
-            <PWA />
-          </TooltipProvider>
-        </QueryClientProvider>
-      )}
+                }>
+                  <Routes>
+                    <Route path="/" element={<Index />} />
+                    <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                    <Route path="/terms" element={<Terms />} />
+                    <Route path="/refund-policy" element={<RefundPolicy />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </Suspense>
+              </BrowserRouter>
+              <PWA />
+            </TooltipProvider>
+          </QueryClientProvider>
+        )}
+      </ThemeProvider>
     </HelmetProvider>
   );
 };
