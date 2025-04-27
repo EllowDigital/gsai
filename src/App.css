@@ -230,3 +230,17 @@ h2::after {
 * {
   transition: transform 0.3s ease-in-out;
 }
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.6), 0 0 20px rgba(255, 0, 0, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.8), 0 0 30px rgba(255, 0, 0, 0.6);
+  }
+}
+
+.hover\\:animate-pulse-glow:hover {
+  animation: pulse-glow 2s infinite;
+}
