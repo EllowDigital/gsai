@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+
+import { useEffect } from 'react';
 import { useParallax } from '@/hooks/use-parallax';
 
 const About = () => {
@@ -9,10 +10,12 @@ const About = () => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting && entry.target instanceof HTMLElement) {
-          entry.target.classList.add('animate-fade-in-up');
+          entry.target.classList.add('reveal-slide-up');
           entry.target.style.opacity = '1';
           entry.target.style.visibility = 'visible';
-          entry.target.style.animationDelay = entry.target.getAttribute('data-delay') || '0s';
+          
+          // Unobserve after animation for better performance
+          observer.unobserve(entry.target);
         }
       });
     }, { threshold: 0.1 });
@@ -66,20 +69,20 @@ const About = () => {
             About Us
           </h2>
           <div className="w-24 h-1 bg-gsai-red mx-auto mt-4 mb-8" />
-          <p ref={paragraphRef} className="text-gray-300 max-w-2xl mx-auto about-animate opacity-0" data-delay="0.2s">
+          <p ref={paragraphRef} className="text-gray-300 max-w-2xl mx-auto about-animate opacity-0" data-delay="0.1s">
             Established in 2019, Ghatak Sports Academy India™ is a premier martial arts academy dedicated to excellence in combat sports training and character development.
           </p>
         </div>
 
-        <div className="grid gap-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 items-stretch">
+        <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 items-stretch">
           {sections.map((section, idx) => (
             <div
               key={idx}
               className="glass-card p-8 about-animate opacity-0 flex flex-col h-full 
               backdrop-blur-lg bg-white/5 border border-white/10 rounded-2xl 
-              transition-transform transform hover:scale-105 hover:shadow-2xl 
+              transition-all transform hover:scale-105 hover:shadow-2xl 
               hover:backdrop-blur-2xl hover:bg-white/10 hover:animate-pulse-glow"
-              data-delay={`${0.4 + idx * 0.2}s`}
+              style={{ transitionDelay: `${0.1 + idx * 0.1}s` }}
             >
               <div className="flex items-center mb-6">
                 <div className="w-12 h-12 rounded-full bg-gsai-red flex items-center justify-center mr-4">

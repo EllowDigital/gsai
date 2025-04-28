@@ -1,3 +1,4 @@
+
 import { useEffect, useRef, useState } from 'react';
 
 // Define affiliation types for better type safety
@@ -20,6 +21,9 @@ const Affiliations = () => {
             target.classList.add('animate-fade-in-up');
             target.style.visibility = 'visible';
             target.style.opacity = '1';
+            
+            // Unobserve after animation for better performance
+            observer.unobserve(entry.target);
           }
         });
       },
@@ -43,20 +47,18 @@ const Affiliations = () => {
     const carousel = carouselRef.current;
 
     const startCarousel = () => {
-      if (carousel) {
+      if (carousel && !isHovered) {
         scrollInterval = setInterval(() => {
-          carousel.scrollLeft += 1;
+          if (carousel) {
+            carousel.scrollLeft += 1;
 
-          // Reset scroll position when reaching the end
-          if (carousel.scrollLeft >= (carousel.scrollWidth - carousel.clientWidth)) {
-            carousel.scrollLeft = 0;
+            // Reset scroll position when reaching the end
+            if (carousel.scrollLeft >= (carousel.scrollWidth - carousel.clientWidth)) {
+              carousel.scrollLeft = 0;
+            }
           }
         }, 20);
       }
-    };
-
-    const stopCarousel = () => {
-      clearInterval(scrollInterval);
     };
 
     // Start the carousel
@@ -65,6 +67,13 @@ const Affiliations = () => {
     // Pause carousel on hover
     carousel?.addEventListener('mouseenter', () => setIsHovered(true));
     carousel?.addEventListener('mouseleave', () => setIsHovered(false));
+
+    // Restart on hover state change
+    if (isHovered && scrollInterval) {
+      clearInterval(scrollInterval);
+    } else if (!isHovered) {
+      startCarousel();
+    }
 
     // Cleanup event listeners and interval
     return () => {
