@@ -317,3 +317,50 @@ h2::after {
   background: linear-gradient(90deg, #333 0%, #444 50%, #333 100%);
   background-size: 200% 100%;
 }
+
+/* Button shine effect animation */
+@keyframes shine {
+  from {
+    left: -100%;
+  }
+  to {
+    left: 200%;
+  }
+}
+
+.animate-shine {
+  animation: shine 1.5s linear infinite;
+}
+
+/* Button hover animations */
+.btn-hover-float {
+  transition: transform 0.3s ease;
+}
+
+.btn-hover-float:hover {
+  transform: translateY(-6px);
+}
+
+/* Button click effect */
+.btn-click {
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.btn-click:active {
+  transform: scale(0.95);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Float animation for elements */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
