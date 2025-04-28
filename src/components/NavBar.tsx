@@ -110,6 +110,9 @@ const NavBar = () => {
             <SheetContent side="right" className="bg-black/95 border-gsai-red/20">
               <SheetHeader>
                 <SheetTitle className="text-white text-xl font-bold">Menu</SheetTitle>
+                <p id="sheet-description" className="sr-only">
+                  Navigation menu. Use the buttons below to navigate through the site sections.
+                </p>
               </SheetHeader>
               <motion.nav
                 className="flex flex-col gap-6 mt-8"

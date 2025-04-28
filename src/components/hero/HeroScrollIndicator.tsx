@@ -29,6 +29,7 @@ const HeroScrollIndicator = () => {
         strokeLinecap="round"
         strokeLinejoin="round"
         className="text-white/80"
+        aria-hidden="true"
       >
         <path d="M12 5v14M5 12l7 7 7-7" />
       </svg>
