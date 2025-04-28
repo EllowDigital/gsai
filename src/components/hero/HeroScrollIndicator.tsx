@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 const HeroScrollIndicator = () => {
   return (
     <motion.div 
-      className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center"
+      className="absolute bottom-4 sm:bottom-6 md:bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center"
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ 
@@ -17,6 +17,7 @@ const HeroScrollIndicator = () => {
           ease: "easeInOut"
         }
       }}
+      aria-hidden="true" // This is decorative only
     >
       <span className="text-xs text-white/80 mb-2 font-medium">Scroll Down</span>
       <svg
@@ -29,7 +30,6 @@ const HeroScrollIndicator = () => {
         strokeLinecap="round"
         strokeLinejoin="round"
         className="text-white/80"
-        aria-hidden="true"
       >
         <path d="M12 5v14M5 12l7 7 7-7" />
       </svg>

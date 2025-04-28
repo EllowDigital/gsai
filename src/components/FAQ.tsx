@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+
+import { useEffect } from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { useParallax } from '@/hooks/use-parallax';
 import Card3D from './ui/3d-card';
@@ -58,22 +59,22 @@ const FAQ = () => {
   ];
 
   return (
-    <section id="faq" className="py-20 bg-black">
-      <div className="gsai-container">
-        <div className="text-center mb-16">
+    <section id="faq" className="py-12 sm:py-16 md:py-20 bg-black">
+      <div className="gsai-container px-4">
+        <div className="text-center mb-8 sm:mb-12 md:mb-16">
           <h2
             ref={titleRef}
-            className="section-title text-white faq-animate opacity-0"
+            className="section-title text-2xl sm:text-3xl md:text-4xl text-white faq-animate opacity-0"
           >
             Frequently Asked Questions
           </h2>
-          <div className="w-24 h-1 bg-gsai-red mx-auto mt-4 mb-8"></div>
-          <p className="text-gray-300 max-w-2xl mx-auto faq-animate opacity-0" style={{ animationDelay: '0.2s' }}>
+          <div className="w-16 sm:w-20 md:w-24 h-1 bg-gsai-red mx-auto mt-3 mb-6 sm:mt-4 sm:mb-8"></div>
+          <p className="text-gray-300 max-w-xl sm:max-w-2xl mx-auto faq-animate opacity-0" style={{ animationDelay: '0.2s' }}>
             Find answers to common questions about Ghatak Sports Academy India™ programs, enrollment, and facilities.
           </p>
         </div>
 
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-xl sm:max-w-2xl md:max-w-3xl mx-auto">
           <Card3D
             className="w-full"
             intensity={5}
@@ -89,10 +90,10 @@ const FAQ = () => {
                     className="faq-animate opacity-0 mb-4 overflow-hidden border-b border-white/10"
                     style={{ animationDelay: `${0.1 * index}s` }}
                   >
-                    <AccordionTrigger className="py-4 px-6 text-left font-semibold text-white text-lg hover:text-gsai-red transition-colors duration-300 ease-in-out">
+                    <AccordionTrigger className="py-3 sm:py-4 px-3 sm:px-6 text-left font-semibold text-white text-base sm:text-lg hover:text-gsai-red transition-colors duration-300 ease-in-out">
                       {faq.question}
                     </AccordionTrigger>
-                    <AccordionContent className="py-2 px-6 text-gray-300">
+                    <AccordionContent className="py-2 px-3 sm:px-6 text-gray-300 text-sm sm:text-base">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -102,13 +103,13 @@ const FAQ = () => {
           </Card3D>
         </div>
 
-        <div className="text-center mt-12">
+        <div className="text-center mt-8 sm:mt-12">
           <p className="text-gray-400 mb-4 faq-animate opacity-0" style={{ animationDelay: '0.8s' }}>
             Still have questions?
           </p>
           <a
             href="#contact"
-            className="gsai-btn faq-animate opacity-0"
+            className="gsai-btn faq-animate opacity-0 inline-block px-6 py-2 bg-gsai-red text-white rounded-md hover:bg-gsai-red/90 transition-colors"
             style={{ animationDelay: '0.9s' }}
           >
             Contact Us

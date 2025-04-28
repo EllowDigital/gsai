@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -62,12 +63,14 @@ const HeroParticlesSimple: React.FC<HeroParticlesProps> = ({ parentRef }) => {
       }
 
       draw() {
-        ctx.beginPath();
-        ctx.globalAlpha = this.opacity;
-        ctx.fillStyle = this.color;
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.globalAlpha = 1;
+        if (ctx) {
+          ctx.beginPath();
+          ctx.globalAlpha = this.opacity;
+          ctx.fillStyle = this.color;
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        }
       }
     }
 
@@ -83,6 +86,8 @@ const HeroParticlesSimple: React.FC<HeroParticlesProps> = ({ parentRef }) => {
     }
 
     const drawConnections = () => {
+      if (!ctx) return;
+      
       for (let a = 0; a < particles.length; a++) {
         for (let b = a + 1; b < particles.length; b++) {
           const dx = particles[a].x - particles[b].x;
@@ -101,6 +106,8 @@ const HeroParticlesSimple: React.FC<HeroParticlesProps> = ({ parentRef }) => {
     };
 
     const animate = () => {
+      if (!ctx) return;
+      
       ctx.clearRect(0, 0, width, height);
       particles.forEach((p) => {
         p.update();
@@ -112,8 +119,10 @@ const HeroParticlesSimple: React.FC<HeroParticlesProps> = ({ parentRef }) => {
 
     // Resize listener
     const handleResize = () => {
-      width = parentRef.current!.offsetWidth;
-      height = parentRef.current!.offsetHeight;
+      if (!parentRef.current || !canvas) return;
+      
+      width = parentRef.current.offsetWidth;
+      height = parentRef.current.offsetHeight;
       canvas.width = width;
       canvas.height = height;
     };
