@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, RefObject } from 'react';
 
 interface ScrollAnimationOptions {
@@ -8,7 +7,6 @@ interface ScrollAnimationOptions {
   delay?: number;
   animationType?: 'fade' | 'slide' | 'zoom' | 'flip';
   direction?: 'up' | 'down' | 'left' | 'right';
-  duration?: number;
 }
 
 /**
@@ -20,12 +18,11 @@ export const useScrollAnimation = <T extends HTMLElement>(options: ScrollAnimati
   // Destructuring options with default values
   const {
     threshold = 0.1,
-    rootMargin = '0px 0px -5% 0px',
+    rootMargin = '0px 0px -10% 0px',
     once = true,
     delay = 0,
     animationType = 'fade',
-    direction = 'up',
-    duration = 300
+    direction = 'up'
   } = options;
 
   useEffect(() => {
@@ -33,29 +30,7 @@ export const useScrollAnimation = <T extends HTMLElement>(options: ScrollAnimati
     if (!element) return;
 
     // Add appropriate initial animation classes
-    element.classList.add('scroll-animate');
-    
-    // Apply style for faster animations
-    element.style.transition = `opacity ${duration}ms ease-out, transform ${duration}ms ease-out`;
-    element.style.willChange = 'opacity, transform';
-    
-    // Set initial invisible state but make sure it's not displayed: none
-    element.style.opacity = '0';
-    element.style.visibility = 'hidden';
-    
-    // Apply transform based on animation type and direction
-    if (animationType === 'fade') {
-      element.style.transform = 'translateY(10px)';
-    } else if (animationType === 'slide') {
-      if (direction === 'up') element.style.transform = 'translateY(20px)';
-      if (direction === 'down') element.style.transform = 'translateY(-20px)';
-      if (direction === 'left') element.style.transform = 'translateX(20px)';
-      if (direction === 'right') element.style.transform = 'translateX(-20px)';
-    } else if (animationType === 'zoom') {
-      element.style.transform = 'scale(0.95)';
-    } else if (animationType === 'flip') {
-      element.style.transform = 'perspective(400px) rotateX(10deg)';
-    }
+    element.classList.add('scroll-animate', `animate-${animationType}-${direction}`);
 
     // Apply delay if specified
     if (delay > 0) {
@@ -67,41 +42,28 @@ export const useScrollAnimation = <T extends HTMLElement>(options: ScrollAnimati
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const target = entry.target as HTMLElement;
-            
-            // Show element with animation
-            target.style.visibility = 'visible';
-            target.style.opacity = '1';
-            target.style.transform = 'translateY(0) scale(1) rotateX(0)';
-            
-            // Clean up properties after animation completes
-            setTimeout(() => {
-              if (target && once) {
-                target.style.willChange = 'auto';
-              }
-            }, duration + delay);
+            requestAnimationFrame(() => {
+              const target = entry.target as HTMLElement;
 
-            // If 'once' is true, stop observing after first visibility
-            if (once) {
-              observer.unobserve(target);
-            }
+              // Add visibility class to trigger animation
+              target.classList.add('visible');
+              target.style.willChange = 'opacity, transform';
+
+              // Remove will-change after animation completes to optimize performance
+              setTimeout(() => {
+                target.style.willChange = 'auto';
+              }, 1000); // Timeout should match animation duration
+
+              // If 'once' is true, stop observing after first visibility
+              if (once) {
+                observer.unobserve(target);
+              }
+            });
           } else if (!once) {
-            // Reset the element if it leaves viewport and 'once' is false
-            const target = entry.target as HTMLElement;
-            target.style.visibility = 'hidden';
-            target.style.opacity = '0';
-            
-            // Reset transform based on animation type
-            if (animationType === 'fade') {
-              target.style.transform = 'translateY(10px)';
-            } else if (animationType === 'slide') {
-              if (direction === 'up') target.style.transform = 'translateY(20px)';
-              if (direction === 'down') target.style.transform = 'translateY(-20px)';
-              if (direction === 'left') target.style.transform = 'translateX(20px)';
-              if (direction === 'right') target.style.transform = 'translateX(-20px)';
-            } else if (animationType === 'zoom') {
-              target.style.transform = 'scale(0.95)';
-            }
+            requestAnimationFrame(() => {
+              const target = entry.target as HTMLElement;
+              target.classList.remove('visible');
+            });
           }
         });
       },
@@ -112,12 +74,12 @@ export const useScrollAnimation = <T extends HTMLElement>(options: ScrollAnimati
     observer.observe(element);
 
     return () => {
-      // Cleanup observer on component unmount
+      // Cleanup observer on component unmount or when element is no longer present
       if (element) {
         observer.unobserve(element);
       }
     };
-  }, [threshold, rootMargin, once, delay, animationType, direction, duration]);
+  }, [threshold, rootMargin, once, delay, animationType, direction]);
 
   return elementRef;
 };

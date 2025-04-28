@@ -19,14 +19,13 @@ const Preloader = ({ isVisible }: PreloaderProps) => {
     // Prevent page scroll during preloader
     document.body.style.overflow = isVisible ? 'hidden' : '';
 
-    // Faster preloader fadeout
     if (!isVisible) {
       setFadeOut(true);
       const timeout = setTimeout(() => {
         if (containerRef.current) {
           containerRef.current.style.display = 'none';
         }
-      }, 600); // Faster fade-out time
+      }, 1000); // Match CSS fade-out time
 
       return () => clearTimeout(timeout);
     }
@@ -56,7 +55,7 @@ const Preloader = ({ isVisible }: PreloaderProps) => {
         </div>
         <div className="preloader-content">
           <h1 className="preloader-title">Ghatak Sports Academy</h1>
-          <p className="preloader-subtitle">Loading...</p>
+          <p className="preloader-subtitle">Getting the field ready for action...</p>
         </div>
       </div>
     </div>

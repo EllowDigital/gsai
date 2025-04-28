@@ -1,8 +1,8 @@
 
-import { Suspense, lazy, useEffect, useState } from 'react';
+import { Suspense, lazy } from 'react';
 import SectionLoader from './SectionLoader';
 
-// Lazy load the components with priority
+// Lazy load the components
 const About = lazy(() => import('@/components/About'));
 const Founder = lazy(() => import('@/components/Founder'));
 const Programs = lazy(() => import('@/components/Programs'));
@@ -13,131 +13,65 @@ const Contact = lazy(() => import('@/components/Contact'));
 const Affiliations = lazy(() => import('@/components/Affiliations'));
 const Footer = lazy(() => import('@/components/Footer'));
 
-// Observer options for better performance
-const observerOptions = {
-  rootMargin: '100px 0px',
-  threshold: 0.1
-};
+interface MainContentProps {
+  isMounted?: boolean;
+  visibleSections?: Record<string, boolean>;
+}
 
-const MainContent = () => {
-  const [visibleSections, setVisibleSections] = useState<Record<string, boolean>>({
-    about: false,
-    founder: false,
-    programs: false,
-    testimonials: false,
-    gallery: false,
-    faq: false,
-    contact: false,
-    affiliations: false,
-    footer: false
-  });
-
-  // Set up lazy loading based on scroll position
-  useEffect(() => {
-    // Create intersection observer
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const sectionId = entry.target.id;
-          setVisibleSections(prev => ({
-            ...prev,
-            [sectionId]: true
-          }));
-          
-          // Once section is visible, stop observing it
-          observer.unobserve(entry.target);
-        }
-      });
-    }, observerOptions);
-
-    // Observe section placeholders
-    const sections = document.querySelectorAll('[data-section-target]');
-    sections.forEach(section => {
-      observer.observe(section);
-    });
-
-    // Preload all sections after a short delay for smoother UX
-    const timer = setTimeout(() => {
-      setVisibleSections({
-        about: true,
-        founder: true,
-        programs: true,
-        testimonials: true,
-        gallery: true,
-        faq: true,
-        contact: true,
-        affiliations: true,
-        footer: true
-      });
-    }, 1500);
-
-    // Cleanup
-    return () => {
-      observer.disconnect();
-      clearTimeout(timer);
-    };
-  }, []);
-
+const MainContent: React.FC<MainContentProps> = () => {
   return (
     <div className="relative z-20">
-      {/* About Section */}
-      <section id="about" data-section-target="about">
+      {/* Sections */}
+      <section id="about">
         <Suspense fallback={<SectionLoader />}>
-          {visibleSections.about && <About />}
+          <About />
         </Suspense>
       </section>
 
-      {/* Founder Section */}
-      <section id="founderSection" data-section-target="founder">
+      <section id="founderSection">
         <Suspense fallback={<SectionLoader />}>
-          {visibleSections.founder && <Founder />}
+          <Founder />
         </Suspense>
       </section>
 
-      {/* Programs Section */}
-      <section id="programs" data-section-target="programs">
+      <section id="programs">
         <Suspense fallback={<SectionLoader />}>
-          {visibleSections.programs && <Programs />}
+          <Programs />
         </Suspense>
       </section>
 
-      {/* Testimonials Section */}
-      <section id="testimonials" data-section-target="testimonials">
+      <section id="testimonials">
         <Suspense fallback={<SectionLoader />}>
-          {visibleSections.testimonials && <Testimonials />}
+          <Testimonials />
         </Suspense>
       </section>
 
-      {/* Gallery Section */}
-      <section id="gallery" data-section-target="gallery">
+      <section id="gallery">
         <Suspense fallback={<SectionLoader />}>
-          {visibleSections.gallery && <Gallery />}
+          <Gallery />
         </Suspense>
       </section>
 
-      {/* FAQ Section */}
-      <section id="faq" data-section-target="faq">
+      <section id="faq">
         <Suspense fallback={<SectionLoader />}>
-          {visibleSections.faq && <FAQ />}
+          <FAQ />
         </Suspense>
       </section>
 
-      {/* Contact Section */}
-      <section id="contact" data-section-target="contact">
+      <section id="contact">
         <Suspense fallback={<SectionLoader />}>
-          {visibleSections.contact && <Contact />}
+          <Contact />
         </Suspense>
       </section>
 
-      {/* Affiliations Section */}
-      <section id="affiliationsSection" data-section-target="affiliations">
+      <section id="affiliationsSection">
         <Suspense fallback={<SectionLoader />}>
-          {visibleSections.affiliations && <Affiliations />}
+          <Affiliations />
         </Suspense>
       </section>
 
-      {/* Footer - always visible */}
-      <section id="footerSection" data-section-target="footer">
+      {/* Ensure footer is always rendered */}
+      <section id="footerSection">
         <Suspense fallback={<SectionLoader />}>
           <Footer />
         </Suspense>

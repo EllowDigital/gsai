@@ -1,86 +1,123 @@
-
-import { useEffect } from 'react';
-import NavBar from '@/components/NavBar';
-import Footer from '@/components/Footer';
-import { Helmet } from 'react-helmet-async';
+import React from "react";
+import { Helmet } from "react-helmet-async";
+import NavBar from "@/components/NavBar";
+import Footer from "@/components/Footer";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 
 const RefundPolicy = () => {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  const sectionRef = useScrollAnimation<HTMLDivElement>({
+    threshold: 0.1,
+    animationType: "fade",
+  });
 
   return (
-    <div className="min-h-screen bg-black">
+    <>
       <Helmet>
-        <title>Refund Policy | Ghatak Sports Academy India</title>
-        <meta name="description" content="Refund Policy for Ghatak Sports Academy India. Learn about our refund terms, cancellations, and payment policies." />
+        <title>Refund Policy | Ghatak Sports Academy India™</title>
+        <meta
+          name="description"
+          content="Refund policy for Ghatak Sports Academy India™. Learn about our terms and conditions for refunds."
+        />
+        <link rel="canonical" href="https://ghatakgsai.netlify.app/refund-policy" />
       </Helmet>
 
-      <NavBar />
-      
-      <main className="py-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
-        <div className="space-y-8 text-white">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6">Refund Policy</h1>
-          
-          <div className="space-y-6 text-sm sm:text-base">
-            <section>
-              <h2 className="text-xl sm:text-2xl font-semibold mb-4">1. Registration and Enrollment Fees</h2>
-              <p className="text-gray-300 mb-2">1.1 Registration fees are non-refundable under any circumstances.</p>
-              <p className="text-gray-300 mb-2">1.2 Enrollment fees may be refunded as per the terms outlined below.</p>
-            </section>
+      <div className="min-h-screen bg-black text-white">
+        <NavBar />
 
-            <section>
-              <h2 className="text-xl sm:text-2xl font-semibold mb-4">2. Refund Eligibility</h2>
-              <p className="text-gray-300 mb-2">2.1 Full refunds (excluding registration fees) will be issued if requested within 7 days of enrollment, provided no more than two classes have been attended.</p>
-              <p className="text-gray-300 mb-2">2.2 Partial refunds of 50% may be issued if requested within 14 days of enrollment, provided no more than four classes have been attended.</p>
-              <p className="text-gray-300 mb-2">2.3 No refunds will be issued after 14 days of enrollment or after attending more than four classes.</p>
-            </section>
+        <main className="gsai-container py-16">
+          <div ref={sectionRef} className="max-w-4xl mx-auto">
+            <h1 className="text-4xl font-bold mb-10 text-center">Refund Policy</h1>
 
-            <section>
-              <h2 className="text-xl sm:text-2xl font-semibold mb-4">3. Special Circumstances</h2>
-              <p className="text-gray-300 mb-2">3.1 Medical Condition: If a student cannot continue training due to a medical condition (verified by a physician's note), a prorated refund may be issued based on the remaining unutilized period.</p>
-              <p className="text-gray-300 mb-2">3.2 Relocation: If a student relocates more than 50 kilometers from the academy location, a prorated refund may be considered with proper documentation.</p>
-              <p className="text-gray-300 mb-2">3.3 GSAI reserves the right to assess each special circumstance on a case-by-case basis.</p>
-            </section>
+            <ScrollArea className="h-[70vh] rounded-md border p-6 bg-black/30">
+              <div className="space-y-8 text-left">
+                {/* Introduction Section */}
+                <section>
+                  <h2 className="text-2xl font-semibold mb-4 text-gsai-gold">Introduction</h2>
+                  <p className="mb-4">
+                    At Ghatak Sports Academy India™ (GSAI), we are committed to providing high-quality services and products. If you are not completely satisfied with your purchase, this refund policy outlines the process for requesting a refund or exchange.
+                  </p>
+                </section>
 
-            <section>
-              <h2 className="text-xl sm:text-2xl font-semibold mb-4">4. Program Cancellation by GSAI</h2>
-              <p className="text-gray-300 mb-2">4.1 If GSAI cancels a program before it begins, a full refund will be issued.</p>
-              <p className="text-gray-300 mb-2">4.2 If GSAI cancels a program after it has begun, a prorated refund will be issued based on the remaining classes.</p>
-            </section>
+                {/* Eligibility for Refund */}
+                <section>
+                  <h2 className="text-2xl font-semibold mb-4 text-gsai-gold">Eligibility for Refund</h2>
+                  <p className="mb-4">
+                    You may be eligible for a refund under the following circumstances:
+                  </p>
+                  <ul className="list-disc pl-5 space-y-2">
+                    <li>If you cancel your registration or membership within 7 days of the purchase date.</li>
+                    <li>If you purchased a product that is defective or damaged.</li>
+                    <li>If the service or program was not delivered as described.</li>
+                  </ul>
+                </section>
 
-            <section>
-              <h2 className="text-xl sm:text-2xl font-semibold mb-4">5. Payment Plans</h2>
-              <p className="text-gray-300 mb-2">5.1 For students on payment plans, cancellation of enrollment will not absolve the responsibility to complete all payments unless otherwise specified in writing.</p>
-              <p className="text-gray-300 mb-2">5.2 Early termination fees may apply as outlined in the payment plan agreement.</p>
-            </section>
+                {/* Refund Process */}
+                <section>
+                  <h2 className="text-2xl font-semibold mb-4 text-gsai-gold">Refund Process</h2>
+                  <p className="mb-4">
+                    To request a refund, please follow these steps:
+                  </p>
+                  <ol className="list-decimal pl-5 space-y-2">
+                    <li>Contact our customer support team via email or phone within 7 days of your purchase.</li>
+                    <li>Provide purchase details including your order number, product/service purchased, and the reason for your refund request.</li>
+                    <li>Our team will review your request and issue the refund if it meets our refund criteria.</li>
+                    <li>Refunds will be processed to the original payment method, and it may take up to 10 business days for the refund to reflect in your account.</li>
+                  </ol>
+                </section>
 
-            <section>
-              <h2 className="text-xl sm:text-2xl font-semibold mb-4">6. Refund Process</h2>
-              <p className="text-gray-300 mb-2">6.1 All refund requests must be submitted in writing to ghatakgsai@gmail.com.</p>
-              <p className="text-gray-300 mb-2">6.2 Refunds will be processed within 14 business days using the original payment method.</p>
-              <p className="text-gray-300 mb-2">6.3 Processing fees charged by payment gateways will not be refunded.</p>
-            </section>
+                {/* Non-Refundable Items */}
+                <section>
+                  <h2 className="text-2xl font-semibold mb-4 text-gsai-gold">Non-Refundable Items</h2>
+                  <p className="mb-4">
+                    The following items are not eligible for a refund:
+                  </p>
+                  <ul className="list-disc pl-5 space-y-2">
+                    <li>Courses, memberships, or services that have already been used or completed.</li>
+                    <li>Products or services that are explicitly marked as non-refundable at the time of purchase.</li>
+                  </ul>
+                </section>
 
-            <section>
-              <h2 className="text-xl sm:text-2xl font-semibold mb-4">7. Contact Information</h2>
-              <p className="text-gray-300 mb-2">For questions or concerns regarding refunds, please contact:</p>
-              <address className="text-gray-300 not-italic">
-                <p>Ghatak Sports Academy India™</p>
-                <p>Email: ghatakgsai@gmail.com</p>
-                <p>Phone: +91 6394135988</p>
-              </address>
-            </section>
+                {/* Exchanges */}
+                <section>
+                  <h2 className="text-2xl font-semibold mb-4 text-gsai-gold">Exchanges</h2>
+                  <p className="mb-4">
+                    In certain cases, rather than issuing a refund, we may offer an exchange or store credit for a future purchase. This typically applies to defective products or services that fall under an exchange program.
+                  </p>
+                </section>
+
+                {/* Changes to Refund Policy */}
+                <section>
+                  <h2 className="text-2xl font-semibold mb-4 text-gsai-gold">Changes to Our Refund Policy</h2>
+                  <p className="mb-4">
+                    We may update this refund policy from time to time. Any changes will be posted on this page, and the date of the last revision will be updated accordingly.
+                  </p>
+                </section>
+
+                {/* Contact Information */}
+                <section>
+                  <h2 className="text-2xl font-semibold mb-4 text-gsai-gold">Contact Information</h2>
+                  <p className="mb-4">
+                    If you have any questions or concerns regarding our refund policy, please reach out to us:
+                  </p>
+                  <p><strong>Email:</strong> ghatakgsai@gmail.com</p>
+                  <p><strong>Phone:</strong> +91-639-413-5988</p>
+                  <p>
+                    <strong>Address:</strong> Naubasta Pulia, Takrohi Road, Amrai Gaon, Indira Nagar, Lucknow, U.P. - 226028
+                  </p>
+                </section>
+
+                <p className="text-sm text-gray-400 pt-4 border-t border-gray-800">
+                  Last Updated: April 25, 2025
+                </p>
+              </div>
+            </ScrollArea>
           </div>
-          
-          <div className="pt-8 border-t border-gray-800">
-            <p className="text-gray-400 text-xs sm:text-sm">Last updated: April 15, 2025</p>
-          </div>
-        </div>
-      </main>
-      
-      <Footer />
-    </div>
+        </main>
+
+        <Footer />
+      </div>
+    </>
   );
 };
 

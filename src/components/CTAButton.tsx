@@ -1,4 +1,3 @@
-
 import { MouseEvent, useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import throttle from "lodash.throttle";
@@ -9,7 +8,6 @@ interface CTAButtonProps {
   href?: string;
   variant?: "primary" | "secondary";
   icon?: React.ReactNode;
-  className?: string;
 }
 
 const CTAButton = ({
@@ -18,15 +16,13 @@ const CTAButton = ({
   href,
   variant = "primary",
   icon,
-  className = "",
 }: CTAButtonProps) => {
   const x = useMotionValue(0.5);
   const y = useMotionValue(0.5);
   const [hovered, setHovered] = useState(false);
-  const [pressed, setPressed] = useState(false);
 
-  const rotateX = useTransform(y, [0, 1], [8, -8]);
-  const rotateY = useTransform(x, [0, 1], [-8, 8]);
+  const rotateX = useTransform(y, [0, 1], [10, -10]);
+  const rotateY = useTransform(x, [0, 1], [-10, 10]);
 
   const smoothRotateX = useSpring(rotateX, { stiffness: 300, damping: 30 });
   const smoothRotateY = useSpring(rotateY, { stiffness: 300, damping: 30 });
@@ -54,9 +50,6 @@ const CTAButton = ({
 
   const handleMouseEnter = () => setHovered(true);
 
-  const handleMouseDown = () => setPressed(true);
-  const handleMouseUp = () => setPressed(false);
-
   const clickHandler = (e: MouseEvent<HTMLAnchorElement | HTMLButtonElement>) => {
     if (href && onClick) {
       e.preventDefault();
@@ -66,26 +59,19 @@ const CTAButton = ({
 
   const ButtonBase = href ? motion.a : motion.button;
 
-  const variantStyles = {
-    primary: "bg-gsai-red text-white",
-    secondary: "bg-gsai-gold text-black"
-  };
-
   const baseClasses = `
     relative inline-flex items-center justify-center
-    px-6 py-3 rounded-md font-bold text-base tracking-wide
+    px-6 py-3 rounded-md font-bold uppercase tracking-wide
     overflow-hidden shadow-lg group text-center
-    transition-all duration-300 hover:shadow-xl
-    ${variantStyles[variant]}
-    ${className}
+    transition-transform duration-300
+    ${variant === "primary" ? "bg-gsai-red text-white" : "bg-gsai-gold text-black"}
   `;
 
   const shineClasses = `
-    absolute top-0 left-[-100%] w-[250%] h-full
-    bg-gradient-to-r from-transparent via-white/30 to-transparent
-    transform rotate-[25deg] pointer-events-none z-10
-    transition-transform duration-700
-    ${hovered ? "translate-x-[80%]" : ""}
+    absolute top-0 left-[-75%] w-[150%] h-full
+    bg-gradient-to-r from-white/40 to-transparent
+    pointer-events-none z-10
+    ${hovered ? "animate-shine" : ""}
   `;
 
   return (
@@ -95,23 +81,11 @@ const CTAButton = ({
         rotateX: smoothRotateX,
         rotateY: smoothRotateY,
         transformStyle: "preserve-3d",
-        transform: pressed ? "scale(0.98)" : "scale(1)",
-        boxShadow: hovered 
-          ? variant === "primary" 
-            ? "0 10px 25px -5px rgba(234, 56, 76, 0.4)" 
-            : "0 10px 25px -5px rgba(218, 165, 32, 0.4)"
-          : "0 4px 15px -3px rgba(0, 0, 0, 0.3)"
       }}
       whileTap={{ scale: 0.96 }}
-      animate={{ 
-        scale: hovered ? 1.03 : 1,
-        transition: { duration: 0.2 } 
-      }}
       onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
       onClick={clickHandler}
       {...(href ? { href } : {})}
       aria-label={label}
@@ -120,26 +94,6 @@ const CTAButton = ({
       <div className="absolute inset-0 rounded-md shadow-inner opacity-50 pointer-events-none z-10" />
       {icon && <span className="mr-2 relative z-20">{icon}</span>}
       <span className="relative z-20">{label}</span>
-
-      {/* Pulse effect on hover */}
-      {hovered && (
-        <motion.div
-          className="absolute inset-0 rounded-md pointer-events-none"
-          initial={{ opacity: 0.5, scale: 0.8 }}
-          animate={{ 
-            opacity: 0,
-            scale: 1.2,
-          }}
-          transition={{
-            repeat: Infinity,
-            duration: 1.5,
-            ease: "easeOut",
-          }}
-          style={{
-            background: variant === "primary" ? "rgba(234, 56, 76, 0.4)" : "rgba(218, 165, 32, 0.4)",
-          }}
-        />
-      )}
     </ButtonBase>
   );
 };

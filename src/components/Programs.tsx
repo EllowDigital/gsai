@@ -1,5 +1,5 @@
-
 import React, { useEffect } from 'react';
+import { cn } from '@/lib/utils';
 import Card3D from './ui/3d-card';
 
 interface ProgramCardProps {

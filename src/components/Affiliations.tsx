@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useState } from 'react';
 
 // Define affiliation types for better type safety
@@ -10,8 +9,6 @@ interface Affiliation {
 const Affiliations = () => {
   const carouselRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
-  // Initialize scrollInterval with null - fix for TS2454
-  const [scrollInterval, setScrollInterval] = useState<ReturnType<typeof setInterval> | null>(null);
 
   // Intersection Observer for fade-in animation
   useEffect(() => {
@@ -23,9 +20,6 @@ const Affiliations = () => {
             target.classList.add('animate-fade-in-up');
             target.style.visibility = 'visible';
             target.style.opacity = '1';
-            
-            // Unobserve after animation for better performance
-            observer.unobserve(entry.target);
           }
         });
       },
@@ -44,29 +38,25 @@ const Affiliations = () => {
 
   // Auto-scroll carousel with pause on hover
   useEffect(() => {
+    let scrollInterval: ReturnType<typeof setInterval>;
+
     const carousel = carouselRef.current;
 
     const startCarousel = () => {
-      if (carousel && !isHovered) {
-        // Clear existing interval if it exists
-        if (scrollInterval) {
-          clearInterval(scrollInterval);
-        }
+      if (carousel) {
+        scrollInterval = setInterval(() => {
+          carousel.scrollLeft += 1;
 
-        // Set new interval
-        const interval = setInterval(() => {
-          if (carousel) {
-            carousel.scrollLeft += 1;
-
-            // Reset scroll position when reaching the end
-            if (carousel.scrollLeft >= (carousel.scrollWidth - carousel.clientWidth)) {
-              carousel.scrollLeft = 0;
-            }
+          // Reset scroll position when reaching the end
+          if (carousel.scrollLeft >= (carousel.scrollWidth - carousel.clientWidth)) {
+            carousel.scrollLeft = 0;
           }
         }, 20);
-        
-        setScrollInterval(interval);
       }
+    };
+
+    const stopCarousel = () => {
+      clearInterval(scrollInterval);
     };
 
     // Start the carousel
@@ -76,23 +66,13 @@ const Affiliations = () => {
     carousel?.addEventListener('mouseenter', () => setIsHovered(true));
     carousel?.addEventListener('mouseleave', () => setIsHovered(false));
 
-    // Restart on hover state change
-    if (isHovered && scrollInterval) {
-      clearInterval(scrollInterval);
-      setScrollInterval(null);
-    } else if (!isHovered) {
-      startCarousel();
-    }
-
     // Cleanup event listeners and interval
     return () => {
-      if (scrollInterval) {
-        clearInterval(scrollInterval);
-      }
+      clearInterval(scrollInterval);
       carousel?.removeEventListener('mouseenter', () => setIsHovered(true));
       carousel?.removeEventListener('mouseleave', () => setIsHovered(false));
     };
-  }, [isHovered, scrollInterval]);
+  }, [isHovered]);
 
   const affiliations: Affiliation[] = [
     { name: 'Government of India', logo: '/images/india.png' },
@@ -110,15 +90,13 @@ const Affiliations = () => {
   ];
 
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-black">
+    <section className="py-20 bg-black">
       <div className="gsai-container">
-        <div className="text-center mb-8 sm:mb-12 md:mb-16">
-          <h2 className="section-title text-2xl md:text-3xl lg:text-4xl text-white affiliation-animate opacity-0">
-            Recognitions & Affiliations
-          </h2>
-          <div className="w-16 sm:w-20 md:w-24 h-1 bg-gsai-red mx-auto mt-3 mb-6 sm:mt-4 sm:mb-8"></div>
+        <div className="text-center mb-16">
+          <h2 className="section-title text-white affiliation-animate opacity-0">Recognitions & Affiliations</h2>
+          <div className="w-24 h-1 bg-gsai-red mx-auto mt-4 mb-8"></div>
           <p
-            className="text-gray-300 text-sm md:text-base max-w-xl sm:max-w-2xl mx-auto px-4 affiliation-animate opacity-0"
+            className="text-gray-300 max-w-2xl mx-auto affiliation-animate opacity-0"
             style={{ animationDelay: '0.2s' }}
           >
             Ghatak Sports Academy India™ is proud to be recognized and affiliated with these prestigious organizations.
@@ -127,39 +105,30 @@ const Affiliations = () => {
 
         <div
           ref={carouselRef}
-          className="flex overflow-x-hidden py-4 sm:py-6 md:py-8 affiliation-animate opacity-0"
+          className="flex overflow-x-hidden py-8 affiliation-animate opacity-0"
           style={{ animationDelay: '0.4s' }}
         >
-          <div className="flex space-x-4 sm:space-x-6 md:space-x-8 animate-scroll">
+          <div className="flex space-x-8 animate-scroll">
             {affiliations.map((affiliation, index) => (
-              <div 
-                key={index} 
-                className="min-w-[150px] sm:min-w-[180px] md:min-w-[200px] glass-card p-3 sm:p-4 flex flex-col items-center"
-              >
+              <div key={index} className="min-w-[200px] glass-card p-4 flex flex-col items-center">
                 <img
                   src={affiliation.logo}
                   alt={affiliation.name}
-                  className="w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 object-cover rounded-lg mb-3 sm:mb-4"
-                  loading="lazy"
+                  className="w-32 h-32 object-cover rounded-lg mb-4"
                 />
-                <p className="text-white text-center text-sm sm:text-base">{affiliation.name}</p>
+                <p className="text-white text-center">{affiliation.name}</p>
               </div>
             ))}
 
             {/* Duplicate items for smooth infinite scrolling */}
             {affiliations.map((affiliation, index) => (
-              <div 
-                key={`dup-${index}`} 
-                className="min-w-[150px] sm:min-w-[180px] md:min-w-[200px] glass-card p-3 sm:p-4 flex flex-col items-center"
-                aria-hidden="true" // Hide duplicate items from screen readers
-              >
+              <div key={`dup-${index}`} className="min-w-[200px] glass-card p-4 flex flex-col items-center">
                 <img
                   src={affiliation.logo}
-                  alt=""
-                  className="w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 object-cover rounded-lg mb-3 sm:mb-4"
-                  loading="lazy"
+                  alt={affiliation.name}
+                  className="w-32 h-32 object-cover rounded-lg mb-4"
                 />
-                <p className="text-white text-center text-sm sm:text-base">{affiliation.name}</p>
+                <p className="text-white text-center">{affiliation.name}</p>
               </div>
             ))}
           </div>

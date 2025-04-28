@@ -5,7 +5,6 @@ import { Menu } from "lucide-react";
 import CTAButton from "./CTAButton";
 import { motion } from "framer-motion";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Button } from "./ui/button";
 
 const NAV_LINKS = [
   { label: "About", href: "#about" },
@@ -80,19 +79,18 @@ const NavBar = () => {
         {/* Desktop Nav */}
         <nav className="hidden md:flex gap-8 items-center">
           {NAV_LINKS.map(({ label, href }) => (
-            <Button
+            <button
               key={href}
               onClick={() => handleNavClick(href)}
-              variant="ghost"
-              className="text-gray-300 hover:text-white font-medium transition-colors relative px-3 py-2 h-auto after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-gsai-red after:left-0 after:-bottom-1 after:scale-x-0 hover:after:scale-x-100 after:origin-bottom-right hover:after:origin-bottom-left after:transition-transform after:duration-300"
+              className="text-gray-300 hover:text-white font-medium transition-colors relative after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-gsai-red after:left-0 after:-bottom-1 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300"
             >
               {label}
-            </Button>
+            </button>
           ))}
           <CTAButton
             label="Join Now"
             href="https://forms.gle/LTYn59kPWkQgC3VR7"
-            variant="primary"
+            className="bg-gsai-red hover:bg-gsai-red/90 text-white shadow-lg hover:shadow-gsai-red/20 transition-all"
           />
         </nav>
 
@@ -110,9 +108,6 @@ const NavBar = () => {
             <SheetContent side="right" className="bg-black/95 border-gsai-red/20">
               <SheetHeader>
                 <SheetTitle className="text-white text-xl font-bold">Menu</SheetTitle>
-                <p id="sheet-description" className="sr-only">
-                  Navigation menu. Use the buttons below to navigate through the site sections.
-                </p>
               </SheetHeader>
               <motion.nav
                 className="flex flex-col gap-6 mt-8"
@@ -121,19 +116,18 @@ const NavBar = () => {
                 transition={{ duration: 0.3 }}
               >
                 {NAV_LINKS.map(({ label, href }) => (
-                  <Button
+                  <button
                     key={href}
                     onClick={() => handleNavClick(href)}
-                    variant="ghost"
-                    className="text-left justify-start text-gray-300 hover:text-gsai-red text-lg transition-colors flex items-center gap-2 w-full px-2 py-1 rounded-lg hover:bg-white/5 h-auto"
+                    className="text-left text-gray-300 hover:text-gsai-red text-lg transition-colors flex items-center gap-2 w-full px-2 py-1 rounded-lg hover:bg-white/5"
                   >
                     {label}
-                  </Button>
+                  </button>
                 ))}
                 <CTAButton
                   label="Join Now"
                   href="https://forms.gle/LTYn59kPWkQgC3VR7"
-                  variant="primary"
+                  className="mt-4 w-full bg-gsai-red hover:bg-gsai-red/90 text-white shadow-lg"
                 />
               </motion.nav>
             </SheetContent>

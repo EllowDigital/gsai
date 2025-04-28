@@ -1,4 +1,3 @@
-
 import { useEffect, useState, useRef, RefObject } from "react";
 
 interface ParallaxOptions {
@@ -21,7 +20,6 @@ export function useParallax<T extends HTMLElement>(
   const ref = useRef<T>(null);
   const [offset, setOffset] = useState(0);
   const [isInView, setIsInView] = useState(false);
-  const frameId = useRef<number | null>(null);
 
   const multiplier = reverse ? -1 : 1;
 
@@ -36,7 +34,7 @@ export function useParallax<T extends HTMLElement>(
       ([entry]) => {
         setIsInView(entry.isIntersecting);
       },
-      { threshold: 0.1, rootMargin: "50px" }
+      { threshold: 0.1 }
     );
 
     observer.observe(element);
@@ -46,33 +44,36 @@ export function useParallax<T extends HTMLElement>(
     };
   }, [disabled]);
 
-  // Handle scroll event using requestAnimationFrame for smoother performance
+  // Handle scroll event and calculate parallax offset
   useEffect(() => {
-    if (disabled || !isInView || !ref.current) return;
+    if (disabled || !isInView) return;
 
     const handleScroll = () => {
-      if (!ref.current) return;
-      
-      const rect = ref.current.getBoundingClientRect();
+      const element = ref.current;
+      if (!element) return;
+
+      const rect = element.getBoundingClientRect();
       const windowHeight = window.innerHeight;
       const viewportCenter = windowHeight / 2;
       const elementCenter = rect.top + rect.height / 2;
       const distanceFromCenter = elementCenter - viewportCenter;
 
-      // Apply parallax effect with acceleration for smoother motion
+      // Apply parallax effect
       setOffset(distanceFromCenter * speed * multiplier);
-      
-      // Continue animation loop
-      frameId.current = requestAnimationFrame(handleScroll);
     };
 
-    // Start animation loop
-    frameId.current = requestAnimationFrame(handleScroll);
+    // Use requestAnimationFrame for smoother scrolling
+    const onScroll = () => {
+      requestAnimationFrame(handleScroll);
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    // Initial calculation
+    handleScroll();
 
     return () => {
-      if (frameId.current) {
-        cancelAnimationFrame(frameId.current);
-      }
+      window.removeEventListener("scroll", onScroll);
     };
   }, [speed, reverse, disabled, isInView, multiplier]);
 
@@ -87,14 +88,8 @@ export function useParallax<T extends HTMLElement>(
 
     const element = ref.current;
     element.style.transform = transform;
-    element.style.transition = "transform 0.1s cubic-bezier(0.33, 1, 0.68, 1)";
+    element.style.transition = "transform 0.1s ease-out";
     element.style.willChange = "transform";
-    
-    return () => {
-      if (element) {
-        element.style.willChange = 'auto';
-      }
-    };
   }, [offset, direction, disabled]);
 
   return ref;

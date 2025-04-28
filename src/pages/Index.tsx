@@ -1,23 +1,26 @@
 
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import NavBar from '@/components/NavBar';
 import Hero from '@/components/Hero';
 import { Helmet } from 'react-helmet-async';
+import { usePageSections } from '@/hooks/use-page-sections';
+import SectionLoader from '@/components/SectionLoader';
 import MainContent from '@/components/MainContent';
 import { useLocation } from 'react-router-dom';
 
 const Index = () => {
+  const { isMounted, visibleSections } = usePageSections();
   const location = useLocation();
 
   // Handle direct navigation to a section via URL hash
   useEffect(() => {
     if (location.hash) {
-      requestAnimationFrame(() => {
-        const element = document.querySelector(location.hash);
-        if (element) {
+      const element = document.querySelector(location.hash);
+      if (element) {
+        setTimeout(() => {
           element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      });
+        }, 300);
+      }
     }
   }, [location.hash]);
 
@@ -46,19 +49,20 @@ const Index = () => {
               "addressRegion": "Uttar Pradesh",
               "postalCode": "226021",
               "addressCountry": "IN"
-            }
+            },
+            "openingHours": "Mo,Tu,We,Th,Fr,Sa,Su 06:00-20:00",
+            "foundingDate": "2019-01-01",
+            "foundingLocation": "Lucknow, India"
           }
         `}</script>
 
         {/* Add preload for critical resources */}
         <link rel="preload" href="/images/logo.png" as="image" />
-        <link rel="preload" as="style" href="/src/App.css" />
-        <link rel="preload" as="style" href="/src/styles/glassmorphism.css" />
-        
+        <link rel="preload" href="/images/founder.webp" as="image" />
+
         {/* Add optimized performance settings */}
         <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="theme-color" content="#000000" />
       </Helmet>
 
       <div className="font-sans min-h-screen bg-black">

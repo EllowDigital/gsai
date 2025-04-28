@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from 'react';
 
 export const usePageSections = () => {
@@ -13,15 +12,14 @@ export const usePageSections = () => {
           if (entry.isIntersecting) {
             // Use requestAnimationFrame for smoother transitions
             requestAnimationFrame(() => {
-              entry.target.classList.add('animate-fade-in', 'opacity-100');
+              entry.target.classList.add('animate-fade-in-up', 'opacity-100');
               entry.target.classList.remove('opacity-0');
-              // Unobserve after animation to improve performance
-              observer.unobserve(entry.target);
+              observer.unobserve(entry.target); // Unobserve after animation
             });
           }
         });
       },
-      { threshold: 0.1, rootMargin: '0px 0px -5% 0px' }
+      { threshold: 0.1, rootMargin: '0px 0px -10% 0px' }
     );
 
     // Observe all sections with the class 'section-animate'
@@ -32,25 +30,44 @@ export const usePageSections = () => {
     return observer;
   }, []);
 
-  // Handle visibility of sections on page load - improved for speed
+  // Handle visibility of sections on page load
   useEffect(() => {
     setIsMounted(true);
 
     const sectionIds = [
-      'about', 'founder', 'programs', 'testimonials', 
-      'gallery', 'faq', 'contact', 'affiliations', 'footer'
+      'about', 'founder', 'programs', 'testimonials', 'gallery', 'faq', 'contact', 'affiliations', 'footer'
     ];
 
-    // Make all sections visible immediately instead of staggered
-    setVisibleSections(
-      sectionIds.reduce((acc, id) => ({ ...acc, [id]: true }), {})
-    );
+    const scheduleVisibility = (index: number) => {
+      if (index >= sectionIds.length) return;
+
+      // Schedule the next section to be made visible after a delay
+      const scheduleNext = () => {
+        setTimeout(() => scheduleVisibility(index + 1), 200); // Delay for staggered visibility
+      };
+
+      // Check for requestIdleCallback support
+      if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(() => {
+          setVisibleSections(prev => ({ ...prev, [sectionIds[index]]: true }));
+          scheduleNext();
+        }, { timeout: 1000 });
+      } else {
+        setTimeout(() => {
+          setVisibleSections(prev => ({ ...prev, [sectionIds[index]]: true }));
+          scheduleNext();
+        }, 200 * index);
+      }
+    };
+
+    scheduleVisibility(0); // Start making sections visible after page load
   }, []);
 
   // Set up the IntersectionObserver when the component mounts
   useEffect(() => {
     if (isMounted) {
       const observer = setupIntersectionObserver();
+
       return () => observer.disconnect(); // Cleanup on unmount
     }
   }, [isMounted, setupIntersectionObserver]);
