@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import { useParallax } from '@/hooks/use-parallax';
 
@@ -13,7 +12,7 @@ const About = () => {
           entry.target.classList.add('reveal-slide-up');
           entry.target.style.opacity = '1';
           entry.target.style.visibility = 'visible';
-          
+
           // Unobserve after animation for better performance
           observer.unobserve(entry.target);
         }
@@ -74,7 +73,7 @@ const About = () => {
           </p>
         </div>
 
-        <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 items-stretch">
+        <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 items-stretch">
           {sections.map((section, idx) => (
             <div
               key={idx}

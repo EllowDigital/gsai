@@ -10,13 +10,13 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer ref={footerRef} className="bg-black text-white pt-16 pb-8 border-t border-gray-800">
-      <div className="gsai-container">
+    <footer ref={footerRef} className="bg-black text-white py-16 border-t border-gray-800">
+      <div className="gsai-container px-4 sm:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {/* About Section */}
-          <div>
+          <div className="space-y-6">
             <h3 className="text-2xl font-bold mb-4 text-gsai-gold">About GSAI</h3>
-            <p className="text-gray-300 mb-4 text-sm md:text-base">
+            <p className="text-gray-300 text-sm md:text-base">
               Government-recognized and ISO 9001:2015 certified martial arts academy empowering individuals through world-class training.
             </p>
             <div className="flex space-x-4 mt-4">
@@ -65,7 +65,8 @@ const Footer = () => {
             </div>
           </div>
 
-          <div>
+          {/* Quick Links Section */}
+          <div className="space-y-6">
             <h3 className="text-2xl font-bold mb-4 text-gsai-gold">Quick Links</h3>
             <ul className="space-y-2 text-sm md:text-base">
               {['About', 'Programs', 'Gallery', 'FAQ', 'Testimonials'].map((link) => (
@@ -81,7 +82,8 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div>
+          {/* Contact Section */}
+          <div className="space-y-6">
             <h3 className="text-2xl font-bold mb-4 text-gsai-gold">Contact</h3>
             <ul className="space-y-2 text-sm md:text-base">
               <li className="flex items-start space-x-2">
@@ -106,7 +108,8 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div>
+          {/* Legal Section */}
+          <div className="space-y-6">
             <h3 className="text-2xl font-bold mb-4 text-gsai-gold">Legal</h3>
             <ul className="space-y-2 text-sm md:text-base">
               <li>

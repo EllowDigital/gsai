@@ -1,6 +1,16 @@
-
 import React, { useEffect } from 'react';
 import Card3D from './ui/3d-card';
+import {
+  GiBoxingGlove,
+  GiHighKick,
+  GiMuscleUp,
+  GiPunchBlast,
+  GiSelfLove,
+  GiHealthPotion,
+  GiSwordSpin,
+} from 'react-icons/gi';
+import { MdSportsMartialArts } from 'react-icons/md';
+import { FaArrowRight } from 'react-icons/fa';
 
 interface ProgramCardProps {
   title: string;
@@ -14,35 +24,23 @@ const ProgramCard = ({ title, icon, description, index }: ProgramCardProps) => {
 
   return (
     <Card3D
-      className="glass-card program-animate opacity-0 group h-full bg-black/20"
+      className="glass-card program-animate opacity-0 group bg-black/20 h-full"
       style={{ animationDelay: cardAnimationDelay }}
-      innerClassName="p-6 rounded-xl transition-all duration-500 flex flex-col h-full"
+      innerClassName="p-6 rounded-2xl flex flex-col h-full transition-all duration-500"
     >
-      <div className="p-4 bg-gradient-to-br from-gsai-red/20 to-black/50 rounded-lg inline-block mb-4 transform-gpu group-hover:scale-110 transition-transform duration-300">
+      <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-gradient-to-br from-gsai-red/30 to-black/40 rounded-xl group-hover:scale-105 transform-gpu transition-transform duration-300">
         {icon}
       </div>
-      <h3 className="text-xl font-bold text-white mb-3 relative">
+      <h3 className="text-xl font-bold text-white mb-3 text-center relative">
         {title}
         <span className="absolute -bottom-1 left-0 w-0 group-hover:w-full h-0.5 bg-gradient-to-r from-gsai-red via-gsai-gold to-gsai-red transition-all duration-500"></span>
       </h3>
-      <p className="text-gray-300 flex-grow">{description}</p>
+      <p className="text-gray-300 text-sm flex-grow text-center">{description}</p>
 
-      <div className="mt-4 pt-2 border-t border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-4 group-hover:translate-y-0">
-        <span className="text-sm text-gsai-gold flex items-center">
+      <div className="mt-6 pt-4 border-t border-white/10 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 text-center">
+        <span className="text-sm text-gsai-gold inline-flex items-center justify-center">
           Learn More
-          <svg
-            className="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            aria-hidden="true"
-          >
-            <path
-              fillRule="evenodd"
-              d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
-              clipRule="evenodd"
-            />
-          </svg>
+          <FaArrowRight className="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" />
         </span>
       </div>
     </Card3D>
@@ -77,186 +75,61 @@ const Programs = () => {
   const programsData = [
     {
       title: 'Karate',
-      icon: (
-        <svg
-          className="w-10 h-10 text-gsai-red"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          aria-label="Karate Icon"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905v.714L7.3 5.3a1.5 1.5 0 00-.3.7v5"
-          />
-        </svg>
-      ),
+      icon: <GiPunchBlast className="w-10 h-10 text-gsai-red" />,
       description: 'Traditional Japanese martial art focusing on striking techniques using hands, feet, and knees.',
     },
     {
       title: 'Taekwondo',
-      icon: (
-        <svg
-          className="w-10 h-10 text-gsai-red"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          aria-label="Taekwondo Icon"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-          />
-        </svg>
-      ),
-      description: 'Korean martial art characterized by its emphasis on head-height kicks and fast kicking techniques.',
+      icon: <GiHighKick className="w-10 h-10 text-gsai-red" />,
+      description: 'Korean martial art known for its head-height kicks and dynamic movements.',
     },
     {
       title: 'Boxing',
-      icon: (
-        <svg
-          className="w-10 h-10 text-gsai-red"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          aria-label="Boxing Icon"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-          />
-        </svg>
-      ),
-      description: 'Combat sport focusing on punching techniques, footwork, and defensive movements.',
+      icon: <GiBoxingGlove className="w-10 h-10 text-gsai-red" />,
+      description: 'Combat sport emphasizing powerful punches, footwork, and defensive strategies.',
     },
     {
       title: 'Kickboxing',
-      icon: (
-        <svg
-          className="w-10 h-10 text-gsai-red"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          aria-label="Kickboxing Icon"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M13 10V3L4 14h7v7l9-11h-7z"
-          />
-        </svg>
-      ),
-      description: 'Stand-up combat sport combining elements of boxing with kicking techniques from karate.',
+      icon: <GiMuscleUp className="w-10 h-10 text-gsai-red" />,
+      description: 'Full-body sport blending boxing with powerful kicking techniques.',
     },
     {
       title: 'MMA',
-      icon: (
-        <svg
-          className="w-10 h-10 text-gsai-red"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          aria-label="MMA Icon"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
-          />
-        </svg>
-      ),
-      description: 'Full-contact combat sport incorporating techniques from various combat sports and martial arts.',
+      icon: <MdSportsMartialArts className="w-10 h-10 text-gsai-red" />,
+      description: 'Hybrid combat sport combining striking, grappling, and submission techniques.',
     },
     {
       title: 'Kalaripayattu',
-      icon: (
-        <svg
-          className="w-10 h-10 text-gsai-red"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          aria-label="Kalaripayattu Icon"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-          />
-        </svg>
-      ),
-      description: 'Ancient Indian martial art originating from Kerala, known for its strikes, kicks, grappling, and weapons training.',
+      icon: <GiSwordSpin className="w-10 h-10 text-gsai-red" />,
+      description: 'Ancient martial art from India involving strikes, kicks, weaponry, and yoga.',
     },
     {
       title: 'Self-Defense',
-      icon: (
-        <svg
-          className="w-10 h-10 text-gsai-red"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          aria-label="Self-Defense Icon"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-          />
-        </svg>
-      ),
-      description: 'Practical techniques designed for real-world situations to protect oneself from physical harm.',
+      icon: <GiSelfLove className="w-10 h-10 text-gsai-red" />,
+      description: 'Real-life defense strategies to keep yourself and others safe.',
     },
     {
       title: 'Fat Loss Programs',
-      icon: (
-        <svg
-          className="w-10 h-10 text-gsai-red"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          aria-label="Fat Loss Icon"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M6 2l12 20M6 22h12"
-          />
-        </svg>
-      ),
-      description: 'Specialized programs designed to help you lose fat and get in better shape.',
+      icon: <GiHealthPotion className="w-10 h-10 text-gsai-red" />,
+      description: 'Fitness plans tailored to reduce body fat and improve health.',
     },
   ];
 
   return (
-    <section id="programs" className="py-20 bg-black">
-      <div className="gsai-container">
+    <section id="programs" className="py-20 bg-black text-white">
+      <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="section-title text-white program-animate opacity-0">Our Programs</h2>
-          <div className="w-24 h-1 bg-gsai-red mx-auto mt-4 mb-8"></div>
-          <p className="text-gray-300 max-w-2xl mx-auto program-animate opacity-0" style={{ animationDelay: '0.2s' }}>
-            Discover our comprehensive range of martial arts and fitness programs designed for all ages and skill levels.
+          <h2 className="text-3xl md:text-4xl font-bold program-animate opacity-0">Our Programs</h2>
+          <div className="w-24 h-1 bg-gsai-red mx-auto mt-4 mb-6"></div>
+          <p
+            className="text-gray-300 text-base md:text-lg max-w-2xl mx-auto program-animate opacity-0"
+            style={{ animationDelay: '0.2s' }}
+          >
+            Discover a wide range of martial arts and fitness programs suited for all ages and skill levels.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {programsData.map((program, index) => (
             <ProgramCard
               key={program.title}
@@ -271,11 +144,12 @@ const Programs = () => {
         <div className="text-center mt-16">
           <a
             href="https://forms.gle/LTYn59kPWkQgC3VR7"
-            className="gsai-btn program-animate opacity-0 relative overflow-hidden group"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block px-6 py-3 text-white border border-gsai-red rounded-full hover:bg-gsai-red transition-all duration-300 program-animate opacity-0"
             style={{ animationDelay: '0.9s' }}
           >
-            <span className="relative z-10">Register Now</span>
-            <span className="absolute inset-0 bg-gradient-to-r from-gsai-red/0 via-white/20 to-gsai-red/0 transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
+            Register Now
           </a>
         </div>
       </div>

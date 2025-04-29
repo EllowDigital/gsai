@@ -1,49 +1,59 @@
-
 const HeroTitle = () => {
   return (
     <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white mb-4 text-center px-4">
+      {/* Top line: Welcome to */}
       <div
-        className="relative inline-block transform-gpu"
+        className="relative block mx-auto transform-gpu"
         style={{
           animation: "float 3s ease-in-out infinite",
-          textShadow: "0 0 20px rgba(255, 255, 255, 0.2)", // Improved text shadow
+          textShadow: "0 0 20px rgba(255, 255, 255, 0.2)",
         }}
       >
         Welcome to
       </div>
+
+      {/* Academy Name */}
       <div
-        className="mt-2 relative transform-gpu"
+        className="mt-2 relative mx-auto transform-gpu"
         style={{
-          animation: "float 3s ease-in-out infinite 0.2s",
-          textShadow: "2px 2px 10px rgba(0, 0, 0, 0.8)", // Enhanced shadow for more depth
+          animation: "float 3s ease-in-out infinite",
+          animationDelay: "0.2s",
+          textShadow: "2px 2px 10px rgba(0, 0, 0, 0.8)",
         }}
       >
+        {/* Ghatak */}
         <span
           className="text-gsai-red"
           style={{
-            textShadow: "0 0 15px rgba(255, 0, 0, 0.5)", // Stronger red glow
-            display: "inline-block",
+            textShadow: "0 0 15px rgba(255, 0, 0, 0.5)",
             animation: "pulse-glow 2s infinite",
+            display: "inline-block",
           }}
         >
           Ghatak{" "}
         </span>
-        <span className="text-white mx-2"> Sports Academy</span> {/* Added mx-2 for spacing */}
+
+        {/* Sports Academy */}
+        <span className="text-white mx-2">Sports Academy</span>
+
+        {/* India™ */}
         <span
           className="text-gsai-gold"
           style={{
-            textShadow: "0 0 15px rgba(255, 204, 0, 0.5)", // Stronger gold glow
-            display: "inline-block",
+            textShadow: "0 0 15px rgba(255, 204, 0, 0.5)",
             animation: "pulse-glow 2.5s infinite",
+            display: "inline-block",
           }}
         >
           India™
         </span>
 
+        {/* Decorative star */}
         <div
           className="absolute -top-6 -right-6 w-12 h-12 opacity-70 hidden md:block"
           style={{
-            animation: "float 3s ease-in-out infinite 0.5s",
+            animation: "float 3s ease-in-out infinite",
+            animationDelay: "0.5s",
           }}
         >
           <svg

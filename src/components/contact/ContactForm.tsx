@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import Card3D from "../ui/3d-card";
@@ -134,9 +133,9 @@ const ContactForm = () => {
   };
 
   return (
-    <Card3D className="w-full" intensity={10} shadow>
-      <div className="p-8">
-        <h3 className="text-2xl font-bold text-white mb-6">Send Us a Message</h3>
+    <Card3D className="w-full max-w-xl mx-auto p-6 sm:p-8 md:p-10" intensity={10} shadow>
+      <div className="space-y-6">
+        <h3 className="text-2xl font-bold text-white text-center sm:text-left">Send Us a Message</h3>
 
         {isSuccess && (
           <p className="text-green-400 font-semibold mb-4 text-center animate-fade-in">
@@ -144,12 +143,8 @@ const ContactForm = () => {
           </p>
         )}
 
-        <form
-          onSubmit={handleSubmit}
-          action="https://formsubmit.co/ellowdigitals@gmail.com"
-          method="POST"
-        >
-          <div className="mb-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
             <label htmlFor="name" className="block text-gray-300 mb-2">
               Your Name
             </label>
@@ -168,7 +163,7 @@ const ContactForm = () => {
             )}
           </div>
 
-          <div className="mb-4">
+          <div>
             <label htmlFor="email" className="block text-gray-300 mb-2">
               Email Address
             </label>
@@ -187,7 +182,7 @@ const ContactForm = () => {
             )}
           </div>
 
-          <div className="mb-4">
+          <div>
             <label htmlFor="phone" className="block text-gray-300 mb-2">
               Phone Number
             </label>
@@ -206,7 +201,7 @@ const ContactForm = () => {
             )}
           </div>
 
-          <div className="mb-4">
+          <div>
             <label htmlFor="program" className="block text-gray-300 mb-2">
               Interested Program
             </label>
@@ -244,7 +239,7 @@ const ContactForm = () => {
             )}
           </div>
 
-          <div className="mb-4">
+          <div>
             <label htmlFor="message" className="block text-gray-300 mb-2">
               Message (Optional)
             </label>
@@ -265,9 +260,8 @@ const ContactForm = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`gsai-btn w-full transition-opacity duration-300 ${
-              isSubmitting ? "opacity-50 cursor-not-allowed" : ""
-            }`}
+            className={`gsai-btn w-full transition-opacity duration-300 ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+              }`}
           >
             {isSubmitting ? "Sending..." : "Send Message"}
           </button>

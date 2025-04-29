@@ -1,4 +1,3 @@
-
 import { useRef, useEffect, useState, useCallback } from "react";
 import HeroParticles from "./HeroParticles";
 import CTAButton from "./CTAButton";
@@ -71,16 +70,13 @@ const Hero = () => {
         onMouseEnter={contentEffect.handleMouseEnter}
         onMouseLeave={contentEffect.handleMouseLeave}
         onMouseMove={contentEffect.handleMouseMove}
-        className={`relative text-center z-40 flex flex-col items-center transition-all duration-1000 ease-in-out ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-          }`}
+        className={`relative text-center z-40 flex flex-col items-center transition-all duration-1000 ease-in-out ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
       >
-        {/* Removed the glass-card and all associated styles */}
-        <div className="w-full max-w-4xl mx-auto">
+        <div className="w-full max-w-7xl mx-auto">
           <HeroTitle />
           <HeroSubtitle />
-
           <div
-            className="transform-gpu transition-transform duration-300 mb-12"
+            className="transform-gpu transition-transform duration-300 mb-16 sm:mb-20"
             style={{
               animation: "float 3s ease-in-out infinite 0.4s",
               transform: `perspective(1000px) rotateY(${mousePosition.x * 0.05}deg) rotateX(${mousePosition.y * -0.05}deg)`,
@@ -97,10 +93,12 @@ const Hero = () => {
               }
             />
           </div>
-
-          {/* Centered Scroll Indicator with extra space */}
-          <HeroScrollIndicator />
         </div>
+      </div>
+
+      {/* Scroll Indicator positioned below CTA Button, centered at the bottom */}
+      <div className="absolute bottom-8 w-full flex justify-center z-30">
+        <HeroScrollIndicator />
       </div>
 
       {/* 3D floating decorative elements */}

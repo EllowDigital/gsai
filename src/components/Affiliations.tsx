@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useState } from 'react';
 
 // Define affiliation types for better type safety
@@ -10,7 +9,6 @@ interface Affiliation {
 const Affiliations = () => {
   const carouselRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
-  // Initialize scrollInterval with null - fix for TS2454
   const [scrollInterval, setScrollInterval] = useState<ReturnType<typeof setInterval> | null>(null);
 
   // Intersection Observer for fade-in animation
@@ -23,7 +21,7 @@ const Affiliations = () => {
             target.classList.add('animate-fade-in-up');
             target.style.visibility = 'visible';
             target.style.opacity = '1';
-            
+
             // Unobserve after animation for better performance
             observer.unobserve(entry.target);
           }
@@ -32,7 +30,6 @@ const Affiliations = () => {
       { threshold: 0.1 } // Trigger when 10% of the element is in view
     );
 
-    // Observe elements with the 'affiliation-animate' class
     const elements = document.querySelectorAll('.affiliation-animate');
     elements.forEach((el) => observer.observe(el));
 
@@ -48,51 +45,43 @@ const Affiliations = () => {
 
     const startCarousel = () => {
       if (carousel && !isHovered) {
-        // Clear existing interval if it exists
         if (scrollInterval) {
-          clearInterval(scrollInterval);
+          clearInterval(scrollInterval); // Clear existing interval
         }
 
-        // Set new interval
         const interval = setInterval(() => {
           if (carousel) {
             carousel.scrollLeft += 1;
 
             // Reset scroll position when reaching the end
-            if (carousel.scrollLeft >= (carousel.scrollWidth - carousel.clientWidth)) {
+            if (carousel.scrollLeft >= carousel.scrollWidth - carousel.clientWidth) {
               carousel.scrollLeft = 0;
             }
           }
         }, 20);
-        
+
         setScrollInterval(interval);
       }
     };
 
-    // Start the carousel
+    // Start the carousel and setup hover events
     startCarousel();
 
-    // Pause carousel on hover
-    carousel?.addEventListener('mouseenter', () => setIsHovered(true));
-    carousel?.addEventListener('mouseleave', () => setIsHovered(false));
+    const handleMouseEnter = () => setIsHovered(true);
+    const handleMouseLeave = () => setIsHovered(false);
 
-    // Restart on hover state change
-    if (isHovered && scrollInterval) {
-      clearInterval(scrollInterval);
-      setScrollInterval(null);
-    } else if (!isHovered) {
-      startCarousel();
-    }
+    carousel?.addEventListener('mouseenter', handleMouseEnter);
+    carousel?.addEventListener('mouseleave', handleMouseLeave);
 
     // Cleanup event listeners and interval
     return () => {
       if (scrollInterval) {
         clearInterval(scrollInterval);
       }
-      carousel?.removeEventListener('mouseenter', () => setIsHovered(true));
-      carousel?.removeEventListener('mouseleave', () => setIsHovered(false));
+      carousel?.removeEventListener('mouseenter', handleMouseEnter);
+      carousel?.removeEventListener('mouseleave', handleMouseLeave);
     };
-  }, [isHovered, scrollInterval]);
+  }, [isHovered]);
 
   const affiliations: Affiliation[] = [
     { name: 'Government of India', logo: '/images/india.png' },
@@ -127,14 +116,14 @@ const Affiliations = () => {
 
         <div
           ref={carouselRef}
-          className="flex overflow-x-hidden py-4 sm:py-6 md:py-8 affiliation-animate opacity-0"
+          className="flex overflow-x-auto py-4 sm:py-6 md:py-8 affiliation-animate opacity-0"
           style={{ animationDelay: '0.4s' }}
         >
           <div className="flex space-x-4 sm:space-x-6 md:space-x-8 animate-scroll">
             {affiliations.map((affiliation, index) => (
-              <div 
-                key={index} 
-                className="min-w-[150px] sm:min-w-[180px] md:min-w-[200px] glass-card p-3 sm:p-4 flex flex-col items-center"
+              <div
+                key={index}
+                className="min-w-[160px] sm:min-w-[180px] md:min-w-[220px] glass-card p-3 sm:p-4 flex flex-col items-center mx-2"
               >
                 <img
                   src={affiliation.logo}
@@ -148,9 +137,9 @@ const Affiliations = () => {
 
             {/* Duplicate items for smooth infinite scrolling */}
             {affiliations.map((affiliation, index) => (
-              <div 
-                key={`dup-${index}`} 
-                className="min-w-[150px] sm:min-w-[180px] md:min-w-[200px] glass-card p-3 sm:p-4 flex flex-col items-center"
+              <div
+                key={`dup-${index}`}
+                className="min-w-[160px] sm:min-w-[180px] md:min-w-[220px] glass-card p-3 sm:p-4 flex flex-col items-center mx-2"
                 aria-hidden="true" // Hide duplicate items from screen readers
               >
                 <img

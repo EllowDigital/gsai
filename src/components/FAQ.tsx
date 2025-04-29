@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { useParallax } from '@/hooks/use-parallax';
@@ -81,7 +80,7 @@ const FAQ = () => {
             shadow
             border
           >
-            <div className="p-1">
+            <div className="p-4">
               <Accordion type="single" collapsible className="w-full">
                 {faqData.map((faq, index) => (
                   <AccordionItem

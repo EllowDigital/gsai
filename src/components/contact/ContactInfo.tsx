@@ -1,15 +1,15 @@
-
 import Card3D from "../ui/3d-card";
 
 const ContactInfo = () => {
   return (
-    <Card3D className="h-full" intensity={15} shadow glare>
-      <div className="p-8 h-full">
+    <Card3D className="h-full p-4 md:p-8" intensity={15} shadow glare>
+      <div className="h-full flex flex-col">
         <h3 className="text-2xl font-bold text-white mb-6">Get In Touch</h3>
 
         <div className="space-y-6">
-          <div className="flex items-start">
-            <div className="bg-gsai-red bg-opacity-20 p-3 rounded-full mr-4">
+          {/* Email */}
+          <div className="flex items-start space-x-4">
+            <div className="bg-gsai-red bg-opacity-20 p-3 rounded-full">
               <svg
                 className="w-6 h-6 text-gsai-red"
                 fill="none"
@@ -35,8 +35,9 @@ const ContactInfo = () => {
             </div>
           </div>
 
-          <div className="flex items-start">
-            <div className="bg-gsai-red bg-opacity-20 p-3 rounded-full mr-4">
+          {/* Phone */}
+          <div className="flex items-start space-x-4">
+            <div className="bg-gsai-red bg-opacity-20 p-3 rounded-full">
               <svg
                 className="w-6 h-6 text-gsai-red"
                 fill="none"
@@ -57,8 +58,9 @@ const ContactInfo = () => {
             </div>
           </div>
 
-          <div className="flex items-start">
-            <div className="bg-gsai-red bg-opacity-20 p-3 rounded-full mr-4">
+          {/* Address - First Branch */}
+          <div className="flex items-start space-x-4">
+            <div className="bg-gsai-red bg-opacity-20 p-3 rounded-full">
               <svg
                 className="w-6 h-6 text-gsai-red"
                 fill="none"
@@ -88,8 +90,9 @@ const ContactInfo = () => {
             </div>
           </div>
 
-          <div className="flex items-start">
-            <div className="bg-gsai-red bg-opacity-20 p-3 rounded-full mr-4">
+          {/* Address - Second Branch */}
+          <div className="flex items-start space-x-4">
+            <div className="bg-gsai-red bg-opacity-20 p-3 rounded-full">
               <svg
                 className="w-6 h-6 text-gsai-red"
                 fill="none"
@@ -125,7 +128,7 @@ const ContactInfo = () => {
           <h4 className="text-lg font-semibold text-white mb-4">
             Opening Hours
           </h4>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <p className="text-gray-400">Monday - Friday</p>
               <p className="text-white">6:00 AM - 9:00 PM</p>

@@ -1,23 +1,22 @@
-
 import { motion } from "framer-motion";
 
 const HeroScrollIndicator = () => {
   return (
-    <motion.div 
-      className="absolute bottom-4 sm:bottom-6 md:bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center"
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ 
-        delay: 1.2, 
-        duration: 0.4,
-        y: {
-          duration: 0.6,
-          repeat: Infinity,
-          repeatType: "reverse",
-          ease: "easeInOut"
-        }
+    <motion.div
+      className="absolute left-1/2 transform -translate-x-1/2 bottom-8 sm:bottom-12 md:bottom-16 flex flex-col items-center"
+      initial={{ opacity: 0 }}
+      animate={{
+        opacity: 1,
+        y: [0, 10, 0], // Bounce effect
       }}
-      aria-hidden="true" // This is decorative only
+      transition={{
+        delay: 1.2,
+        duration: 1.5,
+        repeat: Infinity,
+        repeatType: "loop",
+        ease: "easeInOut",
+      }}
+      aria-hidden="true"
     >
       <span className="text-xs text-white/80 mb-2 font-medium">Scroll Down</span>
       <svg

@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { useParallax } from "@/hooks/use-parallax";
 import ContactForm from "./contact/ContactForm";
@@ -33,11 +32,11 @@ const Contact = () => {
       id="contact"
       className="py-20 bg-gradient-to-b from-black to-gsai-gray-900"
     >
-      <div className="gsai-container">
+      <div className="gsai-container px-4 md:px-8">
         <div className="text-center mb-16">
           <h2
             ref={titleRef}
-            className="section-title text-white contact-animate text-4xl font-extrabold opacity-0"
+            className="section-title text-white contact-animate text-3xl md:text-4xl font-extrabold opacity-0"
           >
             Contact Us
           </h2>
@@ -50,6 +49,7 @@ const Contact = () => {
             Ready to begin your martial arts journey? Get in touch with us today.
           </p>
         </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <div
             className="contact-animate opacity-0"
@@ -64,7 +64,10 @@ const Contact = () => {
             <ContactForm />
           </div>
         </div>
-        <LocationMap />
+
+        <div className="mt-12">
+          <LocationMap />
+        </div>
       </div>
     </section>
   );

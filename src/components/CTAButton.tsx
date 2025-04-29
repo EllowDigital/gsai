@@ -1,4 +1,3 @@
-
 import { MouseEvent, useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import throttle from "lodash.throttle";
@@ -78,6 +77,7 @@ const CTAButton = ({
     transition-all duration-300 hover:shadow-xl
     ${variantStyles[variant]}
     ${className}
+    sm:px-8 sm:py-4 sm:text-lg
   `;
 
   const shineClasses = `
