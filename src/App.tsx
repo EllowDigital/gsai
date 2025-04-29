@@ -9,6 +9,12 @@ import { HelmetProvider } from 'react-helmet-async';
 import { ThemeProvider } from './components/ThemeProvider';
 import Preloader from './components/Preloader';
 import PWA from './pwa';
+// main.tsx or App.tsx
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+<ToastContainer position="top-right" autoClose={3000} />
+
 
 // Optimized lazy loading with priority
 const Index = lazy(() => import("./pages/Index"));

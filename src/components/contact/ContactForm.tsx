@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "react-toastify";
 import Card3D from "../ui/3d-card";
 
 const initialFormData = {
@@ -13,7 +13,6 @@ const initialFormData = {
 export type FormData = typeof initialFormData;
 
 const ContactForm = () => {
-  const { toast } = useToast();
   const [formData, setFormData] = useState(initialFormData);
   const [errors, setErrors] = useState<typeof formData>({ ...initialFormData });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -26,7 +25,6 @@ const ContactForm = () => {
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-
     if (errors[name as keyof typeof errors]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
@@ -34,7 +32,7 @@ const ContactForm = () => {
 
   const validateForm = () => {
     let isValid = true;
-    const newErrors: typeof errors = { ...initialFormData };
+    const newErrors = { ...initialFormData };
 
     if (!formData.name.trim()) {
       newErrors.name = "Name is required.";
@@ -68,11 +66,7 @@ const ContactForm = () => {
     e.preventDefault();
 
     if (!validateForm()) {
-      toast({
-        title: "Form Submission Failed",
-        description: "Please fix the errors in the form.",
-        variant: "destructive",
-      });
+      toast.error("Please fix the errors in the form.");
       return;
     }
 
@@ -80,62 +74,58 @@ const ContactForm = () => {
 
     try {
       const payload = new FormData();
-      Object.entries(formData).forEach(([key, value]) =>
-        payload.append(key, value)
-      );
+      Object.entries(formData).forEach(([key, value]) => {
+        payload.append(key, value);
+      });
 
-      // Add form submission configuration
       payload.append("_replyto", formData.email);
-      payload.append("_next", "https://ghatakgsai.netlify.app/");
       payload.append("_subject", "GSAI: New submission!");
-      payload.append("_cc", "sarwanyadav6174@email.com");
-      payload.append("_bcc", "ghatakgsai@email.com");
-      payload.append("_honeypot", "name");
-      payload.append("_honeypot", "message");
-      payload.append("_template", "table");
       payload.append(
         "_autoresponse",
         "Thank you for reaching out! We'll get back to you soon."
       );
-      payload.append("_blacklist", "spammy term, banned term");
-      payload.append("_captcha", "false");
 
-      const res = await fetch("https://formsubmit.co/ellowdigitals@gmail.com", {
-        method: "POST",
-        body: payload,
-        redirect: "manual",
-      });
+      const res = await fetch(
+        "https://formsubmit.co/ajax/ellowdigitals@gmail.com",
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+          },
+          body: payload,
+        }
+      );
 
-      console.log("FormSubmit response:", res);
+      const result = await res.json();
 
-      if (res.status === 200 || res.status === 302) {
-        toast({
-          title: "Success!",
-          description: `Thank you! We'll reach out soon regarding ${formData.program}.`,
-        });
-
+      if (res.ok) {
+        toast.success(
+          `Thank you! We'll reach out soon regarding ${formData.program}.`
+        );
         setFormData(initialFormData);
         setIsSuccess(true);
         setTimeout(() => setIsSuccess(false), 4000);
       } else {
-        throw new Error(`Submission failed: ${res.statusText}`);
+        throw new Error(result.message || "Submission failed.");
       }
     } catch (error) {
       console.error("Submission error:", error);
-      toast({
-        title: "Submission Error",
-        description: "Something went wrong. Please try again later.",
-        variant: "destructive",
-      });
+      toast.error("Something went wrong. Please try again later.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <Card3D className="w-full max-w-xl mx-auto p-6 sm:p-8 md:p-10" intensity={10} shadow>
+    <Card3D
+      className="w-full max-w-xl mx-auto p-6 sm:p-8 md:p-10"
+      intensity={10}
+      shadow
+    >
       <div className="space-y-6">
-        <h3 className="text-2xl font-bold text-white text-center sm:text-left">Send Us a Message</h3>
+        <h3 className="text-2xl font-bold text-white text-center sm:text-left">
+          Send Us a Message
+        </h3>
 
         {isSuccess && (
           <p className="text-green-400 font-semibold mb-4 text-center animate-fade-in">
@@ -144,62 +134,47 @@ const ContactForm = () => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="name" className="block text-gray-300 mb-2">
-              Your Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-md text-white focus:outline-none focus:border-gsai-red"
-              placeholder="Enter your name"
-              required
-            />
-            {errors.name && (
-              <p className="text-red-400 text-sm mt-1">{errors.name}</p>
-            )}
-          </div>
-
-          <div>
-            <label htmlFor="email" className="block text-gray-300 mb-2">
-              Email Address
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-md text-white focus:outline-none focus:border-gsai-red"
-              placeholder="Enter your email"
-              required
-            />
-            {errors.email && (
-              <p className="text-red-400 text-sm mt-1">{errors.email}</p>
-            )}
-          </div>
-
-          <div>
-            <label htmlFor="phone" className="block text-gray-300 mb-2">
-              Phone Number
-            </label>
-            <input
-              type="tel"
-              id="phone"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-md text-white focus:outline-none focus:border-gsai-red"
-              placeholder="Enter your phone number"
-              required
-            />
-            {errors.phone && (
-              <p className="text-red-400 text-sm mt-1">{errors.phone}</p>
-            )}
-          </div>
+          {[
+            {
+              label: "Your Name",
+              name: "name",
+              type: "text",
+              placeholder: "Enter your name",
+            },
+            {
+              label: "Email Address",
+              name: "email",
+              type: "email",
+              placeholder: "Enter your email",
+            },
+            {
+              label: "Phone Number",
+              name: "phone",
+              type: "tel",
+              placeholder: "Enter your phone number",
+            },
+          ].map(({ label, name, type, placeholder }) => (
+            <div key={name}>
+              <label htmlFor={name} className="block text-gray-300 mb-2">
+                {label}
+              </label>
+              <input
+                id={name}
+                name={name}
+                type={type}
+                value={formData[name as keyof FormData]}
+                onChange={handleChange}
+                className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-md text-white focus:outline-none focus:border-yellow-400"
+                placeholder={placeholder}
+                required
+              />
+              {errors[name as keyof typeof errors] && (
+                <p className="text-red-400 text-sm mt-1">
+                  {errors[name as keyof typeof errors]}
+                </p>
+              )}
+            </div>
+          ))}
 
           <div>
             <label htmlFor="program" className="block text-gray-300 mb-2">
@@ -210,7 +185,7 @@ const ContactForm = () => {
               name="program"
               value={formData.program}
               onChange={handleChange}
-              className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-md text-white focus:outline-none focus:border-gsai-red"
+              className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-md text-white focus:outline-none focus:border-yellow-400"
               required
             >
               {[
@@ -228,7 +203,7 @@ const ContactForm = () => {
                   key={index}
                   value={program === "Select a program" ? "" : program}
                   disabled={program === "Select a program"}
-                  style={{ color: "#8B0000" }}
+                  className="bg-gray-900 text-white"
                 >
                   {program}
                 </option>
@@ -249,19 +224,17 @@ const ContactForm = () => {
               value={formData.message}
               onChange={handleChange}
               rows={4}
-              className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-md text-white focus:outline-none focus:border-gsai-red"
+              className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-md text-white focus:outline-none focus:border-yellow-400"
               placeholder="Enter your message"
             ></textarea>
-            {errors.message && (
-              <p className="text-red-400 text-sm mt-1">{errors.message}</p>
-            )}
           </div>
 
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`gsai-btn w-full transition-opacity duration-300 ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""
-              }`}
+            className={`w-full px-4 py-2 rounded-md font-bold text-black bg-yellow-400 hover:bg-yellow-500 transition-opacity duration-300 ${
+              isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+            }`}
           >
             {isSubmitting ? "Sending..." : "Send Message"}
           </button>

@@ -2,6 +2,12 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 import './styles/glassmorphism.css';
+// main.tsx or App.tsx
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+<ToastContainer position="top-right" autoClose={3000} />
+
 
 const reportWebVitals = (metric: any) => {
     console.log(metric);

@@ -5,6 +5,7 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  background: #000;
 }
 
 /* Logo styles */
@@ -364,3 +365,4 @@ h2::after {
 .animate-float {
   animation: float 5s ease-in-out infinite;
 }
+
