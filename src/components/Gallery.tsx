@@ -86,16 +86,32 @@ const Gallery = () => {
   }, []);
 
   const galleryImages = [
+    // Major Events
     { src: '/images/slider.png', alt: 'National Martial Arts Games 2019' },
+    { src: '/images/slider5.png', alt: 'National Kalaripayattu Championship 2022' },
+    { src: '/images/gallery4.png', alt: 'Kalaripayattu Nationals 2022' },
+    { src: '/images/gallery5.png', alt: 'World Martial Arts Games' },
+  
+    // Prominent Figures
     { src: '/images/gallery1.png', alt: 'With Anurag Thakur Sir' },
     { src: '/images/gallery3.jpg', alt: "With Parul Chaudhary Ma'am" },
     { src: '/images/gallery3.png', alt: 'International Martial Arts Champion' },
-    { src: '/images/gallery4.png', alt: 'Kalaripayattu Nationals 2022' },
-    { src: '/images/gallery5.png', alt: 'World Martial Arts Games' },
+  
+    // Practice & Training
     { src: '/images/slider2.png', alt: 'Outdoor Training Session' },
-    { src: '/images/slider5.png', alt: 'National Kalaripayattu Championship 2022' },
-    { src: '/images/slider4.png', alt: 'In-depth Interview' },
+    { src: '/images/branch2.webp', alt: 'Branch 2: Outdoor Sunday Practice' },
+    { src: '/images/new1.webp', alt: 'Martial Arts Practice Session 1' },
+    { src: '/images/new2.webp', alt: 'Martial Arts Practice Session 2' },
+    { src: '/images/student.webp', alt: 'Our Student' },
+  
+    // Instructor Highlights
+    { src: '/images/new4.webp', alt: 'Our Instructor: Nitesh Yadav' },
+    { src: '/images/new3.webp', alt: 'Our Instructor: Nitesh Yadav (Portrait)' },
+  
+    // Media
+    { src: '/images/slider4.png', alt: 'In-depth Interview with Instructor' },
   ];
+  
 
   const openLightbox = (index: number) => {
     setCurrentIndex(index);

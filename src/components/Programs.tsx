@@ -28,9 +28,10 @@ const ProgramCard = ({ title, icon, description, index }: ProgramCardProps) => {
       style={{ animationDelay: cardAnimationDelay }}
       innerClassName="p-6 rounded-2xl flex flex-col h-full transition-all duration-500"
     >
-      <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-gradient-to-br from-gsai-red/30 to-black/40 rounded-xl group-hover:scale-105 transform-gpu transition-transform duration-300">
+      <div className="mt-6 w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-gradient-to-br from-gsai-red/30 to-black/40 rounded-xl group-hover:scale-105 transform-gpu transition-transform duration-300">
         {icon}
       </div>
+
       <h3 className="text-xl font-bold text-white mb-3 text-center relative">
         {title}
         <span className="absolute -bottom-1 left-0 w-0 group-hover:w-full h-0.5 bg-gradient-to-r from-gsai-red via-gsai-gold to-gsai-red transition-all duration-500"></span>
@@ -39,7 +40,7 @@ const ProgramCard = ({ title, icon, description, index }: ProgramCardProps) => {
 
       <div className="mt-6 pt-4 border-t border-white/10 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 text-center">
         <span className="text-sm text-gsai-gold inline-flex items-center justify-center">
-          Learn More
+          <a href='#contact' >Learn More</a>
           <FaArrowRight className="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" />
         </span>
       </div>
@@ -146,7 +147,7 @@ const Programs = () => {
             href="https://forms.gle/LTYn59kPWkQgC3VR7"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block px-6 py-3 text-white border border-gsai-red rounded-full hover:bg-gsai-red transition-all duration-300 program-animate opacity-0"
+            className="inline-block px-6 py-3 text-white border border-gsai-gold rounded-full hover:bg-gsai-gold transition-all duration-300 program-animate opacity-0"
             style={{ animationDelay: '0.9s' }}
           >
             Register Now

@@ -48,16 +48,16 @@ const About = () => {
         'Integrity: Maintaining high ethical standards in all actions'
       ],
     },
-    {
-      title: 'Our Achievements',
-      iconPath: "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2",
-      list: [
-        'Multiple National Championship titles in various martial arts disciplines',
-        'Recognized by the Sports Authority of India for excellence in sports training',
-        'Over 500 students trained with 100+ medal winners at state and national levels',
-        'Featured in national media for innovative training methodologies'
-      ],
-    },
+    // {
+    //   title: 'Our Achievements',
+    //   iconPath: "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2",
+    //   list: [
+    //     'Multiple National Championship titles in various martial arts disciplines',
+    //     'Recognized by the Sports Authority of India for excellence in sports training',
+    //     'Over 500 students trained with 100+ medal winners at state and national levels',
+    //     'Featured in national media for innovative training methodologies'
+    //   ],
+    // },
   ];
 
   return (
@@ -69,7 +69,7 @@ const About = () => {
           </h2>
           <div className="w-24 h-1 bg-gsai-red mx-auto mt-4 mb-8" />
           <p ref={paragraphRef} className="text-gray-300 max-w-2xl mx-auto about-animate opacity-0" data-delay="0.1s">
-            Established in 2019, Ghatak Sports Academy India™ is a premier martial arts academy dedicated to excellence in combat sports training and character development.
+            Established in 2025, Ghatak Sports Academy India™ is a premier martial arts academy dedicated to excellence in combat sports training and character development.
           </p>
         </div>
 

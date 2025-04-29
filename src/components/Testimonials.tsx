@@ -17,30 +17,30 @@ interface Testimonial {
 const testimonialsData: Testimonial[] = [
   {
     id: 1,
-    name: "John Doe",
+    name: "Shivansh",
     role: "Student",
     quote: "This is an amazing martial arts school!",
     rating: 5,
-    location: "New York, NY",
-    image: ""
+    location: "Lucknow, Uttar Pradesh",
+    image: "/placeholder.svg"
   },
   {
     id: 2,
-    name: "Jane Smith",
+    name: "Nitesh Yadav",
     role: "Instructor",
     quote: "Incredible training experience!",
-    rating: 4,
-    location: "Los Angeles, CA",
-    image: ""
+    rating: 5,
+    location: "Lucknow, Uttar Pradesh",
+    image: "/placeholder.svg"
   },
   {
     id: 3,
-    name: "Mary Johnson",
+    name: "R.K YADAV",
     role: "Alumni",
     quote: "The best martial arts experience I've ever had.",
     rating: 5,
-    location: "Chicago, IL",
-    image: ""
+    location: "Lucknow, Uttar Pradesh",
+    image: "/placeholder.svg"
   }
 ];
 
