@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
@@ -65,7 +66,8 @@ const Testimonials = () => {
   const [direction, setDirection] = useState(0);
   const containerRef = useScrollAnimation<HTMLDivElement>({
     threshold: 0.1,
-    animationType: "fade",
+    animationType: 'fade',
+    duration: 400
   });
 
   const [sortedTestimonials, setSortedTestimonials] = useState(testimonialsData);
@@ -121,7 +123,7 @@ const Testimonials = () => {
 
   const variants = {
     enter: (direction: number) => ({
-      x: direction > 0 ? 100 : -100,
+      x: direction > 0 ? 50 : -50,
       opacity: 0,
     }),
     center: {
@@ -129,7 +131,7 @@ const Testimonials = () => {
       opacity: 1,
     },
     exit: (direction: number) => ({
-      x: direction < 0 ? 100 : -100,
+      x: direction < 0 ? 50 : -50,
       opacity: 0,
     }),
   };

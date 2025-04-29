@@ -81,9 +81,9 @@ const HeroParticlesAdvanced: React.FC<HeroParticlesProps> = ({ parentRef }) => {
       if (!particlesRef.current || !rendererRef.current || !sceneRef.current || !cameraRef.current) return;
       
       const delta = clockRef.current.getDelta();
-      const positionAttr = particlesRef.current.geometry.getAttribute("position");
-      const velocityAttr = particlesRef.current.geometry.getAttribute("velocity");
-      const opacityAttr = particlesRef.current.geometry.getAttribute("opacity");
+      const positionAttr = particlesRef.current.geometry.getAttribute("position") as THREE.BufferAttribute;
+      const velocityAttr = particlesRef.current.geometry.getAttribute("velocity") as THREE.BufferAttribute;
+      const opacityAttr = particlesRef.current.geometry.getAttribute("opacity") as THREE.BufferAttribute;
 
       for (let i = 0; i < particleCount; i++) {
         positionAttr.array[i * 3] += velocityAttr.array[i * 3] * delta * 100;
@@ -134,8 +134,8 @@ const HeroParticlesAdvanced: React.FC<HeroParticlesProps> = ({ parentRef }) => {
       if (rendererRef.current) {
         rendererRef.current.dispose();
       }
-      if (sceneRef.current) {
-        sceneRef.current.clear();
+      if (sceneRef.current && particlesRef.current) {
+        sceneRef.current.remove(particlesRef.current);
       }
       particlesRef.current = null;
       rendererRef.current = null;

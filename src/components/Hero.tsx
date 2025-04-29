@@ -1,3 +1,4 @@
+
 import { useRef, useEffect, useState, useCallback } from "react";
 import HeroParticles from "./HeroParticles";
 import CTAButton from "./CTAButton";
@@ -51,7 +52,7 @@ const Hero = () => {
     <div
       id="hero"
       ref={heroRef}
-      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-black px-4 sm:px-8 lg:px-16" // Added padding for mobile responsiveness
+      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-black px-4 sm:px-8 lg:px-16"
     >
       <div className="absolute inset-0 z-0">
         <HeroParticles parentRef={heroRef} />
@@ -72,10 +73,6 @@ const Hero = () => {
         onMouseMove={contentEffect.handleMouseMove}
         className={`relative text-center z-40 flex flex-col items-center transition-all duration-1000 ease-in-out ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
           }`}
-        style={{
-          ...contentEffect.style,
-          transition: "transform 0.3s ease-out, opacity 1s ease, translate 1s ease",
-        }}
       >
         {/* Removed the glass-card and all associated styles */}
         <div className="w-full max-w-4xl mx-auto">
@@ -83,7 +80,7 @@ const Hero = () => {
           <HeroSubtitle />
 
           <div
-            className="transform-gpu hover:scale-110 transition-transform duration-300 mb-12" // Added bottom margin for spacing
+            className="transform-gpu transition-transform duration-300 mb-12"
             style={{
               animation: "float 3s ease-in-out infinite 0.4s",
               transform: `perspective(1000px) rotateY(${mousePosition.x * 0.05}deg) rotateX(${mousePosition.y * -0.05}deg)`,
