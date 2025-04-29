@@ -1,6 +1,13 @@
 import { useState, useEffect } from "react";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Menu } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+  SheetClose, // ✅ Added this import
+} from "@/components/ui/sheet";
+import { Menu, X } from "lucide-react"; // ✅ Also ensure X is imported for close icon
 import CTAButton from "./CTAButton";
 import { motion } from "framer-motion";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -34,7 +41,7 @@ const NavBar = () => {
     setIsOpen(false);
 
     if (!isHomePage) {
-      navigate('/', { state: { scrollTo: href.substring(1) } });
+      navigate("/", { state: { scrollTo: href.substring(1) } });
       return;
     }
 
@@ -52,7 +59,11 @@ const NavBar = () => {
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className={`sticky top-0 z-50 w-full transition-all duration-300 ${isScrolled ? "bg-black/80 backdrop-blur-lg shadow-xl" : "bg-transparent"}`}
+      className={`sticky top-0 z-50 w-full transition-all duration-300 ${
+        isScrolled
+          ? "bg-black/80 backdrop-blur-lg shadow-xl"
+          : "bg-transparent"
+      }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
         <Link
@@ -105,7 +116,7 @@ const NavBar = () => {
 
             <SheetContent
               side="right"
-              className="bg-black/95 border-gsai-red/20 text-white" // Ensure text is white for better contrast
+              className="bg-black/95 border-gsai-red/20 text-white"
               aria-labelledby="menu-header"
               aria-describedby="sheet-description"
             >
@@ -120,11 +131,15 @@ const NavBar = () => {
               </SheetClose>
 
               <SheetHeader>
-                <SheetTitle id="menu-header" className="text-white text-xl font-bold">
+                <SheetTitle
+                  id="menu-header"
+                  className="text-white text-xl font-bold"
+                >
                   Menu
                 </SheetTitle>
                 <p id="sheet-description" className="sr-only">
-                  Navigation menu. Use the buttons below to navigate through the site sections.
+                  Navigation menu. Use the buttons below to navigate through the
+                  site sections.
                 </p>
               </SheetHeader>
 
