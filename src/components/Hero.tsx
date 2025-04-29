@@ -53,10 +53,12 @@ const Hero = () => {
       ref={heroRef}
       className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-black px-4 sm:px-8 lg:px-16"
     >
+      {/* Background Particles */}
       <div className="absolute inset-0 z-0">
         <HeroParticles parentRef={heroRef} />
       </div>
 
+      {/* Parallax Gradient Overlay */}
       <div
         className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/60 to-black z-10"
         style={{
@@ -65,16 +67,20 @@ const Hero = () => {
         }}
       />
 
+      {/* Main Content */}
       <div
         ref={contentEffect.ref}
         onMouseEnter={contentEffect.handleMouseEnter}
         onMouseLeave={contentEffect.handleMouseLeave}
         onMouseMove={contentEffect.handleMouseMove}
-        className={`relative text-center z-40 flex flex-col items-center transition-all duration-1000 ease-in-out ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
+        className={`relative text-center z-40 flex flex-col items-center transition-all duration-1000 ease-in-out ${
+          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+        }`}
       >
         <div className="w-full max-w-7xl mx-auto">
           <HeroTitle />
           <HeroSubtitle />
+
           <div
             className="transform-gpu transition-transform duration-300 mb-16 sm:mb-20"
             style={{
@@ -87,8 +93,19 @@ const Hero = () => {
               href="https://forms.gle/LTYn59kPWkQgC3VR7"
               onClick={scrollToContact}
               icon={
-                <svg className="w-5 h-5 inline-block mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                <svg
+                  className="w-5 h-5 inline-block mr-1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
                 </svg>
               }
             />
@@ -96,12 +113,12 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Scroll Indicator positioned below CTA Button, centered at the bottom */}
-      <div className="absolute bottom-8 w-full flex justify-center z-30">
+      {/* Scroll Indicator - now truly centered */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30">
         <HeroScrollIndicator />
       </div>
 
-      {/* 3D floating decorative elements */}
+      {/* Decorative Floating Elements */}
       <div className="absolute hidden lg:block">
         <div
           className="absolute -top-20 -right-20 w-40 h-40 opacity-20"
