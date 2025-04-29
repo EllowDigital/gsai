@@ -105,10 +105,20 @@ const NavBar = () => {
 
             <SheetContent
               side="right"
-              className="bg-black/95 border-gsai-red/20"
-              aria-labelledby="menu-header" // Linking header for better accessibility
-              aria-describedby="sheet-description" // Describing the dialog content
+              className="bg-black/95 border-gsai-red/20 text-white" // Ensure text is white for better contrast
+              aria-labelledby="menu-header"
+              aria-describedby="sheet-description"
             >
+              {/* Close Button */}
+              <SheetClose asChild>
+                <button
+                  aria-label="Close"
+                  className="absolute top-4 right-4 text-white hover:text-gsai-red transition"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </SheetClose>
+
               <SheetHeader>
                 <SheetTitle id="menu-header" className="text-white text-xl font-bold">
                   Menu

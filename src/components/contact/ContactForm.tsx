@@ -80,13 +80,17 @@ const ContactForm = () => {
 
       payload.append("_replyto", formData.email);
       payload.append("_subject", "GSAI: New submission!");
+      payload.append("_template", "table");
+      payload.append("_autoresponse_subject", "Thank you for your message!");
+      payload.append("_cc", "sarwanyadav6174@gmail.com");
+      payload.append("_bcc", "ellowdigitals@gmail.com");
       payload.append(
         "_autoresponse",
         "Thank you for reaching out! We'll get back to you soon."
       );
 
       const res = await fetch(
-        "https://formsubmit.co/ajax/ellowdigitals@gmail.com",
+        "https://formsubmit.co/ajax/ghatakgsai@gmail.com",
         {
           method: "POST",
           headers: {
