@@ -1,0 +1,368 @@
+
+/* Root container */
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  background: #000;
+}
+
+/* Logo styles */
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms ease, transform 300ms ease;
+}
+
+.logo:hover,
+.logo.react:hover {
+  transform: scale(1.05);
+}
+
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+
+/* Logo spin animation (only on preference) */
+@keyframes logo-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+/* Card component */
+.card {
+  padding: 2em;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 300ms ease, box-shadow 300ms ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Documentation text */
+.read-the-docs {
+  color: #888;
+}
+
+/* Animation for martial artist - optimized for performance */
+@keyframes martial-artist {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(10deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.animate-martial-artist {
+  animation: martial-artist 2s ease-in-out infinite;
+  will-change: transform;
+}
+
+@media (max-width: 768px) {
+  .animate-martial-artist {
+    animation: none;
+  }
+}
+
+/* SVG scaling - optimized */
+svg {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  transition: transform 0.3s ease;
+  will-change: transform;
+}
+
+svg:hover {
+  transform: scale(1.05);
+}
+
+/* Martial artist animation - improved performance */
+@keyframes martial-kick {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(30deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes arm-swing {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(45deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.martial-artist {
+  animation: martial-kick 2s ease-in-out infinite;
+  will-change: transform;
+}
+
+.arm-right,
+.arm-left {
+  animation: arm-swing 2s ease-in-out infinite;
+  will-change: transform;
+}
+
+.leg-kicking {
+  animation: martial-kick 2s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Contact text animation - optimized */
+.contact-animate {
+  text-decoration: none;
+  color: #fff;
+  transition: color 0.3s ease;
+}
+
+.contact-animate:hover {
+  color: #61dafb;
+}
+
+/* Global styles for h2 */
+h2,
+h2::before,
+h2::after {
+  all: unset;
+  display: block;
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: white;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* Clean up underlines for h2 */
+.section-title,
+.contact-animate,
+.section-title::before,
+.section-title::after {
+  text-decoration: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  background-image: none !important;
+}
+
+.section-title {
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  -webkit-text-fill-color: inherit !important;
+}
+
+/* Fade-in animation - improved for smoother performance */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out forwards;
+  will-change: opacity, transform;
+}
+
+/* Improved fade-in-up animation */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.3s ease-out forwards;
+  will-change: opacity, transform;
+}
+
+/* GSai Container */
+.gsai-container {
+  max-width: 7xl;
+  margin: 0 auto;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1024px) {
+  .gsai-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .gsai-container {
+    padding: 1rem;
+  }
+}
+
+/* Hover effects for cards, buttons, and sections - optimized */
+.card,
+.button,
+.section {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  will-change: transform, box-shadow;
+}
+
+.card:hover,
+.button:hover,
+.section:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+* {
+  transition: transform 0.3s ease-in-out;
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.6), 0 0 20px rgba(255, 0, 0, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.8), 0 0 30px rgba(255, 0, 0, 0.6);
+  }
+}
+
+.hover\\:animate-pulse-glow:hover {
+  animation: pulse-glow 2s infinite;
+}
+
+/* New reveal animations */
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal-slide-up {
+  animation: slide-up 0.5s ease-out forwards;
+  will-change: opacity, transform;
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.reveal-scale {
+  animation: scale-in 0.4s ease-out forwards;
+  will-change: opacity, transform;
+}
+
+/* Lazy load placeholder animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+.lazy-placeholder {
+  animation: pulse 1.5s ease-in-out infinite;
+  background: linear-gradient(90deg, #333 0%, #444 50%, #333 100%);
+  background-size: 200% 100%;
+}
+
+/* Button shine effect animation */
+@keyframes shine {
+  from {
+    left: -100%;
+  }
+  to {
+    left: 200%;
+  }
+}
+
+.animate-shine {
+  animation: shine 1.5s linear infinite;
+}
+
+/* Button hover animations */
+.btn-hover-float {
+  transition: transform 0.3s ease;
+}
+
+.btn-hover-float:hover {
+  transform: translateY(-6px);
+}
+
+/* Button click effect */
+.btn-click {
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.btn-click:active {
+  transform: scale(0.95);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Float animation for elements */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
+
