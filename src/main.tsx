@@ -1,13 +1,10 @@
+
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 import './styles/glassmorphism.css';
-// main.tsx or App.tsx
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-<ToastContainer position="top-right" autoClose={3000} />
-
 
 const reportWebVitals = (metric: any) => {
     console.log(metric);
@@ -27,7 +24,12 @@ if (rootElement) {
     try {
         const startTime = performance.now();
         const root = createRoot(rootElement);
-        root.render(<App />);
+        root.render(
+            <>
+                <App />
+                <ToastContainer position="top-right" autoClose={3000} />
+            </>
+        );
 
         const renderTime = performance.now() - startTime;
         console.log(`Initial render took ${renderTime.toFixed(2)}ms`);

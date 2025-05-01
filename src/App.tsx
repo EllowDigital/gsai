@@ -9,8 +9,8 @@ import { HelmetProvider } from 'react-helmet-async';
 import { ThemeProvider } from './components/ThemeProvider';
 import Preloader from './components/Preloader';
 import PWA from './pwa';
-// Import ToastContainer
-import { ToastContainer, toast } from "react-toastify";
+// Import toast notification but not the container (moved to main.tsx)
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Optimized lazy loading with priority
@@ -158,7 +158,7 @@ const App = () => {
             <TooltipProvider>
               <Toaster />
               <Sonner />
-              <ToastContainer position="top-right" autoClose={5000} />
+              {/* Removed ToastContainer from here as it's now in main.tsx */}
               <BrowserRouter>
                 <Suspense fallback={
                   <div className="w-full h-screen flex items-center justify-center bg-black">
