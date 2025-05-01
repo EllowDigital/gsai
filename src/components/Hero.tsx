@@ -76,7 +76,7 @@ const Hero = () => {
     <div
       id="hero"
       ref={heroRef}
-      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-black w-full px-4 sm:px-6 lg:px-8"
+      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-black w-full px-0 m-0"
     >
       {/* Background Particles - optimized for better performance */}
       <div className="absolute inset-0 z-0">
@@ -100,16 +100,16 @@ const Hero = () => {
         onMouseEnter={contentEffect.handleMouseEnter}
         onMouseLeave={contentEffect.handleMouseLeave}
         onMouseMove={contentEffect.handleMouseMove}
-        className={`relative text-center z-40 flex flex-col items-center transition-all duration-1000 ease-in-out ${
+        className={`relative text-center z-40 flex flex-col items-center justify-center w-full max-w-screen transition-all duration-1000 ease-in-out ${
           isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
         }`}
       >
-        <div className="w-full max-w-7xl mx-auto">
+        <div className="w-full max-w-7xl mx-auto flex flex-col items-center justify-center">
           <HeroTitle />
           <HeroSubtitle />
 
           <div
-            className="transform-gpu transition-transform duration-300 mb-12 sm:mb-16"
+            className="transform-gpu transition-transform duration-300 mb-12 sm:mb-16 w-full flex justify-center"
             style={{
               animation: "float 3s ease-in-out infinite 0.4s",
               transform: isMobile 

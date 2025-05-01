@@ -61,9 +61,9 @@ const Index = () => {
         <meta name="theme-color" content="#000000" />
       </Helmet>
 
-      <div className="font-sans min-h-screen bg-black w-full overflow-x-hidden">
+      <div className="font-sans min-h-screen bg-black w-full max-w-[100vw] overflow-x-hidden">
         <NavBar />
-        <main id="main-content" className="w-full">
+        <main id="main-content" className="w-full overflow-x-hidden">
           <div className="relative z-10 w-full">
             <Hero />
           </div>

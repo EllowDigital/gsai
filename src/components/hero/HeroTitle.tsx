@@ -14,7 +14,7 @@ const HeroTitle = () => {
     : "0 0 20px rgba(255, 255, 255, 0.2)";
   
   return (
-    <h1 className={`${titleSize} font-bold text-white mb-2 sm:mb-4 text-center px-2 sm:px-4 w-full`}>
+    <h1 className={`${titleSize} font-bold text-white mb-2 sm:mb-4 text-center px-2 sm:px-4 mx-auto w-full`}>
       {/* Top line: Welcome to */}
       <div
         className="relative block mx-auto transform-gpu"

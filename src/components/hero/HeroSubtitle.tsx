@@ -11,7 +11,7 @@ const HeroSubtitle = () => {
     
   return (
     <p
-      className="text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 mb-3 sm:mb-4 md:mb-6 lg:mb-8 max-w-xs sm:max-w-sm md:max-w-2xl lg:max-w-3xl mx-auto px-2 sm:px-4"
+      className="text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 mb-3 sm:mb-4 md:mb-6 lg:mb-8 w-full max-w-xs sm:max-w-sm md:max-w-2xl lg:max-w-3xl mx-auto px-2 sm:px-4 text-center"
       style={{
         animation: "fade-in 0.8s ease-out forwards",
         textShadow: textShadowStyle,
