@@ -2,14 +2,21 @@ import Card3D from "../ui/3d-card";
 
 const ContactInfo = () => {
   return (
-    <Card3D className="h-full p-4 md:p-8" intensity={15} shadow glare>
+    <Card3D
+      className="h-full p-4 sm:p-6 md:p-8 rounded-2xl border border-white/20 shadow-xl backdrop-blur-sm bg-black/60"
+      intensity={15}
+      shadow
+      glare
+    >
       <div className="h-full flex flex-col">
-        <h3 className="text-2xl font-bold text-white mb-6">Get In Touch</h3>
+        <h3 className="text-2xl md:text-3xl font-bold text-gsai-gold mb-6">
+          Get In Touch
+        </h3>
 
         <div className="space-y-6">
           {/* Email */}
-          <div className="flex items-start space-x-4">
-            <div className="bg-gsai-red bg-opacity-20 p-3 rounded-full">
+          <div className="flex items-start gap-4">
+            <div className="bg-gsai-red/20 p-3 rounded-full">
               <svg
                 className="w-6 h-6 text-gsai-red"
                 fill="none"
@@ -25,10 +32,10 @@ const ContactInfo = () => {
               </svg>
             </div>
             <div>
-              <p className="text-sm text-gray-400">Email</p>
+              <p className="text-sm text-gsai-gold">Email</p>
               <a
                 href="mailto:ghatakgsai@gmail.com"
-                className="text-white hover:text-gsai-red"
+                className="text-white hover:text-gsai-red break-all"
               >
                 ghatakgsai@gmail.com
               </a>
@@ -36,8 +43,8 @@ const ContactInfo = () => {
           </div>
 
           {/* Phone */}
-          <div className="flex items-start space-x-4">
-            <div className="bg-gsai-red bg-opacity-20 p-3 rounded-full">
+          <div className="flex items-start gap-4">
+            <div className="bg-gsai-red/20 p-3 rounded-full">
               <svg
                 className="w-6 h-6 text-gsai-red"
                 fill="none"
@@ -53,14 +60,16 @@ const ContactInfo = () => {
               </svg>
             </div>
             <div>
-              <p className="text-sm text-gray-400">Phone</p>
-              <p className="text-white">+91-639-413-5988 | +91-835-506-2424</p>
+              <p className="text-sm text-gsai-gold">Phone</p>
+              <p className="text-white">
+                +91-639-413-5988 | +91-835-506-2424
+              </p>
             </div>
           </div>
 
-          {/* Address - First Branch */}
-          <div className="flex items-start space-x-4">
-            <div className="bg-gsai-red bg-opacity-20 p-3 rounded-full">
+          {/* Address 1 */}
+          <div className="flex items-start gap-4">
+            <div className="bg-gsai-red/20 p-3 rounded-full">
               <svg
                 className="w-6 h-6 text-gsai-red"
                 fill="none"
@@ -82,17 +91,17 @@ const ContactInfo = () => {
               </svg>
             </div>
             <div>
-              <p className="text-sm text-gray-400">Address</p>
-              <p className="text-white">
+              <p className="text-sm text-gsai-gold">Address</p>
+              <p className="text-white text-sm">
                 Naubasta Pulia, Takrohi Road, Amrai Gaon, Indira Nagar, Lucknow,
                 Uttar Pradesh - 226028 (Head Branch)
               </p>
             </div>
           </div>
 
-          {/* Address - Second Branch */}
-          <div className="flex items-start space-x-4">
-            <div className="bg-gsai-red bg-opacity-20 p-3 rounded-full">
+          {/* Address 2 */}
+          <div className="flex items-start gap-4">
+            <div className="bg-gsai-red/20 p-3 rounded-full">
               <svg
                 className="w-6 h-6 text-gsai-red"
                 fill="none"
@@ -114,8 +123,8 @@ const ContactInfo = () => {
               </svg>
             </div>
             <div>
-              <p className="text-sm text-gray-400">Address</p>
-              <p className="text-white">
+              <p className="text-sm text-gsai-gold">Address</p>
+              <p className="text-white text-sm">
                 Fitness & Fun Arena (TCC): Hardasi Kheda, Deva Road, near Baba
                 Hospital Road, City Colony, Matiyari, Lucknow, Uttar Pradesh
                 (Second Branch)
@@ -125,16 +134,16 @@ const ContactInfo = () => {
         </div>
 
         <div className="mt-8">
-          <h4 className="text-lg font-semibold text-white mb-4">
+          <h4 className="text-lg font-semibold text-gsai-gold mb-4">
             Opening Hours
           </h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <p className="text-gray-400">Monday - Friday</p>
+              <p className="text-gsai-gold">Monday - Friday</p>
               <p className="text-white">6:00 AM - 9:00 PM</p>
             </div>
             <div>
-              <p className="text-gray-400">Saturday - Sunday</p>
+              <p className="text-gsai-gold">Saturday - Sunday</p>
               <p className="text-white">8:00 AM - 6:00 PM</p>
             </div>
           </div>

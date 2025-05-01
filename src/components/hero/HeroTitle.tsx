@@ -1,43 +1,42 @@
-
 import { useDeviceType } from "@/hooks/use-device-type";
 
 const HeroTitle = () => {
   const deviceType = useDeviceType();
-  
-  // Apply different styles based on device type
-  const titleSize = deviceType === "mobile" 
-    ? "text-3xl xs:text-4xl" 
-    : "text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl";
-  
-  const textShadow = deviceType === "mobile"
-    ? "0 0 10px rgba(255, 255, 255, 0.2)"
-    : "0 0 20px rgba(255, 255, 255, 0.2)";
-  
+
+  const titleSize =
+    deviceType === "mobile"
+      ? "text-3xl xs:text-4xl"
+      : "text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl";
+
+  const textShadow =
+    deviceType === "mobile"
+      ? "0 0 10px rgba(255, 255, 255, 0.2)"
+      : "0 0 20px rgba(255, 255, 255, 0.2)";
+
   return (
-    <h1 className={`${titleSize} font-bold text-white mb-2 sm:mb-4 text-center px-2 sm:px-4 mx-auto w-full`}>
-      {/* Top line: Welcome to */}
+    <div className="text-center px-2 sm:px-4 mx-auto w-full">
+      {/* Top Line */}
       <div
-        className="relative block mx-auto transform-gpu"
+        className={`${titleSize} font-bold text-white mb-2 sm:mb-4`}
         style={{
           animation: "float 3s ease-in-out infinite",
-          textShadow: textShadow,
+          textShadow,
         }}
       >
         Welcome to
       </div>
 
-      {/* Academy Name */}
+      {/* Title */}
       <div
-        className="mt-1 sm:mt-2 relative mx-auto transform-gpu"
+        className={`${titleSize} font-bold mt-1 sm:mt-2 relative inline-block text-center leading-tight`}
         style={{
           animation: "float 3s ease-in-out infinite",
           animationDelay: "0.2s",
           textShadow: "2px 2px 10px rgba(0, 0, 0, 0.8)",
         }}
       >
-        {/* Ghatak */}
         <span
-          className="text-gsai-red inline-block"
+          className="text-gsai-red"
           style={{
             textShadow: "0 0 15px rgba(255, 0, 0, 0.5)",
             animation: "pulse-glow 2s infinite",
@@ -46,14 +45,12 @@ const HeroTitle = () => {
           Ghatak{" "}
         </span>
 
-        {/* Sports Academy */}
-        <span className="text-white mx-1 sm:mx-2 inline-block">
-          Sports<br className="sm:hidden" /> Academy
+        <span className="text-white">
+          Sports<br className="sm:hidden" /> Academy{" "}
         </span>
 
-        {/* India™ */}
         <span
-          className="text-gsai-gold inline-block"
+          className="text-gsai-gold"
           style={{
             textShadow: "0 0 15px rgba(255, 204, 0, 0.5)",
             animation: "pulse-glow 2.5s infinite",
@@ -62,10 +59,10 @@ const HeroTitle = () => {
           India™
         </span>
 
-        {/* Decorative star - only show on larger screens */}
+        {/* Star icon */}
         {deviceType !== "mobile" && (
           <div
-            className="absolute -top-4 -right-4 w-8 h-8 sm:-top-6 sm:-right-6 sm:w-12 sm:h-12 opacity-70 hidden md:block"
+            className="absolute -top-4 -right-4 sm:-top-6 sm:-right-6 w-8 h-8 sm:w-12 sm:h-12 opacity-70 hidden md:block"
             style={{
               animation: "float 3s ease-in-out infinite",
               animationDelay: "0.5s",
@@ -84,7 +81,7 @@ const HeroTitle = () => {
           </div>
         )}
       </div>
-    </h1>
+    </div>
   );
 };
 
