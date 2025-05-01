@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import Card3D from './ui/3d-card';
 import {
@@ -25,10 +26,11 @@ const ProgramCard = ({ title, icon, description, index }: ProgramCardProps) => {
   return (
     <Card3D
       className="glass-card program-animate opacity-0 group bg-black/20 h-full"
-      style={{ animationDelay: cardAnimationDelay }}
       innerClassName="p-6 rounded-2xl flex flex-col h-full transition-all duration-500"
+      // Apply animation delay through inline styling on the child element instead of the Card3D prop
     >
-      <div className="mt-6 w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-gradient-to-br from-gsai-red/30 to-black/40 rounded-xl group-hover:scale-105 transform-gpu transition-transform duration-300">
+      <div className="mt-6 w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-gradient-to-br from-gsai-red/30 to-black/40 rounded-xl group-hover:scale-105 transform-gpu transition-transform duration-300"
+           style={{ animationDelay: cardAnimationDelay }}>
         {icon}
       </div>
 
@@ -40,7 +42,7 @@ const ProgramCard = ({ title, icon, description, index }: ProgramCardProps) => {
 
       <div className="mt-6 pt-4 border-t border-white/10 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 text-center">
         <span className="text-sm text-gsai-gold inline-flex items-center justify-center">
-          <a href='#contact' >Learn More</a>
+          <a href='#contact'>Learn More</a>
           <FaArrowRight className="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" />
         </span>
       </div>
@@ -117,9 +119,9 @@ const Programs = () => {
   ];
 
   return (
-    <section id="programs" className="py-20 bg-black text-white">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
+    <section id="programs" className="py-16 sm:py-20 bg-black text-white px-4 sm:px-6">
+      <div className="container mx-auto">
+        <div className="text-center mb-12 sm:mb-16">
           <h2 className="text-3xl md:text-4xl font-bold program-animate opacity-0">Our Programs</h2>
           <div className="w-24 h-1 bg-gsai-red mx-auto mt-4 mb-6"></div>
           <p
@@ -130,7 +132,7 @@ const Programs = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
           {programsData.map((program, index) => (
             <ProgramCard
               key={program.title}
@@ -142,7 +144,7 @@ const Programs = () => {
           ))}
         </div>
 
-        <div className="text-center mt-16">
+        <div className="text-center mt-12 sm:mt-16">
           <a
             href="https://forms.gle/LTYn59kPWkQgC3VR7"
             target="_blank"

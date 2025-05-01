@@ -1,150 +1,162 @@
 
-import React, { useEffect, useRef } from "react";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useEffect, useRef } from "react";
 import * as THREE from "three";
+import { useTheme } from "@/components/ThemeProvider";
+import { useDeviceType } from "@/hooks/use-device-type";
 
-interface HeroParticlesProps {
+interface HeroParticlesAdvancedProps {
   parentRef: React.RefObject<HTMLDivElement>;
 }
 
-const HeroParticlesAdvanced: React.FC<HeroParticlesProps> = ({ parentRef }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const isMobile = useIsMobile();
+const HeroParticlesAdvanced = ({ parentRef }: HeroParticlesAdvancedProps) => {
+  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
-  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
-  const particlesRef = useRef<THREE.Points | null>(null);
-  const clockRef = useRef<THREE.Clock>(new THREE.Clock());
+  const frameIdRef = useRef<number>(0);
+  const { theme } = useTheme();
+  const deviceType = useDeviceType();
   
-  const particleSize = 4;
-  const whiteColor = new THREE.Color(1.0, 1.0, 1.0);
+  // Adjust particle count based on device type for better performance
+  const getParticleCount = () => {
+    switch (deviceType) {
+      case "mobile": return 75;
+      case "tablet": return 150;
+      default: return 250;
+    }
+  };
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const parent = parentRef.current;
-
-    if (!canvas || !parent) return;
-
-    const width = parent.offsetWidth;
-    const height = parent.offsetHeight;
-
-    // Initialize Scene
-    sceneRef.current = new THREE.Scene();
-    cameraRef.current = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-    cameraRef.current.position.z = 300;
-    rendererRef.current = new THREE.WebGLRenderer({ canvas, alpha: true });
-    rendererRef.current.setSize(width, height);
-
-    // Create Particles
-    const particleCount = isMobile ? 1000 : 2000;
-    const geometry = new THREE.BufferGeometry();
-    const positions = new Float32Array(particleCount * 3);
-    const velocities = new Float32Array(particleCount * 3);
-    const opacities = new Float32Array(particleCount);
-    const colors = new Float32Array(particleCount * 3);
-
-    // Set particles to white color
-    for (let i = 0; i < particleCount; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 400;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 400;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 400;
-
-      velocities[i * 3] = (Math.random() - 0.5) * 0.5;
-      velocities[i * 3 + 1] = (Math.random() - 0.5) * 0.5;
-      velocities[i * 3 + 2] = (Math.random() - 0.5) * 0.5;
-
-      opacities[i] = Math.random();
-
-      colors[i * 3] = whiteColor.r;
-      colors[i * 3 + 1] = whiteColor.g;
-      colors[i * 3 + 2] = whiteColor.b;
-    }
-
-    geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-    geometry.setAttribute("velocity", new THREE.BufferAttribute(velocities, 3));
-    geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
-    geometry.setAttribute("opacity", new THREE.BufferAttribute(opacities, 1));
-
-    const material = new THREE.PointsMaterial({
-      size: particleSize,
-      vertexColors: true,
-      transparent: true,
-      opacity: 1,
-      blending: THREE.AdditiveBlending,
+    if (!parentRef.current) return;
+    
+    // Initialize scene
+    const scene = new THREE.Scene();
+    sceneRef.current = scene;
+    
+    // Initialize camera with responsive FOV
+    const aspectRatio = window.innerWidth / window.innerHeight;
+    const camera = new THREE.PerspectiveCamera(75, aspectRatio, 0.1, 1000);
+    camera.position.z = 5;
+    cameraRef.current = camera;
+    
+    // Initialize renderer with better performance settings
+    const renderer = new THREE.WebGLRenderer({ 
+      alpha: true,
+      antialias: deviceType === "desktop", // Only use antialias on desktop
+      precision: deviceType === "mobile" ? "mediump" : "highp", // Lower precision on mobile
+      powerPreference: "high-performance"
     });
-
-    particlesRef.current = new THREE.Points(geometry, material);
-    sceneRef.current.add(particlesRef.current);
-
-    // Animation
+    renderer.setPixelRatio(window.devicePixelRatio > 1 ? 2 : 1); // Limit pixel ratio
+    renderer.setSize(parentRef.current.clientWidth, parentRef.current.clientHeight);
+    parentRef.current.appendChild(renderer.domElement);
+    rendererRef.current = renderer;
+    
+    // Create particles
+    const particleCount = getParticleCount();
+    const particles = new THREE.BufferGeometry();
+    const positions = new Float32Array(particleCount * 3);
+    const colors = new Float32Array(particleCount * 3);
+    const sizes = new Float32Array(particleCount);
+    
+    const primaryColor = theme === "dark" ? new THREE.Color(0xea384c) : new THREE.Color(0xea384c);
+    const secondaryColor = theme === "dark" ? new THREE.Color(0xdaa520) : new THREE.Color(0xdaa520);
+    const tertiaryColor = theme === "dark" ? new THREE.Color(0xffffff) : new THREE.Color(0xffffff);
+    
+    const colorOptions = [primaryColor, secondaryColor, tertiaryColor];
+    
+    for (let i = 0; i < particleCount; i++) {
+      // Position
+      positions[i * 3] = (Math.random() - 0.5) * 10;     // x
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 10; // y
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 10; // z
+      
+      // Color
+      const color = colorOptions[Math.floor(Math.random() * colorOptions.length)];
+      colors[i * 3] = color.r;
+      colors[i * 3 + 1] = color.g;
+      colors[i * 3 + 2] = color.b;
+      
+      // Size
+      sizes[i] = Math.random() * 0.1 + 0.05;
+    }
+    
+    // Set attributes properly
+    particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    particles.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    particles.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+    
+    // Create material
+    const particleMaterial = new THREE.PointsMaterial({
+      size: 0.1,
+      sizeAttenuation: true,
+      transparent: true,
+      vertexColors: true,
+      opacity: 0.8,
+      depthTest: false,
+    });
+    
+    // Create points
+    const particleSystem = new THREE.Points(particles, particleMaterial);
+    scene.add(particleSystem);
+    
+    // Animation function
     const animate = () => {
-      if (!particlesRef.current || !rendererRef.current || !sceneRef.current || !cameraRef.current) return;
+      if (!particleSystem) return;
       
-      const delta = clockRef.current.getDelta();
-      const positionAttr = particlesRef.current.geometry.getAttribute("position") as THREE.BufferAttribute;
-      const velocityAttr = particlesRef.current.geometry.getAttribute("velocity") as THREE.BufferAttribute;
-      const opacityAttr = particlesRef.current.geometry.getAttribute("opacity") as THREE.BufferAttribute;
-
+      particleSystem.rotation.x += 0.0003;
+      particleSystem.rotation.y += 0.0005;
+      
+      // Safely update positions for animation
+      const positionAttribute = particles.getAttribute('position') as THREE.BufferAttribute;
+      const positionArray = positionAttribute.array;
+      
       for (let i = 0; i < particleCount; i++) {
-        positionAttr.array[i * 3] += velocityAttr.array[i * 3] * delta * 100;
-        positionAttr.array[i * 3 + 1] += velocityAttr.array[i * 3 + 1] * delta * 100;
-        positionAttr.array[i * 3 + 2] += velocityAttr.array[i * 3 + 2] * delta * 100;
-
-        opacityAttr.array[i] = Math.abs(
-          Math.sin(clockRef.current.getElapsedTime() * 2 + i * 0.1)
-        );
+        const i3 = i * 3;
+        
+        // Safe way to update Float32Array
+        positionArray[i3 + 1] += Math.sin(Date.now() * 0.001 + i * 0.1) * 0.001;
       }
-
-      positionAttr.needsUpdate = true;
-      opacityAttr.needsUpdate = true;
-      rendererRef.current.render(sceneRef.current, cameraRef.current);
-      requestAnimationFrame(animate);
+      
+      positionAttribute.needsUpdate = true;
+      
+      // Render the scene
+      renderer.render(scene, camera);
+      frameIdRef.current = requestAnimationFrame(animate);
     };
-
+    
+    // Start animation
     animate();
-
-    // Mouse Interaction
-    const handleMouseMove = (event: MouseEvent) => {
-      if (!particlesRef.current) return;
-      const x = (event.clientX / width - 0.5) * 200;
-      const y = -(event.clientY / height - 0.5) * 200;
-      particlesRef.current.position.set(x, y, 0);
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-
-    // Handle resize
+    
+    // Handle window resize
     const handleResize = () => {
-      if (!parent || !cameraRef.current || !rendererRef.current) return;
+      if (!parentRef.current || !camera || !renderer) return;
       
-      const newWidth = parent.offsetWidth;
-      const newHeight = parent.offsetHeight;
+      const width = parentRef.current.clientWidth;
+      const height = parentRef.current.clientHeight;
       
-      cameraRef.current.aspect = newWidth / newHeight;
-      cameraRef.current.updateProjectionMatrix();
-      rendererRef.current.setSize(newWidth, newHeight);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      
+      renderer.setSize(width, height);
     };
-
+    
     window.addEventListener('resize', handleResize);
-
-    // Clean up
+    
+    // Cleanup function
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener('resize', handleResize);
+      cancelAnimationFrame(frameIdRef.current);
+      
       if (rendererRef.current) {
         rendererRef.current.dispose();
+        
+        if (parentRef.current && rendererRef.current.domElement) {
+          parentRef.current.removeChild(rendererRef.current.domElement);
+        }
       }
-      if (sceneRef.current && particlesRef.current) {
-        sceneRef.current.remove(particlesRef.current);
-      }
-      particlesRef.current = null;
-      rendererRef.current = null;
-      cameraRef.current = null;
-      sceneRef.current = null;
     };
-  }, [parentRef, isMobile]);
-
-  return <canvas ref={canvasRef} className="absolute inset-0 z-0" />;
+  }, [parentRef, theme, deviceType]);
+  
+  return null;
 };
 
 export default HeroParticlesAdvanced;

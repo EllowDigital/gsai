@@ -9,12 +9,9 @@ import { HelmetProvider } from 'react-helmet-async';
 import { ThemeProvider } from './components/ThemeProvider';
 import Preloader from './components/Preloader';
 import PWA from './pwa';
-// main.tsx or App.tsx
-import { ToastContainer } from "react-toastify";
+// Import ToastContainer
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-<ToastContainer position="top-right" autoClose={3000} />
-
 
 // Optimized lazy loading with priority
 const Index = lazy(() => import("./pages/Index"));
@@ -39,6 +36,20 @@ const queryClient = new QueryClient({
 const App = () => {
   const [showPreloader, setShowPreloader] = useState(true);
   const [contentLoaded, setContentLoaded] = useState(false);
+  const [deviceWidth, setDeviceWidth] = useState(window.innerWidth);
+
+  // Handle resize events for responsive layout
+  useEffect(() => {
+    const handleResize = () => {
+      setDeviceWidth(window.innerWidth);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     // Check if it's a page reload
@@ -75,23 +86,24 @@ const App = () => {
       }
     });
 
-    // Shorter minimum wait time
+    // Shorter minimum wait time - even shorter on mobile devices
+    const waitTime = deviceWidth < 768 ? 500 : 800;
     setTimeout(() => {
       minWaitComplete = true;
       if (loadedCount === preloadImages.length) {
         setShowPreloader(false);
         setTimeout(() => setContentLoaded(true), 100);
       }
-    }, 800); // Reduced from 1500ms to 800ms
+    }, waitTime);
 
-    // Shorter fallback timer
+    // Shorter fallback timer - even shorter on mobile devices
     const fallbackTimer = setTimeout(() => {
       setShowPreloader(false);
       setTimeout(() => setContentLoaded(true), 100);
-    }, 1500); // Reduced from 2500ms to 1500ms
+    }, deviceWidth < 768 ? 1200 : 1500);
 
     return () => clearTimeout(fallbackTimer);
-  }, []);
+  }, [deviceWidth]);
 
   // Performance metrics collection
   useEffect(() => {
@@ -119,6 +131,24 @@ const App = () => {
     }
   }, [contentLoaded]);
 
+  // Warning if build:dev script is missing
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'development') {
+      console.warn("IMPORTANT: The package.json file is missing a 'build:dev' script. This script is required for Lovable to build the project. Please add a 'build:dev' script with the command: 'vite build --mode development'");
+      
+      // Use toast notification if available
+      try {
+        toast.warning("Missing 'build:dev' script in package.json. Please add it for better development experience.", {
+          position: "top-right",
+          autoClose: 10000,
+          hideProgressBar: false,
+        });
+      } catch (e) {
+        // Silent catch if toast isn't available
+      }
+    }
+  }, []);
+
   return (
     <HelmetProvider>
       <ThemeProvider>
@@ -128,6 +158,7 @@ const App = () => {
             <TooltipProvider>
               <Toaster />
               <Sonner />
+              <ToastContainer position="top-right" autoClose={5000} />
               <BrowserRouter>
                 <Suspense fallback={
                   <div className="w-full h-screen flex items-center justify-center bg-black">

@@ -1,6 +1,12 @@
+
+import { useDeviceType } from "@/hooks/use-device-type";
+
 const HeroTitle = () => {
+  const deviceType = useDeviceType();
+  const isMobile = deviceType === "mobile";
+  
   return (
-    <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white mb-4 text-center px-4">
+    <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white mb-2 sm:mb-4 text-center px-2 sm:px-4">
       {/* Top line: Welcome to */}
       <div
         className="relative block mx-auto transform-gpu"
@@ -14,7 +20,7 @@ const HeroTitle = () => {
 
       {/* Academy Name */}
       <div
-        className="mt-2 relative mx-auto transform-gpu"
+        className="mt-1 sm:mt-2 relative mx-auto transform-gpu"
         style={{
           animation: "float 3s ease-in-out infinite",
           animationDelay: "0.2s",
@@ -23,26 +29,26 @@ const HeroTitle = () => {
       >
         {/* Ghatak */}
         <span
-          className="text-gsai-red"
+          className="text-gsai-red inline-block"
           style={{
             textShadow: "0 0 15px rgba(255, 0, 0, 0.5)",
             animation: "pulse-glow 2s infinite",
-            display: "inline-block",
           }}
         >
           Ghatak{" "}
         </span>
 
         {/* Sports Academy */}
-        <span className="text-white mx-2">Sports Academy</span>
+        <span className="text-white mx-1 sm:mx-2 inline-block">
+          Sports<br className="sm:hidden" /> Academy
+        </span>
 
         {/* India™ */}
         <span
-          className="text-gsai-gold"
+          className="text-gsai-gold inline-block"
           style={{
             textShadow: "0 0 15px rgba(255, 204, 0, 0.5)",
             animation: "pulse-glow 2.5s infinite",
-            display: "inline-block",
           }}
         >
           India™
@@ -50,7 +56,7 @@ const HeroTitle = () => {
 
         {/* Decorative star */}
         <div
-          className="absolute -top-6 -right-6 w-12 h-12 opacity-70 hidden md:block"
+          className="absolute -top-4 -right-4 w-8 h-8 sm:-top-6 sm:-right-6 sm:w-12 sm:h-12 opacity-70 hidden md:block"
           style={{
             animation: "float 3s ease-in-out infinite",
             animationDelay: "0.5s",

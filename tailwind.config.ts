@@ -1,3 +1,4 @@
+
 import { type Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
 
@@ -11,6 +12,7 @@ const config: Config = {
       center: true,
       padding: "2rem",
       screens: {
+        xs: "400px",  // Added extra small breakpoint for tiny mobile screens
         sm: "640px",
         md: "768px",
         lg: "1024px",
@@ -20,6 +22,10 @@ const config: Config = {
     },
 
     extend: {
+      screens: {
+        'xs': '400px', // New breakpoint for very small mobile devices
+      },
+      
       colors: {
         // Global tokens
         border: "hsl(var(--border))",

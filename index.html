@@ -1,10 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <!-- Charset & Viewport -->
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, shrink-to-fit=no, viewport-fit=cover">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
   <!-- Title & Description -->
@@ -137,6 +138,8 @@
       padding: 0;
       background: #000;
       height: 100%;
+      width: 100%;
+      overflow-x: hidden;
     }
 
     #initial-preloader {
@@ -153,11 +156,11 @@
     }
 
     #initial-preloader>div {
-      width: 80px;
-      height: 80px;
-      border: 10px solid transparent;
-      border-top: 10px solid #ffcc00;
-      border-bottom: 10px solid #ff0000;
+      width: 60px;
+      height: 60px;
+      border: 8px solid transparent;
+      border-top: 8px solid #ffcc00;
+      border-bottom: 8px solid #ff0000;
       border-radius: 50%;
       animation: spin 1.5s linear infinite;
     }
@@ -181,6 +184,21 @@
       clip: rect(0 0 0 0);
       white-space: nowrap;
       border: 0;
+    }
+
+    /* Add responsive base styles */
+    @media (max-width: 640px) {
+      #initial-preloader>div {
+        width: 50px;
+        height: 50px;
+        border-width: 6px;
+      }
+    }
+
+    /* Define XS breakpoint for very small mobile devices */
+    @media (max-width: 400px) {
+      .xs\:text-base { font-size: 1rem; }
+      .xs\:text-4xl { font-size: 2.25rem; }
     }
   </style>
 </head>

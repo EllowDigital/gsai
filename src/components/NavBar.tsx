@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import {
   Sheet,
@@ -5,13 +6,14 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-  SheetClose, // ✅ Added this import
+  SheetClose,
 } from "@/components/ui/sheet";
-import { Menu, X } from "lucide-react"; // ✅ Also ensure X is imported for close icon
+import { Menu, X } from "lucide-react";
 import CTAButton from "./CTAButton";
 import { motion } from "framer-motion";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
+import { useDeviceType } from "@/hooks/use-device-type";
 
 const NAV_LINKS = [
   { label: "About", href: "#about" },
@@ -28,6 +30,8 @@ const NavBar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const isHomePage = location.pathname === "/";
+  const deviceType = useDeviceType();
+  const isMobile = deviceType === "mobile";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -65,18 +69,18 @@ const NavBar = () => {
           : "bg-transparent"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex items-center justify-between">
         <Link
           to="/"
-          className="flex items-center gap-3 group"
+          className="flex items-center gap-2 sm:gap-3 group"
           aria-label="Homepage"
         >
           <img
             src="/favicon_io/android-chrome-192x192.png"
             alt="GSAI Logo"
-            className="h-10 w-10 rounded-full object-cover shadow-lg transition-transform group-hover:scale-105"
+            className="h-8 w-8 sm:h-10 sm:w-10 rounded-full object-cover shadow-lg transition-transform group-hover:scale-105"
           />
-          <span className="font-extrabold text-lg sm:text-xl text-white drop-shadow-sm whitespace-nowrap">
+          <span className="font-extrabold text-base sm:text-lg text-white drop-shadow-sm whitespace-nowrap">
             <span className="text-gsai-red">G</span>
             <span className="text-gsai-gold">SA</span>
             <span className="text-white">I</span>
@@ -84,13 +88,13 @@ const NavBar = () => {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex gap-8 items-center">
+        <nav className="hidden md:flex gap-4 lg:gap-8 items-center">
           {NAV_LINKS.map(({ label, href }) => (
             <Button
               key={href}
               onClick={() => handleNavClick(href)}
               variant="ghost"
-              className="text-gray-300 hover:text-black hover:bg-white font-medium transition-colors relative px-3 py-2 h-auto after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-gsai-red after:left-0 after:-bottom-1 after:scale-x-0 hover:after:scale-x-100 after:origin-bottom-right hover:after:origin-bottom-left after:transition-transform after:duration-300"
+              className="text-gray-300 hover:text-black hover:bg-white font-medium transition-colors relative px-2 lg:px-3 py-1 lg:py-2 h-auto after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-gsai-red after:left-0 after:-bottom-1 after:scale-x-0 hover:after:scale-x-100 after:origin-bottom-right hover:after:origin-bottom-left after:transition-transform after:duration-300"
             >
               {label}
             </Button>
@@ -99,6 +103,7 @@ const NavBar = () => {
             label="Join Now"
             href="https://forms.gle/LTYn59kPWkQgC3VR7"
             variant="primary"
+            className="ml-2"
           />
         </nav>
 
@@ -116,7 +121,7 @@ const NavBar = () => {
 
             <SheetContent
               side="right"
-              className="bg-black/95 border-gsai-red/20 text-white"
+              className="bg-black/95 border-gsai-red/20 text-white w-[80vw] max-w-sm"
               aria-labelledby="menu-header"
               aria-describedby="sheet-description"
             >
@@ -154,7 +159,7 @@ const NavBar = () => {
                     key={href}
                     onClick={() => handleNavClick(href)}
                     variant="ghost"
-                    className="text-left justify-start text-gray-300 hover:text-gsai-red text-lg transition-colors flex items-center gap-2 w-full px-2 py-1 rounded-lg hover:bg-white/30 h-auto"
+                    className="text-left justify-start text-gray-300 hover:text-gsai-red text-lg transition-colors flex items-center gap-2 w-full px-2 py-3 rounded-lg hover:bg-white/10 h-auto"
                   >
                     {label}
                   </Button>
