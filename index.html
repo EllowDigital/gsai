@@ -4,7 +4,8 @@
 <head>
   <!-- Charset & Viewport -->
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, shrink-to-fit=no, viewport-fit=cover">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=5, shrink-to-fit=no, viewport-fit=cover">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
   <!-- Title & Description -->
@@ -183,7 +184,6 @@
       border: 0;
     }
 
-    /* Add responsive base styles */
     @media (max-width: 640px) {
       #initial-preloader>div {
         width: 50px;
@@ -192,24 +192,21 @@
       }
     }
 
-    /* Define XS breakpoint for very small mobile devices */
     @media (max-width: 400px) {
-      .xs\:text-base { font-size: 1rem; }
-      .xs\:text-4xl { font-size: 2.25rem; }
+      .xs\:text-base {
+        font-size: 1rem;
+      }
+
+      .xs\:text-4xl {
+        font-size: 2.25rem;
+      }
     }
   </style>
-  <script type="module" crossorigin src="/assets/index-BWOeB41O.js"></script>
+  <script type="module" crossorigin src="/assets/index-BpYL6Ii-.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/index-mx0TOORX.css">
 <link rel="manifest" href="/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/registerSW.js"></script></head>
 
 <body role="document" class="overflow-x-hidden">
-  <!-- Skip to content link for accessibility
-    <a
-      href="#main-content"
-      class="visually-hidden focus:not-visually-hidden bg-gsai-red text-white py-2 px-4 fixed top-0 left-0 z-50"
-      >Skip to content</a
-    > -->
-
   <!-- Preloader -->
   <div id="initial-preloader" aria-live="polite" aria-label="Loading site...">
     <div></div>
@@ -242,8 +239,7 @@
         const pagePerformance = {
           pageLoad: performance.now(),
           domContentLoaded: performance.timing
-            ? performance.timing.domContentLoadedEventEnd -
-            performance.timing.navigationStart
+            ? performance.timing.domContentLoadedEventEnd - performance.timing.navigationStart
             : 0,
         };
         console.log("Performance metrics:", pagePerformance);
