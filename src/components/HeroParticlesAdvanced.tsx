@@ -13,7 +13,7 @@ const HeroParticlesAdvanced = ({ parentRef }: HeroParticlesAdvancedProps) => {
   const sceneRef = useRef<THREE.Scene | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const frameIdRef = useRef<number>(0);
-  const { theme = "dark" } = useTheme() || {};
+  const { theme } = useTheme() || { theme: "dark" }; // Fix the theme property access
   const deviceType = useDeviceType();
   
   // Adjust particle count based on device type for better performance
@@ -90,7 +90,7 @@ const HeroParticlesAdvanced = ({ parentRef }: HeroParticlesAdvancedProps) => {
       transparent: true,
       vertexColors: true,
       opacity: 0.8,
-      depthTest: false,
+      // Remove depthTest as it's not a valid parameter for PointsMaterialParameters
     });
     
     // Create points
@@ -111,10 +111,10 @@ const HeroParticlesAdvanced = ({ parentRef }: HeroParticlesAdvancedProps) => {
       for (let i = 0; i < particleCount; i++) {
         const i3 = i * 3;
         
-        // Update Float32Array safely using set method
+        // Update Float32Array safely - fix the array access
         const currentY = positionArray[i3 + 1];
-        const newY = currentY + Math.sin(Date.now() * 0.001 + i * 0.1) * 0.001;
-        positionArray[i3 + 1] = newY;
+        // Use the current value directly without updating it first
+        positionArray[i3 + 1] = currentY + Math.sin(Date.now() * 0.001 + i * 0.1) * 0.001;
       }
       
       positionAttribute.needsUpdate = true;

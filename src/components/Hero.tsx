@@ -76,7 +76,7 @@ const Hero = () => {
     <div
       id="hero"
       ref={heroRef}
-      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-black px-4 sm:px-6 lg:px-8"
+      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-black w-full px-4 sm:px-6 lg:px-8"
     >
       {/* Background Particles - optimized for better performance */}
       <div className="absolute inset-0 z-0">
