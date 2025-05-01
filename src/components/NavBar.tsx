@@ -1,13 +1,5 @@
-
 import { useState, useEffect } from "react";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-  SheetClose,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Menu, X } from "lucide-react";
 import CTAButton from "./CTAButton";
 import { motion } from "framer-motion";
@@ -42,14 +34,12 @@ const NavBar = () => {
 
   const handleNavClick = (href: string) => {
     setIsOpen(false);
-    
-    // If not on homepage, navigate to homepage with the target section
+
     if (!isHomePage) {
       navigate("/", { state: { scrollTo: href.substring(1) } });
       return;
     }
-    
-    // If on homepage, scroll to the section
+
     setTimeout(() => {
       const element = document.getElementById(href.substring(1));
       if (element) {
@@ -61,7 +51,6 @@ const NavBar = () => {
     }, 100);
   };
 
-  // Apply responsive styles based on device type
   const logoSize = deviceType === "mobile" ? "h-8 w-8" : "h-10 w-10";
   const logoTextSize = deviceType === "mobile" ? "text-base" : "text-lg";
 
@@ -70,18 +59,13 @@ const NavBar = () => {
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className={`sticky top-0 z-50 w-full transition-all duration-300 ${
-        isScrolled
+      className={`sticky top-0 z-50 w-full transition-all duration-300 ${isScrolled
           ? "bg-black/80 backdrop-blur-lg shadow-xl"
           : "bg-transparent"
-      }`}
+        }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex items-center justify-between">
-        <Link
-          to="/"
-          className="flex items-center gap-2 sm:gap-3 group"
-          aria-label="Homepage"
-        >
+        <Link to="/" className="flex items-center gap-2 sm:gap-3 group" aria-label="Homepage">
           <img
             src="/favicon_io/android-chrome-192x192.png"
             alt="GSAI Logo"
@@ -118,10 +102,7 @@ const NavBar = () => {
         <div className="md:hidden">
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
-              <button
-                aria-label="Open mobile menu"
-                className="text-white hover:text-gray-300 transition p-2"
-              >
+              <button aria-label="Open mobile menu" className="text-white hover:text-gray-300 transition p-2">
                 <Menu className="w-6 h-6" />
               </button>
             </SheetTrigger>
@@ -132,7 +113,6 @@ const NavBar = () => {
               aria-labelledby="menu-header"
               aria-describedby="sheet-description"
             >
-              {/* Close Button */}
               <SheetClose asChild>
                 <button
                   aria-label="Close"
@@ -143,15 +123,11 @@ const NavBar = () => {
               </SheetClose>
 
               <SheetHeader>
-                <SheetTitle
-                  id="menu-header"
-                  className="text-white text-xl font-bold"
-                >
+                <SheetTitle id="menu-header" className="text-white text-xl font-bold">
                   Menu
                 </SheetTitle>
                 <p id="sheet-description" className="sr-only">
-                  Navigation menu. Use the buttons below to navigate through the
-                  site sections.
+                  Navigation menu. Use the buttons below to navigate through the site sections.
                 </p>
               </SheetHeader>
 
@@ -171,11 +147,6 @@ const NavBar = () => {
                     {label}
                   </Button>
                 ))}
-                <CTAButton
-                  label="Join Now"
-                  href="https://forms.gle/LTYn59kPWkQgC3VR7"
-                  variant="primary"
-                />
               </motion.nav>
             </SheetContent>
           </Sheet>
