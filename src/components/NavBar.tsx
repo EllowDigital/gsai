@@ -42,19 +42,23 @@ const NavBar = () => {
 
   const handleNavClick = (href: string) => {
     setIsOpen(false);
-
+    
+    // If not on homepage, navigate to homepage with the target section
     if (!isHomePage) {
       navigate("/", { state: { scrollTo: href.substring(1) } });
       return;
     }
-
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }
+    
+    // If on homepage, scroll to the section
+    setTimeout(() => {
+      const element = document.getElementById(href.substring(1));
+      if (element) {
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    }, 100);
   };
 
   // Apply responsive styles based on device type
