@@ -31,7 +31,6 @@ const NavBar = () => {
   const navigate = useNavigate();
   const isHomePage = location.pathname === "/";
   const deviceType = useDeviceType();
-  const isMobile = deviceType === "mobile";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -58,6 +57,10 @@ const NavBar = () => {
     }
   };
 
+  // Apply responsive styles based on device type
+  const logoSize = deviceType === "mobile" ? "h-8 w-8" : "h-10 w-10";
+  const logoTextSize = deviceType === "mobile" ? "text-base" : "text-lg";
+
   return (
     <motion.header
       initial={{ opacity: 0, y: -10 }}
@@ -78,9 +81,9 @@ const NavBar = () => {
           <img
             src="/favicon_io/android-chrome-192x192.png"
             alt="GSAI Logo"
-            className="h-8 w-8 sm:h-10 sm:w-10 rounded-full object-cover shadow-lg transition-transform group-hover:scale-105"
+            className={`${logoSize} rounded-full object-cover shadow-lg transition-transform group-hover:scale-105`}
           />
-          <span className="font-extrabold text-base sm:text-lg text-white drop-shadow-sm whitespace-nowrap">
+          <span className={`font-extrabold ${logoTextSize} text-white drop-shadow-sm whitespace-nowrap`}>
             <span className="text-gsai-red">G</span>
             <span className="text-gsai-gold">SA</span>
             <span className="text-white">I</span>

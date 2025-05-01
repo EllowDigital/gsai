@@ -3,16 +3,24 @@ import { useDeviceType } from "@/hooks/use-device-type";
 
 const HeroTitle = () => {
   const deviceType = useDeviceType();
-  const isMobile = deviceType === "mobile";
+  
+  // Apply different styles based on device type
+  const titleSize = deviceType === "mobile" 
+    ? "text-3xl xs:text-4xl" 
+    : "text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl";
+  
+  const textShadow = deviceType === "mobile"
+    ? "0 0 10px rgba(255, 255, 255, 0.2)"
+    : "0 0 20px rgba(255, 255, 255, 0.2)";
   
   return (
-    <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white mb-2 sm:mb-4 text-center px-2 sm:px-4">
+    <h1 className={`${titleSize} font-bold text-white mb-2 sm:mb-4 text-center px-2 sm:px-4`}>
       {/* Top line: Welcome to */}
       <div
         className="relative block mx-auto transform-gpu"
         style={{
           animation: "float 3s ease-in-out infinite",
-          textShadow: "0 0 20px rgba(255, 255, 255, 0.2)",
+          textShadow: textShadow,
         }}
       >
         Welcome to
@@ -54,25 +62,27 @@ const HeroTitle = () => {
           India™
         </span>
 
-        {/* Decorative star */}
-        <div
-          className="absolute -top-4 -right-4 w-8 h-8 sm:-top-6 sm:-right-6 sm:w-12 sm:h-12 opacity-70 hidden md:block"
-          style={{
-            animation: "float 3s ease-in-out infinite",
-            animationDelay: "0.5s",
-          }}
-        >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            className="w-full h-full text-gsai-gold"
+        {/* Decorative star - only show on larger screens */}
+        {deviceType !== "mobile" && (
+          <div
+            className="absolute -top-4 -right-4 w-8 h-8 sm:-top-6 sm:-right-6 sm:w-12 sm:h-12 opacity-70 hidden md:block"
+            style={{
+              animation: "float 3s ease-in-out infinite",
+              animationDelay: "0.5s",
+            }}
           >
-            <path
-              d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
-              fill="currentColor"
-            />
-          </svg>
-        </div>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              className="w-full h-full text-gsai-gold"
+            >
+              <path
+                d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                fill="currentColor"
+              />
+            </svg>
+          </div>
+        )}
       </div>
     </h1>
   );

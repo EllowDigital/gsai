@@ -57,7 +57,7 @@ const Hero = () => {
 
   useEffect(() => {
     window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("touchmove", handleTouchMove);
+    window.addEventListener("touchmove", handleTouchMove, { passive: true });
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("touchmove", handleTouchMove);
@@ -142,10 +142,8 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Scroll Indicator - truly centered */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30">
-        <HeroScrollIndicator />
-      </div>
+      {/* Scroll Indicator */}
+      <HeroScrollIndicator />
 
       {/* Decorative Floating Elements - only show on larger devices */}
       {!isMobile && (
