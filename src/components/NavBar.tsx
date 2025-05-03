@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Menu, X } from "lucide-react";
@@ -34,21 +35,28 @@ const NavBar = () => {
 
   const handleNavClick = (href: string) => {
     setIsOpen(false);
-
+    
+    // Extract the section ID from the href (remove the leading #)
+    const sectionId = href.substring(1);
+    
     if (!isHomePage) {
-      navigate("/", { state: { scrollTo: href.substring(1) } });
+      navigate("/", { state: { scrollTo: sectionId } });
       return;
     }
 
-    setTimeout(() => {
-      const element = document.getElementById(href.substring(1));
-      if (element) {
+    // Find the element and scroll to it
+    const element = document.getElementById(sectionId);
+    if (element) {
+      // Use a small timeout to ensure the DOM is ready
+      setTimeout(() => {
         element.scrollIntoView({
           behavior: "smooth",
           block: "start",
         });
-      }
-    }, 100);
+      }, 100);
+    } else {
+      console.error(`Section with ID "${sectionId}" not found`);
+    }
   };
 
   const logoSize = deviceType === "mobile" ? "h-8 w-8" : "h-10 w-10";
@@ -138,14 +146,15 @@ const NavBar = () => {
                 transition={{ duration: 0.3 }}
               >
                 {NAV_LINKS.map(({ label, href }) => (
-                  <Button
-                    key={href}
-                    onClick={() => handleNavClick(href)}
-                    variant="ghost"
-                    className="text-left justify-start text-gray-300 hover:text-gsai-red text-lg transition-colors flex items-center gap-2 w-full px-2 py-3 rounded-lg hover:bg-white/10 h-auto"
-                  >
-                    {label}
-                  </Button>
+                  <SheetClose key={href} asChild>
+                    <Button
+                      onClick={() => handleNavClick(href)}
+                      variant="ghost"
+                      className="text-left justify-start text-gray-300 hover:text-gsai-red text-lg transition-colors flex items-center gap-2 w-full px-2 py-3 rounded-lg hover:bg-white/10 h-auto"
+                    >
+                      {label}
+                    </Button>
+                  </SheetClose>
                 ))}
               </motion.nav>
             </SheetContent>
