@@ -177,7 +177,7 @@ const Footer = () => {
               className="hover:underline transition-colors duration-300"
               style={{ color: colors.red.DEFAULT }}
             >
-              EllowDigitals
+              EllowDigital
             </a>
           </p>
         </div>
