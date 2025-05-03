@@ -1,3 +1,4 @@
+
 import { RefObject } from "react";
 import HeroParticlesSimple from "./HeroParticlesSimple";
 import HeroParticlesVanilla from "./HeroParticlesVanilla";
@@ -8,21 +9,17 @@ interface HeroParticlesProps {
   parentRef: RefObject<HTMLDivElement>;
 }
 
-export interface ParticleProps {
-  parentRef: RefObject<HTMLDivElement>;
-}
-
 const HeroParticles = ({ parentRef }: HeroParticlesProps) => {
   const deviceType = useDeviceType(); // returns "mobile" | "tablet" | "desktop"
 
   switch (deviceType) {
     case "mobile":
-      return <HeroParticlesSimple parentRef={parentRef} />;
+      return <HeroParticlesSimple />;
     case "tablet":
-      return <HeroParticlesVanilla parentRef={parentRef} />;
+      return <HeroParticlesVanilla />;
     case "desktop":
     default:
-      return <HeroParticlesAdvanced parentRef={parentRef} />;
+      return <HeroParticlesAdvanced />;
   }
 };
 

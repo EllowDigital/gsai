@@ -5,17 +5,25 @@ import { cn } from "@/lib/utils";
 export interface Card3DProps {
   children: React.ReactNode;
   className?: string;
-  innerClassName?: string; // Added this property
+  innerClassName?: string; 
   rotationIntensity?: number;
   depthIntensity?: number;
+  shadow?: boolean;
+  glare?: boolean;
+  border?: boolean;
+  intensity?: number;
 }
 
 const Card3D = ({
   children,
   className,
-  innerClassName, // Added this parameter
+  innerClassName,
   rotationIntensity = 10,
   depthIntensity = 10,
+  shadow = false,
+  glare = false,
+  border = false,
+  intensity = 10,
 }: Card3DProps) => {
   const [isHovered, setIsHovered] = React.useState(false);
   const [rotation, setRotation] = React.useState({ x: 0, y: 0 });
@@ -31,12 +39,14 @@ const Card3D = ({
       const mouseX = event.clientX;
       const mouseY = event.clientY;
 
-      const rotateY = ((mouseX - centerX) / (rect.width / 2)) * rotationIntensity;
-      const rotateX = ((mouseY - centerY) / (rect.height / 2)) * -rotationIntensity;
+      // Use either rotationIntensity or intensity (for backward compatibility)
+      const rotateIntensity = rotationIntensity || intensity;
+      const rotateY = ((mouseX - centerX) / (rect.width / 2)) * rotateIntensity;
+      const rotateX = ((mouseY - centerY) / (rect.height / 2)) * -rotateIntensity;
 
       setRotation({ x: rotateX, y: rotateY });
     },
-    [rotationIntensity]
+    [rotationIntensity, intensity]
   );
 
   const handleMouseLeave = React.useCallback(() => {
@@ -57,6 +67,7 @@ const Card3D = ({
     transform,
     transition: `transform ${transitionDuration} ease-out`,
     transformStyle: "preserve-3d" as const,
+    boxShadow: shadow && isHovered ? "0 25px 50px -12px rgba(0, 0, 0, 0.25)" : undefined,
   };
 
   const contentStyleProps = {
@@ -67,13 +78,21 @@ const Card3D = ({
     transformStyle: "preserve-3d" as const,
   };
 
+  let cardClasses = cn(
+    "card-3d w-full rounded-xl bg-transparent",
+    border && "border border-gray-200 dark:border-gray-800",
+    className
+  );
+
+  if (glare) {
+    cardClasses += " relative overflow-hidden";
+    // Note: We would implement glare effect here if needed
+  }
+
   return (
     <div
       ref={cardRef}
-      className={cn(
-        "card-3d w-full rounded-xl bg-transparent",
-        className
-      )}
+      className={cardClasses}
       style={cardStyleProps}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
@@ -85,6 +104,16 @@ const Card3D = ({
       >
         {children}
       </div>
+      {glare && isHovered && (
+        <div 
+          className="absolute inset-0 pointer-events-none z-10"
+          style={{
+            background: "linear-gradient(105deg, transparent 20%, rgba(255, 255, 255, 0.15) 40%, rgba(255, 255, 255, 0.2) 60%, transparent 80%)",
+            transform: `translateX(${rotation.y * 3}px) translateY(${rotation.x * 3}px)`,
+            transition: "transform 0.2s ease-out",
+          }}
+        />
+      )}
     </div>
   );
 };

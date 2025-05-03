@@ -38,10 +38,11 @@ const HeroParticlesAdvanced = () => {
     // Create arrays for positions, velocities, and colors
     const positions = new Float32Array(particleCount * 3);
     const velocities = new Float32Array(particleCount * 3);
-    const colors = new Float32Array(particleCount * 3);
+    const particleColors = new Float32Array(particleCount * 3);
     
-    const redColor = new THREE.Color(colors.red.DEFAULT);
-    const goldColor = new THREE.Color(colors.gold.DEFAULT);
+    // Define colors for particles using THREE.Color
+    const redColor = new THREE.Color(0xea384c); // Using hex value directly
+    const goldColor = new THREE.Color(0xDAA520); // Using hex value directly
 
     for (let i = 0; i < particleCount * 3; i += 3) {
       // Position
@@ -56,15 +57,15 @@ const HeroParticlesAdvanced = () => {
       
       // Color - alternate between red and gold
       const color = Math.random() > 0.5 ? redColor : goldColor;
-      colors[i] = color.r;
-      colors[i + 1] = color.g;
-      colors[i + 2] = color.b;
+      particleColors[i] = color.r;
+      particleColors[i + 1] = color.g;
+      particleColors[i + 2] = color.b;
     }
     
     // Add attributes to geometry
     particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     particles.setAttribute('velocity', new THREE.BufferAttribute(velocities, 3));
-    particles.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    particles.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
 
     // Create material
     const particleMaterial = new THREE.PointsMaterial({
@@ -129,7 +130,7 @@ const HeroParticlesAdvanced = () => {
         mountRef.current.innerHTML = '';
       }
     };
-  }, [colors]);
+  }, []);
 
   return (
     <div 
