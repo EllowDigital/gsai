@@ -1,16 +1,12 @@
 
-import { RefObject } from "react";
 import HeroParticlesSimple from "./HeroParticlesSimple";
 import HeroParticlesVanilla from "./HeroParticlesVanilla";
 import HeroParticlesAdvanced from "./HeroParticlesAdvanced";
-import { useDeviceType } from "@/hooks/use-device-type"; // Custom hook to detect device type
+import { useDeviceType } from "@/hooks/use-device-type";
 
-interface HeroParticlesProps {
-  parentRef: RefObject<HTMLDivElement>;
-}
-
-const HeroParticles = ({ parentRef }: HeroParticlesProps) => {
-  const deviceType = useDeviceType(); // returns "mobile" | "tablet" | "desktop"
+// No need for props as we'll handle the div reference internally in each component
+const HeroParticles = () => {
+  const deviceType = useDeviceType();
 
   switch (deviceType) {
     case "mobile":

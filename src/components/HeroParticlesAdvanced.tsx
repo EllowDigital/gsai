@@ -1,11 +1,9 @@
 
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { useTheme } from './ThemeProvider';
 
 const HeroParticlesAdvanced = () => {
   const mountRef = useRef<HTMLDivElement>(null);
-  const { colors } = useTheme();
 
   useEffect(() => {
     // Create scene
@@ -23,6 +21,7 @@ const HeroParticlesAdvanced = () => {
     // Create renderer
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
+    // Use renderer.setClearColor with alpha channel instead of setClearColor
     renderer.setClearColor(0x000000, 0);
 
     // Add renderer to DOM

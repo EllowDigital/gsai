@@ -1,20 +1,15 @@
-import { useEffect, useRef, RefObject } from "react";
 
-interface HeroParticlesProps {
-  parentRef: RefObject<HTMLDivElement>;
-}
+import { useEffect, useRef } from "react";
 
-const HeroParticlesVanilla = ({ parentRef }: HeroParticlesProps) => {
+const HeroParticlesVanilla = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const container = containerRef.current;
-    const parentElement = parentRef.current;
+    if (!container) return;
 
-    if (!container || !parentElement) return;
-
-    const containerWidth = parentElement.offsetWidth;
-    const containerHeight = parentElement.offsetHeight;
+    const containerWidth = container.offsetWidth;
+    const containerHeight = container.offsetHeight;
 
     // Define the number of particles based on screen size
     const particleCount = window.innerWidth < 768 ? 50 : 100;
@@ -96,8 +91,8 @@ const HeroParticlesVanilla = ({ parentRef }: HeroParticlesProps) => {
 
     // Handle window resize
     const handleResize = () => {
-      const newWidth = parentElement.offsetWidth;
-      const newHeight = parentElement.offsetHeight;
+      const newWidth = container.offsetWidth;
+      const newHeight = container.offsetHeight;
 
       particles.forEach(particle => {
         const x = parseFloat(particle.dataset.x || '0');
@@ -115,7 +110,7 @@ const HeroParticlesVanilla = ({ parentRef }: HeroParticlesProps) => {
     const handleMouseMove = (e: MouseEvent) => {
       const mouseX = e.clientX;
       const mouseY = e.clientY;
-      const rect = parentElement.getBoundingClientRect();
+      const rect = container.getBoundingClientRect();
 
       particles.forEach(particle => {
         const x = parseFloat(particle.dataset.x || '0');
@@ -141,7 +136,7 @@ const HeroParticlesVanilla = ({ parentRef }: HeroParticlesProps) => {
       window.removeEventListener('resize', handleResize);
       container.removeEventListener('mousemove', handleMouseMove);
     };
-  }, [parentRef]);
+  }, []);
 
   return (
     <div

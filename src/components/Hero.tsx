@@ -1,3 +1,4 @@
+
 import { useRef, useEffect, useState, useCallback } from "react";
 import HeroParticles from "./HeroParticles";
 import CTAButton from "./CTAButton";
@@ -49,7 +50,7 @@ const Hero = () => {
     >
       {/* Particle Background */}
       <div className="absolute inset-0 z-0">
-        <HeroParticles parentRef={heroRef} />
+        <HeroParticles />
       </div>
 
       {/* Gradient Overlay with 3D Parallax */}

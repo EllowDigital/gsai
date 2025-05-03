@@ -2,23 +2,22 @@
 import React, { useEffect, useRef } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-interface HeroParticlesProps {
-  parentRef: React.RefObject<HTMLDivElement>;
-}
-
-const HeroParticlesSimple: React.FC<HeroParticlesProps> = ({ parentRef }) => {
+const HeroParticlesSimple = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  // Create our own containerRef to use for dimensions
+  const containerRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas || !parentRef.current) return;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    let width = parentRef.current.offsetWidth;
-    let height = parentRef.current.offsetHeight;
+    let width = container.offsetWidth;
+    let height = container.offsetHeight;
 
     canvas.width = width;
     canvas.height = height;
@@ -119,10 +118,10 @@ const HeroParticlesSimple: React.FC<HeroParticlesProps> = ({ parentRef }) => {
 
     // Resize listener
     const handleResize = () => {
-      if (!parentRef.current || !canvas) return;
+      if (!container || !canvas) return;
       
-      width = parentRef.current.offsetWidth;
-      height = parentRef.current.offsetHeight;
+      width = container.offsetWidth;
+      height = container.offsetHeight;
       canvas.width = width;
       canvas.height = height;
     };
@@ -157,9 +156,13 @@ const HeroParticlesSimple: React.FC<HeroParticlesProps> = ({ parentRef }) => {
       canvas.removeEventListener("touchstart", handleInteraction);
       window.removeEventListener("resize", handleResize);
     };
-  }, [parentRef, isMobile]);
+  }, [isMobile]);
 
-  return <canvas ref={canvasRef} className="absolute inset-0 z-0" />;
+  return (
+    <div ref={containerRef} className="absolute inset-0 z-0">
+      <canvas ref={canvasRef} className="absolute inset-0 z-0" />
+    </div>
+  );
 };
 
 export default HeroParticlesSimple;
