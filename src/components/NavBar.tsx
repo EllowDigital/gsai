@@ -33,6 +33,7 @@ const NavBar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Improved navigation function with better timing
   const handleNavClick = (href: string) => {
     setIsOpen(false);
     
@@ -40,20 +41,27 @@ const NavBar = () => {
     const sectionId = href.substring(1);
     
     if (!isHomePage) {
+      // If not on homepage, navigate to homepage with the state
       navigate("/", { state: { scrollTo: sectionId } });
       return;
     }
 
-    // Find the element and scroll to it
+    // Find the element and scroll to it with a more reliable approach
     const element = document.getElementById(sectionId);
+    
     if (element) {
-      // Use a small timeout to ensure the DOM is ready
+      // Prevent default behavior and any history changes
       setTimeout(() => {
+        // Use scrollIntoView with a block setting that ensures the element is visible
         element.scrollIntoView({
           behavior: "smooth",
           block: "start",
         });
-      }, 100);
+        
+        // Additional focus to ensure the browser's attention is on this element
+        element.setAttribute('tabindex', '-1');
+        element.focus({ preventScroll: true });
+      }, 150); // Slightly increased timeout for better reliability
     } else {
       console.error(`Section with ID "${sectionId}" not found`);
     }
@@ -91,7 +99,10 @@ const NavBar = () => {
           {NAV_LINKS.map(({ label, href }) => (
             <Button
               key={href}
-              onClick={() => handleNavClick(href)}
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavClick(href);
+              }}
               variant="ghost"
               className="text-gray-300 hover:text-black hover:bg-white font-medium transition-colors relative px-2 lg:px-3 py-1 lg:py-2 h-auto after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-gsai-red after:left-0 after:-bottom-1 after:scale-x-0 hover:after:scale-x-100 after:origin-bottom-right hover:after:origin-bottom-left after:transition-transform after:duration-300"
             >
@@ -148,7 +159,10 @@ const NavBar = () => {
                 {NAV_LINKS.map(({ label, href }) => (
                   <SheetClose key={href} asChild>
                     <Button
-                      onClick={() => handleNavClick(href)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleNavClick(href);
+                      }}
                       variant="ghost"
                       className="text-left justify-start text-gray-300 hover:text-gsai-red text-lg transition-colors flex items-center gap-2 w-full px-2 py-3 rounded-lg hover:bg-white/10 h-auto"
                     >

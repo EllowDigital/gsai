@@ -9,17 +9,37 @@ import { useLocation } from 'react-router-dom';
 const Index = () => {
   const location = useLocation();
 
-  // Handle direct navigation to a section via URL hash
+  // Handle direct navigation to a section via URL hash or state
   useEffect(() => {
+    // Handle URL hash navigation
     if (location.hash) {
-      requestAnimationFrame(() => {
-        const element = document.querySelector(location.hash);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      });
+      const sectionId = location.hash.substring(1); // Remove the # character
+      scrollToSection(sectionId);
     }
-  }, [location.hash]);
+    
+    // Handle navigation from state (used when coming from another page)
+    if (location.state && location.state.scrollTo) {
+      const sectionId = location.state.scrollTo;
+      scrollToSection(sectionId);
+    }
+  }, [location.hash, location.state]);
+
+  // Helper function to scroll to a section
+  const scrollToSection = (sectionId: string) => {
+    // Use requestAnimationFrame to ensure DOM is ready
+    requestAnimationFrame(() => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        // Short delay to ensure everything is loaded
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          // Add focus for accessibility and to ensure the browser's attention
+          element.setAttribute('tabindex', '-1');
+          element.focus({ preventScroll: true });
+        }, 200);
+      }
+    });
+  };
 
   return (
     <>
