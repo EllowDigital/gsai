@@ -8,6 +8,7 @@ import { useDeviceType } from "@/hooks/use-device-type";
 const HeroParticles = () => {
   const deviceType = useDeviceType();
 
+  // Each particle component manages its own container ref internally
   switch (deviceType) {
     case "mobile":
       return <HeroParticlesSimple />;

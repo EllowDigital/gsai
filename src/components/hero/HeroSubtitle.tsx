@@ -15,7 +15,7 @@ const HeroSubtitle = () => {
       style={{
         animation: "fade-in 0.8s ease-out forwards",
         textShadow: textShadowStyle,
-        color: "#ffffff",
+        color: "#ffffff", // Using hex color instead of theme value
       }}
     >
       Empowering Lives Through Martial Arts

@@ -1,29 +1,31 @@
 
-import React, { useEffect, useRef } from "react";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useEffect, useRef } from "react";
 
 const HeroParticlesSimple = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  // Create our own containerRef to use for dimensions
   const containerRef = useRef<HTMLDivElement>(null);
-  const isMobile = useIsMobile();
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const container = containerRef.current;
+    
     if (!canvas || !container) return;
-
-    const ctx = canvas.getContext("2d");
+    
+    const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let width = container.offsetWidth;
-    let height = container.offsetHeight;
+    // Set canvas to full container size
+    const setCanvasSize = () => {
+      canvas.width = container.clientWidth;
+      canvas.height = container.clientHeight;
+    };
+    
+    setCanvasSize();
 
-    canvas.width = width;
-    canvas.height = height;
-
-    const particleCount = isMobile ? 40 : 80;
-    const particles: Particle[] = [];
+    // Create particles
+    const particlesArray: Particle[] = [];
+    const numberOfParticles = 40;
+    const colors = ['#ea384c', '#DAA520']; // Red and Gold
 
     class Particle {
       x: number;
@@ -31,136 +33,74 @@ const HeroParticlesSimple = () => {
       size: number;
       speedX: number;
       speedY: number;
-      gravity: number;
-      opacity: number;
       color: string;
 
-      constructor(x?: number, y?: number) {
-        this.x = x ?? Math.random() * width;
-        this.y = y ?? Math.random() * height;
-        this.size = Math.random() * 2 + 1;
-        this.speedX = (Math.random() - 0.5) * 0.6;
-        this.speedY = (Math.random() - 0.5) * 0.6;
-        this.gravity = 0.03 + Math.random() * 0.02; // gentle downward pull
-        this.opacity = Math.random() * 0.8 + 0.2;
-        const colors = ["#FFD700", "#FFFFFF", "#FF6600"];
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 3 + 1;
+        this.speedX = (Math.random() - 0.5) * 0.5;
+        this.speedY = (Math.random() - 0.5) * 0.5;
         this.color = colors[Math.floor(Math.random() * colors.length)];
       }
 
       update() {
-        this.x += this.speedX + Math.sin(this.y * 0.01) * 0.1; // swaying effect
-        this.y += this.speedY + this.gravity;
+        this.x += this.speedX;
+        this.y += this.speedY;
 
-        // Bounce off bottom edge
-        if (this.y > height) {
-          this.y = 0;
+        // Bounce off edges
+        if (this.x > canvas.width || this.x < 0) {
+          this.speedX = -this.speedX;
         }
-
-        // Wrap around horizontally
-        if (this.x < 0) this.x = width;
-        if (this.x > width) this.x = 0;
+        if (this.y > canvas.height || this.y < 0) {
+          this.speedY = -this.speedY;
+        }
       }
 
       draw() {
-        if (ctx) {
-          ctx.beginPath();
-          ctx.globalAlpha = this.opacity;
-          ctx.fillStyle = this.color;
-          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.globalAlpha = 1;
-        }
+        if (!ctx) return;
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
       }
     }
 
-    const addParticleAt = (x: number, y: number) => {
-      for (let i = 0; i < 5; i++) {
-        particles.push(new Particle(x, y));
-      }
-    };
-
-    // Init particles
-    for (let i = 0; i < particleCount; i++) {
-      particles.push(new Particle());
+    // Create particle instances
+    for (let i = 0; i < numberOfParticles; i++) {
+      particlesArray.push(new Particle());
     }
 
-    const drawConnections = () => {
-      if (!ctx) return;
-      
-      for (let a = 0; a < particles.length; a++) {
-        for (let b = a + 1; b < particles.length; b++) {
-          const dx = particles[a].x - particles[b].x;
-          const dy = particles[a].y - particles[b].y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          if (distance < 70) {
-            ctx.beginPath();
-            ctx.strokeStyle = "rgba(255,255,255,0.08)";
-            ctx.lineWidth = 0.5;
-            ctx.moveTo(particles[a].x, particles[a].y);
-            ctx.lineTo(particles[b].x, particles[b].y);
-            ctx.stroke();
-          }
-        }
-      }
-    };
-
+    // Animation loop
     const animate = () => {
       if (!ctx) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      ctx.clearRect(0, 0, width, height);
-      particles.forEach((p) => {
-        p.update();
-        p.draw();
-      });
-      drawConnections();
+      for (const particle of particlesArray) {
+        particle.update();
+        particle.draw();
+      }
+      
       requestAnimationFrame(animate);
     };
 
-    // Resize listener
-    const handleResize = () => {
-      if (!container || !canvas) return;
-      
-      width = container.offsetWidth;
-      height = container.offsetHeight;
-      canvas.width = width;
-      canvas.height = height;
-    };
-
-    // Touch/click interaction
-    const handleInteraction = (e: MouseEvent | TouchEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      let clientX = 0;
-      let clientY = 0;
-
-      if ("touches" in e) {
-        clientX = e.touches[0].clientX;
-        clientY = e.touches[0].clientY;
-      } else {
-        clientX = e.clientX;
-        clientY = e.clientY;
-      }
-
-      const x = clientX - rect.left;
-      const y = clientY - rect.top;
-      addParticleAt(x, y);
-    };
-
-    canvas.addEventListener("click", handleInteraction);
-    canvas.addEventListener("touchstart", handleInteraction);
-    window.addEventListener("resize", handleResize);
-
     animate();
 
-    return () => {
-      canvas.removeEventListener("click", handleInteraction);
-      canvas.removeEventListener("touchstart", handleInteraction);
-      window.removeEventListener("resize", handleResize);
+    // Handle resize
+    const handleResize = () => {
+      setCanvasSize();
     };
-  }, [isMobile]);
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   return (
     <div ref={containerRef} className="absolute inset-0 z-0">
-      <canvas ref={canvasRef} className="absolute inset-0 z-0" />
+      <canvas ref={canvasRef} className="w-full h-full block"></canvas>
     </div>
   );
 };
