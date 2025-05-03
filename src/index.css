@@ -7,6 +7,15 @@
   :root {
     --destructive-foreground: 210 40% 98%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    /* Enhanced color system with better contrast */
+    --gsai-red: 354 84% 57%;
+    --gsai-red-light: 354 100% 71%;
+    --gsai-red-dark: 354 71% 45%;
+    
+    --gsai-gold: 43 74% 49%;
+    --gsai-gold-light: 43 86% 75%;
+    --gsai-gold-dark: 43 74% 35%;
   }
 
   :root {
@@ -331,45 +340,45 @@
   }
 
   .glass {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 12px;
   }
 
   .glass-dark {
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.25);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 12px;
   }
 
   .glass-card {
-    @apply bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-20 rounded-lg shadow-xl transition-all duration-300;
+    @apply bg-white/15 backdrop-blur-lg border border-white/25 rounded-lg shadow-xl transition-all duration-300;
   }
 
   .glass-card:hover {
-    @apply border-opacity-40 bg-opacity-15;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5),
-      0 0 15px rgba(255, 255, 255, 0.1);
+    @apply border-opacity-50 bg-opacity-20;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6),
+      0 0 15px rgba(255, 255, 255, 0.15);
   }
 
   .text-3d {
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2),
-      0 2px 0 rgba(255, 255, 255, 0.15), 0 3px 0 rgba(255, 255, 255, 0.1),
-      0 4px 5px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3),
+      0 2px 0 rgba(255, 255, 255, 0.2), 0 3px 0 rgba(255, 255, 255, 0.15),
+      0 4px 5px rgba(0, 0, 0, 0.6);
   }
 
   .text-3d-gold {
-    color: gold;
-    text-shadow: 0 1px 0 #caa400, 0 2px 0 #9a7b00, 0 3px 5px rgba(0, 0, 0, 0.5);
+    color: #DAA520;
+    text-shadow: 0 1px 0 #f3d98b, 0 2px 0 #b88a1b, 0 3px 5px rgba(0, 0, 0, 0.6);
   }
 
   .text-3d-red {
     color: #ea384c;
-    text-shadow: 0 1px 0 #c0292b, 0 2px 0 #a01f1f, 0 3px 5px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 1px 0 #ff6b7d, 0 2px 0 #c41e30, 0 3px 5px rgba(0, 0, 0, 0.6);
   }
 
   .decorative-icon {

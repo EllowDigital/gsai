@@ -64,10 +64,18 @@ const config: Config = {
           foreground: "hsl(var(--card-foreground))",
         },
 
-        // Custom GSAI palette
+        // Enhanced GSAI palette with better contrast
         gsai: {
-          red: "#ea384c",
-          gold: "#DAA520",
+          red: {
+            light: "#ff6b7d", // Lighter red for hover states
+            DEFAULT: "#ea384c", // Standard GSAI red
+            dark: "#c41e30",   // Darker red for pressed states and better contrast
+          },
+          gold: {
+            light: "#f3d98b", // Lighter gold for hover states
+            DEFAULT: "#DAA520", // Standard GSAI gold
+            dark: "#b88a1b",   // Darker gold for pressed states and better contrast
+          },
           gray: {
             50: "#f9f9f9",
             100: "#ededed",
@@ -79,6 +87,11 @@ const config: Config = {
             700: "#2a2a2a",
             800: "#1a1a1a",
             900: "#121212",
+          },
+          text: {
+            light: "#ffffff",   // White text for dark backgrounds
+            muted: "#e0e0e0",   // Slightly dimmed text for less emphasis
+            dark: "#121212",    // Near-black text for light backgrounds
           },
         },
 

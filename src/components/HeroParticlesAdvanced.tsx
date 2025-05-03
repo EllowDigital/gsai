@@ -81,22 +81,33 @@ const HeroParticlesAdvanced: React.FC<HeroParticlesProps> = ({ parentRef }) => {
       if (!particlesRef.current || !rendererRef.current || !sceneRef.current || !cameraRef.current) return;
       
       const delta = clockRef.current.getDelta();
+      
+      // Fixed TypeScript errors by properly accessing BufferAttributes
       const positionAttr = particlesRef.current.geometry.getAttribute("position") as THREE.BufferAttribute;
       const velocityAttr = particlesRef.current.geometry.getAttribute("velocity") as THREE.BufferAttribute;
       const opacityAttr = particlesRef.current.geometry.getAttribute("opacity") as THREE.BufferAttribute;
-
+      
+      // Create mutable arrays from the buffer attributes
+      const posArray = positionAttr.array as Float32Array;
+      const velArray = velocityAttr.array as Float32Array;
+      const opacArray = opacityAttr.array as Float32Array;
+      
       for (let i = 0; i < particleCount; i++) {
-        positionAttr.array[i * 3] += velocityAttr.array[i * 3] * delta * 100;
-        positionAttr.array[i * 3 + 1] += velocityAttr.array[i * 3 + 1] * delta * 100;
-        positionAttr.array[i * 3 + 2] += velocityAttr.array[i * 3 + 2] * delta * 100;
+        // Update positions using velocities
+        posArray[i * 3] += velArray[i * 3] * delta * 100;
+        posArray[i * 3 + 1] += velArray[i * 3 + 1] * delta * 100;
+        posArray[i * 3 + 2] += velArray[i * 3 + 2] * delta * 100;
 
-        opacityAttr.array[i] = Math.abs(
+        // Update opacity with sine wave for shimmering effect
+        opacArray[i] = Math.abs(
           Math.sin(clockRef.current.getElapsedTime() * 2 + i * 0.1)
         );
       }
 
+      // Mark attributes as needing update after modifying the array data
       positionAttr.needsUpdate = true;
       opacityAttr.needsUpdate = true;
+      
       rendererRef.current.render(sceneRef.current, cameraRef.current);
       requestAnimationFrame(animate);
     };

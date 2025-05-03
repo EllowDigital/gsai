@@ -1,3 +1,4 @@
+
 import { MouseEvent, useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import throttle from "lodash.throttle";
@@ -65,9 +66,10 @@ const CTAButton = ({
 
   const ButtonBase = href ? motion.a : motion.button;
 
+  // Updated color variants with enhanced contrast
   const variantStyles = {
-    primary: "bg-gsai-red text-white",
-    secondary: "bg-gsai-gold text-black"
+    primary: "bg-gsai-red-DEFAULT text-white",
+    secondary: "bg-gsai-gold-DEFAULT text-black"
   };
 
   const baseClasses = `
@@ -78,11 +80,13 @@ const CTAButton = ({
     ${variantStyles[variant]}
     ${className}
     sm:px-8 sm:py-4 sm:text-lg
+    focus:outline-none focus:ring-2
   `;
 
+  // More pronounced shine effect for better visual feedback
   const shineClasses = `
     absolute top-0 left-[-100%] w-[250%] h-full
-    bg-gradient-to-r from-transparent via-white/30 to-transparent
+    bg-gradient-to-r from-transparent via-white/40 to-transparent
     transform rotate-[25deg] pointer-events-none z-10
     transition-transform duration-700
     ${hovered ? "translate-x-[80%]" : ""}
@@ -98,8 +102,8 @@ const CTAButton = ({
         transform: pressed ? "scale(0.98)" : "scale(1)",
         boxShadow: hovered 
           ? variant === "primary" 
-            ? "0 10px 25px -5px rgba(234, 56, 76, 0.4)" 
-            : "0 10px 25px -5px rgba(218, 165, 32, 0.4)"
+            ? "0 10px 25px -5px rgba(234, 56, 76, 0.5)" 
+            : "0 10px 25px -5px rgba(218, 165, 32, 0.5)"
           : "0 4px 15px -3px rgba(0, 0, 0, 0.3)"
       }}
       whileTap={{ scale: 0.96 }}
@@ -121,11 +125,11 @@ const CTAButton = ({
       {icon && <span className="mr-2 relative z-20">{icon}</span>}
       <span className="relative z-20">{label}</span>
 
-      {/* Pulse effect on hover */}
+      {/* Enhanced pulse effect on hover */}
       {hovered && (
         <motion.div
           className="absolute inset-0 rounded-md pointer-events-none"
-          initial={{ opacity: 0.5, scale: 0.8 }}
+          initial={{ opacity: 0.6, scale: 0.8 }}
           animate={{ 
             opacity: 0,
             scale: 1.2,
@@ -136,7 +140,9 @@ const CTAButton = ({
             ease: "easeOut",
           }}
           style={{
-            background: variant === "primary" ? "rgba(234, 56, 76, 0.4)" : "rgba(218, 165, 32, 0.4)",
+            background: variant === "primary" 
+              ? "rgba(234, 56, 76, 0.5)" 
+              : "rgba(218, 165, 32, 0.5)",
           }}
         />
       )}
