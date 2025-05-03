@@ -1,5 +1,8 @@
+
 import { Link } from 'react-router-dom';
 import { useScrollAnimation } from '@/hooks/use-scroll-animation';
+import { useDeviceType } from '@/hooks/use-device-type';
+import { useTheme } from './ThemeProvider';
 
 const Footer = () => {
   const footerRef = useScrollAnimation<HTMLDivElement>({
@@ -7,30 +10,44 @@ const Footer = () => {
     animationType: 'fade',
   });
 
+  const deviceType = useDeviceType();
+  const { colors } = useTheme();
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer ref={footerRef} className="bg-black text-white py-16 border-t border-gray-800">
-      <div className="gsai-container px-4 sm:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+    <footer 
+      ref={footerRef} 
+      className="bg-black text-white py-8 md:py-12 lg:py-16 border-t border-gray-800"
+      style={{ background: colors.background }}
+    >
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {/* About Section */}
-          <div className="space-y-6">
-            <h3 className="text-2xl font-bold mb-4 text-gsai-gold">About GSAI</h3>
-            <p className="text-gray-300 text-sm md:text-base">
+          <div className="space-y-4 md:space-y-6">
+            <h3 className="text-xl sm:text-2xl font-bold mb-2 md:mb-4" style={{ color: colors.gold.DEFAULT }}>About GSAI</h3>
+            <p className="text-gray-300 text-sm">
               Government-recognized and ISO 9001:2015 certified martial arts academy empowering individuals through world-class training.
             </p>
-            <div className="flex space-x-4 mt-4">
+            <div className="flex flex-wrap gap-3 mt-3">
               {['facebook', 'instagram', 'youtube', 'whatsapp'].map((platform) => (
                 <a
                   key={platform}
                   href={`https://${platform}.com`}
                   aria-label={platform.charAt(0).toUpperCase() + platform.slice(1)}
-                  className="text-gray-400 hover:text-white"
+                  className="text-gray-400 hover:text-white transition-colors duration-300"
+                  style={{ 
+                    background: 'rgba(255,255,255,0.1)', 
+                    padding: '8px',
+                    borderRadius: '50%',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
+                    width={deviceType === "mobile" ? "20" : "22"}
+                    height={deviceType === "mobile" ? "20" : "22"}
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -66,15 +83,16 @@ const Footer = () => {
           </div>
 
           {/* Quick Links Section */}
-          <div className="space-y-6">
-            <h3 className="text-2xl font-bold mb-4 text-gsai-gold">Quick Links</h3>
-            <ul className="space-y-2 text-sm md:text-base">
+          <div className="space-y-4 md:space-y-6">
+            <h3 className="text-xl sm:text-2xl font-bold mb-2 md:mb-4" style={{ color: colors.gold.DEFAULT }}>Quick Links</h3>
+            <ul className="grid grid-cols-1 gap-2">
               {['About', 'Programs', 'Gallery', 'FAQ', 'Testimonials'].map((link) => (
                 <li key={link}>
                   <Link
                     to={`/#${link.toLowerCase()}`}
-                    className="text-gray-300 hover:text-white transition-colors"
+                    className="text-gray-300 hover:text-white transition-colors flex items-center group"
                   >
+                    <span className="inline-block w-0 group-hover:w-2 h-2 rounded-full mr-0 group-hover:mr-2 transition-all duration-300" style={{ background: colors.red.DEFAULT }}></span>
                     {link}
                   </Link>
                 </li>
@@ -83,55 +101,84 @@ const Footer = () => {
           </div>
 
           {/* Contact Section */}
-          <div className="space-y-6">
-            <h3 className="text-2xl font-bold mb-4 text-gsai-gold">Contact</h3>
-            <ul className="space-y-2 text-sm md:text-base">
-              <li className="flex items-start space-x-2">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gsai-red mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+          <div className="space-y-4 md:space-y-6">
+            <h3 className="text-xl sm:text-2xl font-bold mb-2 md:mb-4" style={{ color: colors.gold.DEFAULT }}>Contact</h3>
+            <ul className="grid grid-cols-1 gap-3">
+              <li className="flex items-start gap-2">
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  className="h-5 w-5 mt-0.5 flex-shrink-0" 
+                  style={{ color: colors.red.DEFAULT }}
+                  viewBox="0 0 20 20" 
+                  fill="currentColor"
+                >
                   <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                 </svg>
-                <span className="text-gray-300">Naubasta Pulia, Takrohi Road, Amrai Gaon, Indira Nagar, Lucknow, U.P. - 226028</span>
+                <span className="text-gray-300 text-sm">Naubasta Pulia, Takrohi Road, Amrai Gaon, Indira Nagar, Lucknow, U.P. - 226028</span>
               </li>
-              <li className="flex items-start space-x-2">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gsai-red mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+              <li className="flex items-start gap-2">
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  className="h-5 w-5 mt-0.5 flex-shrink-0" 
+                  style={{ color: colors.red.DEFAULT }}
+                  viewBox="0 0 20 20" 
+                  fill="currentColor"
+                >
                   <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                 </svg>
-                <span className="text-gray-300">+91-639-413-5988<br />+91-835-506-2424</span>
+                <span className="text-gray-300 text-sm">+91-639-413-5988<br />+91-835-506-2424</span>
               </li>
-              <li className="flex items-start space-x-2">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gsai-red mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+              <li className="flex items-start gap-2">
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  className="h-5 w-5 mt-0.5 flex-shrink-0" 
+                  style={{ color: colors.red.DEFAULT }}
+                  viewBox="0 0 20 20" 
+                  fill="currentColor"
+                >
                   <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                   <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                 </svg>
-                <a href="mailto:ghatakgsai@gmail.com" className="text-gray-300 hover:text-white transition-colors">ghatakgsai@gmail.com</a>
+                <a href="mailto:ghatakgsai@gmail.com" className="text-gray-300 hover:text-white transition-colors text-sm">ghatakgsai@gmail.com</a>
               </li>
             </ul>
           </div>
 
           {/* Legal Section */}
-          <div className="space-y-6">
-            <h3 className="text-2xl font-bold mb-4 text-gsai-gold">Legal</h3>
-            <ul className="space-y-2 text-sm md:text-base">
-              <li>
-                <Link to="/privacy-policy" className="text-gray-300 hover:text-white transition-colors">Privacy Policy</Link>
-              </li>
-              <li>
-                <Link to="/terms" className="text-gray-300 hover:text-white transition-colors">Terms and Conditions</Link>
-              </li>
-              <li>
-                <Link to="/refund-policy" className="text-gray-300 hover:text-white transition-colors">Refund Policy</Link>
-              </li>
+          <div className="space-y-4 md:space-y-6">
+            <h3 className="text-xl sm:text-2xl font-bold mb-2 md:mb-4" style={{ color: colors.gold.DEFAULT }}>Legal</h3>
+            <ul className="grid grid-cols-1 gap-2">
+              {[
+                { name: 'Privacy Policy', path: '/privacy-policy' },
+                { name: 'Terms and Conditions', path: '/terms' },
+                { name: 'Refund Policy', path: '/refund-policy' }
+              ].map((item) => (
+                <li key={item.name}>
+                  <Link to={item.path} className="text-gray-300 hover:text-white transition-colors flex items-center group">
+                    <span className="inline-block w-0 group-hover:w-2 h-2 rounded-full mr-0 group-hover:mr-2 transition-all duration-300" style={{ background: colors.red.DEFAULT }}></span>
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
 
-        <div className="mt-12 border-t border-gray-800 pt-6 text-center">
-          <p className="text-gray-400 text-sm">
+        <div className="mt-8 md:mt-10 lg:mt-12 pt-6 border-t border-gray-800 text-center">
+          <p className="text-gray-400 text-xs sm:text-sm">
             © {currentYear} Ghatak Sports Academy India™. All rights reserved.
           </p>
           <p className="text-gray-500 text-xs mt-2">
             <span>Proudly designed & maintained by </span>
-            <a href="https://www.ellowdigitals.me" target="_blank" rel="noopener noreferrer" className="text-gsai-red hover:underline">EllowDigitals</a>
+            <a 
+              href="https://www.ellowdigitals.me" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="hover:underline transition-colors duration-300"
+              style={{ color: colors.red.DEFAULT }}
+            >
+              EllowDigitals
+            </a>
           </p>
         </div>
       </div>

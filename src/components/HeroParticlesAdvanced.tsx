@@ -1,161 +1,143 @@
 
-import React, { useEffect, useRef } from "react";
-import { useIsMobile } from "@/hooks/use-mobile";
-import * as THREE from "three";
+import { useEffect, useRef } from 'react';
+import * as THREE from 'three';
+import { useTheme } from './ThemeProvider';
 
-interface HeroParticlesProps {
-  parentRef: React.RefObject<HTMLDivElement>;
-}
-
-const HeroParticlesAdvanced: React.FC<HeroParticlesProps> = ({ parentRef }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const isMobile = useIsMobile();
-  const sceneRef = useRef<THREE.Scene | null>(null);
-  const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
-  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
-  const particlesRef = useRef<THREE.Points | null>(null);
-  const clockRef = useRef<THREE.Clock>(new THREE.Clock());
-  
-  const particleSize = 4;
-  const whiteColor = new THREE.Color(1.0, 1.0, 1.0);
+const HeroParticlesAdvanced = () => {
+  const mountRef = useRef<HTMLDivElement>(null);
+  const { colors } = useTheme();
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const parent = parentRef.current;
+    // Create scene
+    const scene = new THREE.Scene();
 
-    if (!canvas || !parent) return;
+    // Create camera
+    const camera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
+    );
+    camera.position.z = 5;
 
-    const width = parent.offsetWidth;
-    const height = parent.offsetHeight;
+    // Create renderer
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x000000, 0);
 
-    // Initialize Scene
-    sceneRef.current = new THREE.Scene();
-    cameraRef.current = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-    cameraRef.current.position.z = 300;
-    rendererRef.current = new THREE.WebGLRenderer({ canvas, alpha: true });
-    rendererRef.current.setSize(width, height);
-
-    // Create Particles
-    const particleCount = isMobile ? 1000 : 2000;
-    const geometry = new THREE.BufferGeometry();
-    const positions = new Float32Array(particleCount * 3);
-    const velocities = new Float32Array(particleCount * 3);
-    const opacities = new Float32Array(particleCount);
-    const colors = new Float32Array(particleCount * 3);
-
-    // Set particles to white color
-    for (let i = 0; i < particleCount; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 400;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 400;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 400;
-
-      velocities[i * 3] = (Math.random() - 0.5) * 0.5;
-      velocities[i * 3 + 1] = (Math.random() - 0.5) * 0.5;
-      velocities[i * 3 + 2] = (Math.random() - 0.5) * 0.5;
-
-      opacities[i] = Math.random();
-
-      colors[i * 3] = whiteColor.r;
-      colors[i * 3 + 1] = whiteColor.g;
-      colors[i * 3 + 2] = whiteColor.b;
+    // Add renderer to DOM
+    if (mountRef.current) {
+      mountRef.current.innerHTML = '';
+      mountRef.current.appendChild(renderer.domElement);
     }
 
-    geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-    geometry.setAttribute("velocity", new THREE.BufferAttribute(velocities, 3));
-    geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
-    geometry.setAttribute("opacity", new THREE.BufferAttribute(opacities, 1));
+    // Create particles
+    const particleCount = window.innerWidth < 768 ? 500 : 1000;
+    const particles = new THREE.BufferGeometry();
+    
+    // Create arrays for positions, velocities, and colors
+    const positions = new Float32Array(particleCount * 3);
+    const velocities = new Float32Array(particleCount * 3);
+    const colors = new Float32Array(particleCount * 3);
+    
+    const redColor = new THREE.Color(colors.red.DEFAULT);
+    const goldColor = new THREE.Color(colors.gold.DEFAULT);
 
-    const material = new THREE.PointsMaterial({
-      size: particleSize,
+    for (let i = 0; i < particleCount * 3; i += 3) {
+      // Position
+      positions[i] = (Math.random() - 0.5) * 10;
+      positions[i + 1] = (Math.random() - 0.5) * 10;
+      positions[i + 2] = (Math.random() - 0.5) * 10;
+      
+      // Velocity
+      velocities[i] = (Math.random() - 0.5) * 0.01;
+      velocities[i + 1] = (Math.random() - 0.5) * 0.01;
+      velocities[i + 2] = (Math.random() - 0.5) * 0.01;
+      
+      // Color - alternate between red and gold
+      const color = Math.random() > 0.5 ? redColor : goldColor;
+      colors[i] = color.r;
+      colors[i + 1] = color.g;
+      colors[i + 2] = color.b;
+    }
+    
+    // Add attributes to geometry
+    particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    particles.setAttribute('velocity', new THREE.BufferAttribute(velocities, 3));
+    particles.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+    // Create material
+    const particleMaterial = new THREE.PointsMaterial({
+      size: window.innerWidth < 768 ? 0.05 : 0.08,
       vertexColors: true,
       transparent: true,
-      opacity: 1,
-      blending: THREE.AdditiveBlending,
+      opacity: 0.8,
     });
 
-    particlesRef.current = new THREE.Points(geometry, material);
-    sceneRef.current.add(particlesRef.current);
+    // Create points
+    const particleSystem = new THREE.Points(particles, particleMaterial);
+    scene.add(particleSystem);
 
-    // Animation
+    // Animation function
     const animate = () => {
-      if (!particlesRef.current || !rendererRef.current || !sceneRef.current || !cameraRef.current) return;
-      
-      const delta = clockRef.current.getDelta();
-      
-      // Fixed TypeScript errors by properly accessing BufferAttributes
-      const positionAttr = particlesRef.current.geometry.getAttribute("position") as THREE.BufferAttribute;
-      const velocityAttr = particlesRef.current.geometry.getAttribute("velocity") as THREE.BufferAttribute;
-      const opacityAttr = particlesRef.current.geometry.getAttribute("opacity") as THREE.BufferAttribute;
-      
-      // Create mutable arrays from the buffer attributes
-      const posArray = positionAttr.array as Float32Array;
-      const velArray = velocityAttr.array as Float32Array;
-      const opacArray = opacityAttr.array as Float32Array;
-      
-      for (let i = 0; i < particleCount; i++) {
-        // Update positions using velocities
-        posArray[i * 3] += velArray[i * 3] * delta * 100;
-        posArray[i * 3 + 1] += velArray[i * 3 + 1] * delta * 100;
-        posArray[i * 3 + 2] += velArray[i * 3 + 2] * delta * 100;
-
-        // Update opacity with sine wave for shimmering effect
-        opacArray[i] = Math.abs(
-          Math.sin(clockRef.current.getElapsedTime() * 2 + i * 0.1)
-        );
-      }
-
-      // Mark attributes as needing update after modifying the array data
-      positionAttr.needsUpdate = true;
-      opacityAttr.needsUpdate = true;
-      
-      rendererRef.current.render(sceneRef.current, cameraRef.current);
       requestAnimationFrame(animate);
+      
+      // Update particle positions
+      const positionsArray = particles.attributes.position.array as Float32Array;
+      const velocitiesArray = particles.attributes.velocity.array as Float32Array;
+      
+      for (let i = 0; i < positionsArray.length; i += 3) {
+        positionsArray[i] += velocitiesArray[i];
+        positionsArray[i + 1] += velocitiesArray[i + 1];
+        positionsArray[i + 2] += velocitiesArray[i + 2];
+        
+        // Loop particles back if they go out of bounds
+        if (positionsArray[i] > 5 || positionsArray[i] < -5) {
+          velocitiesArray[i] *= -1;
+        }
+        if (positionsArray[i + 1] > 5 || positionsArray[i + 1] < -5) {
+          velocitiesArray[i + 1] *= -1;
+        }
+        if (positionsArray[i + 2] > 5 || positionsArray[i + 2] < -5) {
+          velocitiesArray[i + 2] *= -1;
+        }
+      }
+      
+      // Update BufferGeometry
+      particles.attributes.position.needsUpdate = true;
+      
+      // Rotate particle system
+      particleSystem.rotation.y += 0.001;
+      
+      renderer.render(scene, camera);
     };
 
-    animate();
-
-    // Mouse Interaction
-    const handleMouseMove = (event: MouseEvent) => {
-      if (!particlesRef.current) return;
-      const x = (event.clientX / width - 0.5) * 200;
-      const y = -(event.clientY / height - 0.5) * 200;
-      particlesRef.current.position.set(x, y, 0);
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-
-    // Handle resize
+    // Handle window resize
     const handleResize = () => {
-      if (!parent || !cameraRef.current || !rendererRef.current) return;
-      
-      const newWidth = parent.offsetWidth;
-      const newHeight = parent.offsetHeight;
-      
-      cameraRef.current.aspect = newWidth / newHeight;
-      cameraRef.current.updateProjectionMatrix();
-      rendererRef.current.setSize(newWidth, newHeight);
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
     };
 
     window.addEventListener('resize', handleResize);
-
-    // Clean up
+    
+    animate();
+    
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener('resize', handleResize);
-      if (rendererRef.current) {
-        rendererRef.current.dispose();
+      if (mountRef.current) {
+        mountRef.current.innerHTML = '';
       }
-      if (sceneRef.current && particlesRef.current) {
-        sceneRef.current.remove(particlesRef.current);
-      }
-      particlesRef.current = null;
-      rendererRef.current = null;
-      cameraRef.current = null;
-      sceneRef.current = null;
     };
-  }, [parentRef, isMobile]);
+  }, [colors]);
 
-  return <canvas ref={canvasRef} className="absolute inset-0 z-0" />;
+  return (
+    <div 
+      ref={mountRef}
+      className="fixed inset-0 pointer-events-none z-0"
+      aria-hidden="true"
+    />
+  );
 };
 
 export default HeroParticlesAdvanced;

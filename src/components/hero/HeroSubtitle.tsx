@@ -1,8 +1,10 @@
 
 import { useDeviceType } from "@/hooks/use-device-type";
+import { useTheme } from "@/components/ThemeProvider";
 
 const HeroSubtitle = () => {
   const deviceType = useDeviceType();
+  const { colors } = useTheme();
   
   // Enhanced text shadow for better readability across devices
   const textShadowStyle = deviceType === "mobile" 
@@ -15,6 +17,7 @@ const HeroSubtitle = () => {
       style={{
         animation: "fade-in 0.8s ease-out forwards",
         textShadow: textShadowStyle,
+        color: colors.accent,
       }}
     >
       Empowering Lives Through Martial Arts

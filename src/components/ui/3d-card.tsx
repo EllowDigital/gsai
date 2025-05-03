@@ -1,97 +1,89 @@
 
-import React, { useRef, useState } from "react";
+import React from "react";
 import { cn } from "@/lib/utils";
 
-type Card3DProps = {
+export interface Card3DProps {
   children: React.ReactNode;
   className?: string;
-  border?: boolean;
-  intensity?: number;
-  shadow?: boolean;
-  glare?: boolean;
-  borderRadius?: number;
-  borderColor?: string;
-  perspective?: number;
-};
+  innerClassName?: string; // Added this property
+  rotationIntensity?: number;
+  depthIntensity?: number;
+}
 
 const Card3D = ({
   children,
   className,
-  border = false,
-  intensity = 10,
-  shadow = false,
-  glare = false,
-  borderRadius = 8,
-  borderColor = "rgba(255, 255, 255, 0.15)",
-  perspective = 1000,
+  innerClassName, // Added this parameter
+  rotationIntensity = 10,
+  depthIntensity = 10,
 }: Card3DProps) => {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const [rotate, setRotate] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
+  const [isHovered, setIsHovered] = React.useState(false);
+  const [rotation, setRotation] = React.useState({ x: 0, y: 0 });
+  const cardRef = React.useRef<HTMLDivElement>(null);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
-    const card = cardRef.current;
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    
-    const rotateX = ((y - centerY) / centerY) * intensity * -1;
-    const rotateY = ((x - centerX) / centerX) * intensity;
-    
-    setRotate({ x: rotateX, y: rotateY });
+  const handleMouseMove = React.useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      if (!cardRef.current) return;
+
+      const rect = cardRef.current.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const mouseX = event.clientX;
+      const mouseY = event.clientY;
+
+      const rotateY = ((mouseX - centerX) / (rect.width / 2)) * rotationIntensity;
+      const rotateX = ((mouseY - centerY) / (rect.height / 2)) * -rotationIntensity;
+
+      setRotation({ x: rotateX, y: rotateY });
+    },
+    [rotationIntensity]
+  );
+
+  const handleMouseLeave = React.useCallback(() => {
+    setIsHovered(false);
+    setRotation({ x: 0, y: 0 });
+  }, []);
+
+  const handleMouseEnter = React.useCallback(() => {
+    setIsHovered(true);
+  }, []);
+
+  const transform = isHovered
+    ? `perspective(1000px) rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`
+    : "perspective(1000px) rotateX(0) rotateY(0)";
+
+  const transitionDuration = isHovered ? "0.1s" : "0.5s";
+  const cardStyleProps = {
+    transform,
+    transition: `transform ${transitionDuration} ease-out`,
+    transformStyle: "preserve-3d" as const,
+  };
+
+  const contentStyleProps = {
+    transform: isHovered
+      ? `translateZ(${depthIntensity}px)`
+      : "translateZ(0)",
+    transition: `transform ${transitionDuration} ease-out`,
+    transformStyle: "preserve-3d" as const,
   };
 
   return (
     <div
       ref={cardRef}
-      className={cn("relative transition-transform duration-200 ease-out", className)}
+      className={cn(
+        "card-3d w-full rounded-xl bg-transparent",
+        className
+      )}
+      style={cardStyleProps}
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => {
-        setIsHovered(false);
-        setRotate({ x: 0, y: 0 });
-      }}
-      style={{
-        perspective: `${perspective}px`,
-      }}
+      onMouseLeave={handleMouseLeave}
+      onMouseEnter={handleMouseEnter}
     >
       <div
-        style={{
-          transform: `rotateX(${rotate.x}deg) rotateY(${rotate.y}deg) translateZ(0)`,
-          transition: "transform 0.2s ease-out",
-          transformStyle: "preserve-3d" as React.CSSProperties["transformStyle"],
-          borderRadius: `${borderRadius}px`,
-          border: border ? `1px solid ${borderColor}` : "none",
-          boxShadow: shadow
-            ? `0 10px 30px -10px rgba(0, 0, 0, 0.3), 
-               0 5px 10px -5px rgba(0, 0, 0, 0.2)`
-            : "none",
-        }}
+        className={cn("w-full h-full tilt-card-inner overflow-hidden", innerClassName)}
+        style={contentStyleProps}
       >
         {children}
-        
-        {glare && isHovered && (
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              borderRadius: `${borderRadius}px`,
-              background: `radial-gradient(
-                circle at ${(rotate.y / intensity) * 50 + 50}% ${
-                (rotate.x / intensity) * 50 + 50
-              }%,
-                rgba(255, 255, 255, 0.15) 0%,
-                rgba(255, 255, 255, 0) 60%)`,
-              pointerEvents: "none",
-            }}
-          />
-        )}
       </div>
     </div>
   );
