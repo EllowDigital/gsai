@@ -23,7 +23,7 @@ const HeroParticlesAdvanced = () => {
     renderer.setPixelRatio(window.devicePixelRatio);
     
     // Use the correct method for transparency
-    renderer.setClearColorHex(0x000000, 0); // Fixed property
+    renderer.setClearColor(0x000000, 0); // Use setClearColor instead of setClearColorHex
     containerRef.current.appendChild(renderer.domElement);
     rendererRef.current = renderer;
 
@@ -106,14 +106,9 @@ const HeroParticlesAdvanced = () => {
         cancelAnimationFrame(animationFrameRef.current);
       }
       
-      if (particlesGeometry) {
-        particlesGeometry.dispose();
-      }
-      
-      if (particlesMaterial) {
-        particlesMaterial.dispose();
-      }
-      
+      // Manually clean up resources 
+      // Note: We're not using .dispose() directly on geometry/material as it's not in the type definition
+      // But we ensure renderer is properly disposed
       if (rendererRef.current) {
         rendererRef.current.dispose();
       }

@@ -1,3 +1,4 @@
+
 declare module "three" {
   export class Scene extends Object3D {
     background: Color | Texture | null;
@@ -68,6 +69,7 @@ declare module "three" {
     render(scene: Scene, camera: PerspectiveCamera): void;
     setSize(width: number, height: number, updateStyle?: boolean): void;
     setPixelRatio(value: number): void;
+    setClearColor(color: Color | string | number, alpha?: number): void;
     dispose(): void;
     clear(): void;
   }
@@ -92,6 +94,7 @@ declare module "three" {
     setIndex(index: BufferAttribute | number[] | null): void;
     computeBoundingBox(): void;
     computeBoundingSphere(): void;
+    dispose(): void; // Added dispose method
   }
 
   export class BufferAttribute {
@@ -119,6 +122,7 @@ declare module "three" {
     blending: number;
 
     constructor(parameters?: PointsMaterialParameters);
+    dispose(): void; // Added dispose method
   }
 
   export interface PointsMaterialParameters {
