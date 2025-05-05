@@ -1,113 +1,129 @@
-import React, { useEffect, useRef, useState } from 'react';
+
+import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
 const HeroParticlesAdvanced = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [scene, setScene] = useState<THREE.Scene | null>(null);
+  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+  const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
+  const pointsRef = useRef<THREE.Points | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (!containerRef.current) return;
 
-    // Initialize Three.js scene
-    const width = containerRef.current.clientWidth;
-    const height = containerRef.current.clientHeight;
+    // Scene setup
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    cameraRef.current = camera;
 
-    const newScene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ alpha: true });
-
-    // Fix - using renderer.setClearColor with the proper type
+    // Renderer setup
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    // Use correct method from THREE.js
     renderer.setClearColor(0x000000, 0);
-    renderer.setSize(width, height);
     containerRef.current.appendChild(renderer.domElement);
+    rendererRef.current = renderer;
 
-    // Position camera
-    camera.position.z = 5;
-
-    // Add particles
-    const particleCount = 2000;
-    const particles = new THREE.BufferGeometry();
-    const positions = new Float32Array(particleCount * 3);
-    const colors = new Float32Array(particleCount * 3);
-    const sizes = new Float32Array(particleCount);
-
-    for (let i = 0; i < particleCount * 3; i += 3) {
-      // Position
-      positions[i] = (Math.random() - 0.5) * 15;
-      positions[i + 1] = (Math.random() - 0.5) * 15;
-      positions[i + 2] = (Math.random() - 0.5) * 15;
-
-      // Color
-      const particleType = Math.random();
-      if (particleType < 0.5) {
-        // Red particles
-        colors[i] = 0.92;     // R
-        colors[i + 1] = 0.22; // G
-        colors[i + 2] = 0.29; // B
+    // Create particle geometry
+    const particlesGeometry = new THREE.BufferGeometry();
+    const particleCount = 1500;
+    
+    const positionArray = new Float32Array(particleCount * 3);
+    const colorArray = new Float32Array(particleCount * 3);
+    
+    for (let i = 0; i < particleCount * 3; i++) {
+      // Position (spread across the scene)
+      positionArray[i] = (Math.random() - 0.5) * 10;
+      
+      // Colors (red to gold gradient)
+      if (i % 3 === 0) {
+        colorArray[i] = Math.random() * 0.5 + 0.5; // Red component (0.5-1.0)
+      } else if (i % 3 === 1) {
+        colorArray[i] = Math.random() * 0.3; // Green component (0-0.3)
       } else {
-        // Gold particles
-        colors[i] = 0.85;     // R
-        colors[i + 1] = 0.65; // G
-        colors[i + 2] = 0.13; // B
+        colorArray[i] = Math.random() * 0.1; // Blue component (0-0.1)
       }
-
-      // Size
-      sizes[i / 3] = Math.random() * 6 + 2;
     }
-
-    particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    particles.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-    particles.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
-
-    const particleMaterial = new THREE.PointsMaterial({
-      size: 0.1,
+    
+    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positionArray, 3));
+    particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
+    
+    // Material setup
+    const particlesMaterial = new THREE.PointsMaterial({
+      size: 0.01,
+      sizeAttenuation: true,
       vertexColors: true,
       transparent: true,
-      opacity: 0.7,
-      blending: THREE.AdditiveBlending,
+      opacity: 0.8,
     });
-
-    const particleSystem = new THREE.Points(particles, particleMaterial);
-    newScene.add(particleSystem);
-
+    
+    // Create the particle system
+    const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+    scene.add(particles);
+    pointsRef.current = particles;
+    
+    // Camera position
+    camera.position.z = 3;
+    
     // Animation
     const animate = () => {
-      const animationId = requestAnimationFrame(animate);
-      particleSystem.rotation.x += 0.0005;
-      particleSystem.rotation.y += 0.0010;
-      renderer.render(newScene, camera);
-      return animationId;
+      if (!pointsRef.current) return;
+      
+      pointsRef.current.rotation.x += 0.0001;
+      pointsRef.current.rotation.y += 0.0003;
+      
+      // Render
+      if (rendererRef.current && cameraRef.current) {
+        rendererRef.current.render(scene, cameraRef.current);
+      }
+      
+      // Next frame
+      animationFrameRef.current = requestAnimationFrame(animate);
     };
-
-    const animationId = animate();
-
-    // Handle window resize
+    
+    animate();
+    
+    // Resize handler
     const handleResize = () => {
-      if (!containerRef.current) return;
-      const newWidth = containerRef.current.clientWidth;
-      const newHeight = containerRef.current.clientHeight;
-      renderer.setSize(newWidth, newHeight);
-      camera.aspect = newWidth / newHeight;
-      camera.updateProjectionMatrix();
+      if (!cameraRef.current || !rendererRef.current) return;
+      
+      cameraRef.current.aspect = window.innerWidth / window.innerHeight;
+      cameraRef.current.updateProjectionMatrix();
+      rendererRef.current.setSize(window.innerWidth, window.innerHeight);
     };
-
+    
     window.addEventListener('resize', handleResize);
-
-    setScene(newScene);
-
+    
     // Cleanup
     return () => {
-      cancelAnimationFrame(animationId);
-      window.removeEventListener('resize', handleResize);
-      if (containerRef.current && renderer.domElement) {
-        containerRef.current.removeChild(renderer.domElement);
+      if (containerRef.current && rendererRef.current) {
+        containerRef.current.removeChild(rendererRef.current.domElement);
       }
-      // Clean up 3D objects
-      particleSystem.geometry.dispose();
-      particleMaterial.dispose();
+      
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+      
+      if (particlesGeometry) {
+        // @ts-ignore - THREE.js does have dispose but TS doesn't recognize it
+        particlesGeometry.dispose();
+      }
+      
+      if (particlesMaterial) {
+        // @ts-ignore - THREE.js does have dispose but TS doesn't recognize it
+        particlesMaterial.dispose();
+      }
+      
+      if (rendererRef.current) {
+        rendererRef.current.dispose();
+      }
+      
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
-
+  
   return <div ref={containerRef} className="absolute inset-0 z-0" />;
 };
 

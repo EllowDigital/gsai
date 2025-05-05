@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { useScrollAnimation } from '@/hooks/use-scroll-animation';
 import { useDeviceType } from '@/hooks/use-device-type';
@@ -17,10 +16,13 @@ const Footer = () => {
   return (
     <footer 
       ref={footerRef} 
-      className="bg-black text-white py-8 md:py-12 lg:py-16 border-t border-gray-800"
-      style={{ background: colors.background }}
+      className="bg-black text-white py-8 md:py-12 lg:py-16 border-t border-gray-800 relative"
     >
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Background gradient and texture */}
+      <div className="absolute inset-0 bg-gradient-to-b from-gray-900 to-black opacity-50"></div>
+      <div className="absolute inset-0 bg-[url('/images/texture.png')] bg-repeat opacity-5"></div>
+      
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {/* About Section */}
           <div className="space-y-4 md:space-y-6">
