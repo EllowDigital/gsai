@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { useParallax } from '@/hooks/use-parallax';
 import Card3D from './ui/3d-card';
-import { MessageSquareQuestion, Quote } from 'lucide-react';
+import { MessageSquare, Quote } from 'lucide-react';
 
 interface FaqItem {
   question: string;
@@ -12,7 +12,7 @@ interface FaqItem {
 
 const FAQ = () => {
   const titleRef = useParallax<HTMLHeadingElement>({ speed: 0.1 });
-  const [activeItem, setActiveItem] = useState<string | null>(null);
+  const [activeItem, setActiveItem] = useState<string | undefined>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -74,7 +74,7 @@ const FAQ = () => {
       
       <div className="gsai-container relative z-10 px-4 sm:px-6 md:px-8">
         <div className="text-center mb-12 md:mb-16 relative">
-          <MessageSquareQuestion className="text-gsai-gold h-10 w-10 md:h-12 md:w-12 mx-auto mb-4 opacity-80" />
+          <MessageSquare className="text-gsai-gold h-10 w-10 md:h-12 md:w-12 mx-auto mb-4 opacity-80" />
           
           <h2
             ref={titleRef}
@@ -116,7 +116,7 @@ const FAQ = () => {
                       className={`py-5 px-6 text-left font-bold text-lg hover:no-underline group ${
                         activeItem === `item-${index}` ? 'text-gsai-gold' : 'text-white'
                       }`}
-                      onClick={() => setActiveItem(activeItem === `item-${index}` ? null : `item-${index}`)}
+                      onClick={() => setActiveItem(activeItem === `item-${index}` ? undefined : `item-${index}`)}
                     >
                       <div className="flex items-center gap-3">
                         <span className={`flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br ${
