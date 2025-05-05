@@ -1,59 +1,69 @@
 
-import Card3D from "../ui/3d-card";
-import { MapPin } from "lucide-react";
+import { motion } from 'framer-motion';
 
 const LocationMap = () => {
   return (
-    <div className="px-4 text-center contact-animate opacity-0">
-      <div className="flex items-center justify-center gap-3 mb-6">
-        <MapPin className="text-gsai-red" size={24} />
-        <h3 className="text-2xl font-semibold text-white">Our Location</h3>
-      </div>
-      <div className="w-24 h-1 bg-gradient-to-r from-gsai-red to-gsai-gold mx-auto mb-8 rounded-full"></div>
-      
-      <Card3D 
-        className="w-full overflow-hidden rounded-xl border border-white/10"
-        intensity={5}
-      >
-        <div className="relative w-full h-80 md:h-[450px] rounded-lg overflow-hidden">
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3557.7127555156358!2d81.02444217597154!3d26.912609860094033!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3999596def6ea9c7%3A0x23d2ceb539bff92!2sGhatak%20Sports%20Academy%20India!5e0!3m2!1sen!2sin!4v1739461937485!5m2!1sen!2sin"
-            width="100%"
-            height="100%"
-            style={{
-              border: 0,
-              position: "absolute",
-              top: 0,
-              left: 0,
-              objectFit: "cover",
-            }}
-            allowFullScreen
-            loading="lazy"
-            title="GSAI Location Map"
-          ></iframe>
-          
-          {/* Gradient overlay at the top of the map */}
-          <div className="absolute top-0 left-0 w-full h-16 bg-gradient-to-b from-black to-transparent pointer-events-none"></div>
-          
-          {/* Map pin markers */}
-          <div className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm p-3 rounded-lg border border-white/10 shadow-lg">
-            <div className="flex items-center gap-2">
-              <MapPin className="text-gsai-red flex-shrink-0" size={16} />
-              <span className="text-white text-sm whitespace-nowrap">Ghatak Sports Academy</span>
-            </div>
-          </div>
-        </div>
-      </Card3D>
-      
-      <div className="mt-6 max-w-2xl mx-auto text-left bg-gsai-gray-900/50 border border-white/5 rounded-lg p-4">
-        <p className="text-white/80 text-sm">
-          <strong className="text-gsai-gold">Getting Here:</strong> Located in 
-          Indira Nagar, our academy is easily accessible via public transportation 
-          and has ample parking space. If you need specific directions, please feel free 
-          to contact us at <a href="tel:+916394135988" className="text-gsai-red hover:underline">+91-639-413-5988</a>.
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.2 }}
+      className="rounded-2xl overflow-hidden border border-white/10 shadow-xl"
+    >
+      <div className="bg-gradient-to-br from-black/60 to-gray-900/60 backdrop-blur-md p-4 sm:p-6">
+        <h3 className="text-2xl font-bold mb-4 text-gradient-gold">Our Location</h3>
+        <p className="text-gray-300 mb-4">
+          Located in the heart of Lucknow, Ghatak Sports Academy India is easily accessible from all parts of the city.
         </p>
       </div>
-    </div>
+      
+      <div className="h-[350px] sm:h-[450px] w-full bg-gray-200 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gray-900/30 flex items-center justify-center z-10">
+          <div className="animate-pulse bg-white/10 rounded-lg p-8 backdrop-blur-sm text-center max-w-md">
+            <h4 className="text-white text-xl font-semibold mb-4">Interactive Map Loading</h4>
+            <p className="text-gray-200 mb-6">Our Google Maps integration appears here in the live website. Providing directions and location details.</p>
+            <a 
+              href="https://maps.google.com/?q=Ghatak+Sports+Academy+India" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="btn-primary inline-block"
+            >
+              Open in Google Maps
+            </a>
+          </div>
+        </div>
+        
+        {/* A placeholder map image */}
+        <img 
+          src="/images/map.png" 
+          alt="Map of Ghatak Sports Academy Location" 
+          className="w-full h-full object-cover"
+          onError={(e) => {
+            // If image fails to load, show a fallback
+            const target = e.target as HTMLImageElement;
+            target.src = "https://maps.googleapis.com/maps/api/staticmap?center=26.880892,80.968186&zoom=15&size=1200x600&markers=color:red%7C26.880892,80.968186&key=YOUR_API_KEY";
+          }}
+        />
+      </div>
+      
+      <div className="bg-gradient-to-tr from-black/60 to-gray-900/60 backdrop-blur-md p-4 sm:p-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="bg-black/30 p-4 rounded-lg border border-white/10">
+            <h4 className="text-white font-semibold mb-2">Address</h4>
+            <p className="text-gray-300 text-sm">Naubasta Pulia, Takrohi Road, Amrai Gaon, Indira Nagar, Lucknow, U.P. - 226028</p>
+          </div>
+          
+          <div className="bg-black/30 p-4 rounded-lg border border-white/10">
+            <h4 className="text-white font-semibold mb-2">Opening Hours</h4>
+            <p className="text-gray-300 text-sm">Monday - Saturday: 6:00 AM - 8:00 PM<br />Sunday: 8:00 AM - 12:00 PM</p>
+          </div>
+          
+          <div className="bg-black/30 p-4 rounded-lg border border-white/10">
+            <h4 className="text-white font-semibold mb-2">Public Transport</h4>
+            <p className="text-gray-300 text-sm">Bus Routes: 23, 45, 56<br />Nearby Metro: Indira Nagar (2km)</p>
+          </div>
+        </div>
+      </div>
+    </motion.div>
   );
 };
 

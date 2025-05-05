@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 import { useScrollAnimation } from '@/hooks/use-scroll-animation';
 import { useDeviceType } from '@/hooks/use-device-type';

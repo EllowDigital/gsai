@@ -5,6 +5,7 @@ import ContactForm from "./contact/ContactForm";
 import ContactInfo from "./contact/ContactInfo";
 import LocationMap from "./contact/LocationMap";
 import { Mail, Phone, MapPin } from "lucide-react";
+import { motion } from "framer-motion";
 
 const Contact = () => {
   const titleRef = useParallax<HTMLHeadingElement>({ speed: 0.1 });
@@ -43,7 +44,12 @@ const Contact = () => {
 
       <div className="gsai-container px-4 md:px-8 relative z-10">
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
           <div className="inline-block">
             <h2
               ref={titleRef}
@@ -64,20 +70,35 @@ const Contact = () => {
           
           {/* Quick contact options */}
           <div className="flex flex-wrap justify-center items-center gap-4 md:gap-8 mt-8 contact-animate opacity-0" style={{ animationDelay: "0.3s" }}>
-            <a href="mailto:ghatakgsai@gmail.com" className="flex items-center gap-2 px-4 py-2 bg-gsai-gray-800/50 backdrop-blur-sm rounded-full border border-gsai-gray-700 hover:border-gsai-red transition-all hover:scale-105">
+            <motion.a 
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              href="mailto:ghatakgsai@gmail.com" 
+              className="flex items-center gap-2 px-4 py-2 bg-gsai-gray-800/50 backdrop-blur-sm rounded-full border border-gsai-gray-700 hover:border-gsai-red transition-all"
+            >
               <Mail className="text-gsai-red" size={18} />
               <span className="text-white">ghatakgsai@gmail.com</span>
-            </a>
-            <a href="tel:+916394135988" className="flex items-center gap-2 px-4 py-2 bg-gsai-gray-800/50 backdrop-blur-sm rounded-full border border-gsai-gray-700 hover:border-gsai-gold transition-all hover:scale-105">
+            </motion.a>
+            <motion.a 
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              href="tel:+916394135988" 
+              className="flex items-center gap-2 px-4 py-2 bg-gsai-gray-800/50 backdrop-blur-sm rounded-full border border-gsai-gray-700 hover:border-gsai-gold transition-all"
+            >
               <Phone className="text-gsai-gold" size={18} />
               <span className="text-white">+91-639-413-5988</span>
-            </a>
-            <a href="#location" className="flex items-center gap-2 px-4 py-2 bg-gsai-gray-800/50 backdrop-blur-sm rounded-full border border-gsai-gray-700 hover:border-gsai-red transition-all hover:scale-105">
+            </motion.a>
+            <motion.a 
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              href="#location" 
+              className="flex items-center gap-2 px-4 py-2 bg-gsai-gray-800/50 backdrop-blur-sm rounded-full border border-gsai-gray-700 hover:border-gsai-red transition-all"
+            >
               <MapPin className="text-gsai-red" size={18} />
               <span className="text-white">Find Us</span>
-            </a>
+            </motion.a>
           </div>
-        </div>
+        </motion.div>
 
         {/* Contact Content */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">

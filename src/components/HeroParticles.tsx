@@ -4,7 +4,6 @@ import HeroParticlesVanilla from "./HeroParticlesVanilla";
 import HeroParticlesAdvanced from "./HeroParticlesAdvanced";
 import { useDeviceType } from "@/hooks/use-device-type";
 
-// No need for props as we'll handle the div reference internally in each component
 const HeroParticles = () => {
   const deviceType = useDeviceType();
 

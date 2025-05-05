@@ -1,9 +1,9 @@
+
 import * as React from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { DayPicker } from "react-day-picker"
 
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
 
@@ -48,10 +48,7 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        ...props.components,
-        // eslint-disable-next-line react/display-name
         IconLeft: () => <ChevronLeft className="h-4 w-4" />,
-        // eslint-disable-next-line react/display-name
         IconRight: () => <ChevronRight className="h-4 w-4" />,
       }}
       {...props}
@@ -61,8 +58,3 @@ function Calendar({
 Calendar.displayName = "Calendar"
 
 export { Calendar }
-
-const customComponents: Partial<DayPicker.components> = {
-  IconLeft: () => <ChevronLeft className="h-4 w-4" />,
-  IconRight: () => <ChevronRight className="h-4 w-4" />,
-}

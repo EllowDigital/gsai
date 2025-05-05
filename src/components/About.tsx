@@ -2,14 +2,12 @@
 import { useEffect, useRef } from 'react';
 import { useParallax } from '@/hooks/use-parallax';
 import { motion } from 'framer-motion';
-import { useDeviceType } from '@/hooks/use-device-type';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 const About = () => {
   const headingRef = useParallax<HTMLHeadingElement>({ speed: 0.1 });
   const paragraphRef = useParallax<HTMLParagraphElement>({ speed: 0.05 });
   const containerRef = useRef<HTMLDivElement>(null);
-  const deviceType = useDeviceType();
   const isMobile = useIsMobile();
   
   // Animation variants for the mission cards

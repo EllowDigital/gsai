@@ -21,8 +21,9 @@ const HeroParticlesAdvanced = () => {
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
-    // Use correct method from THREE.js
-    renderer.setClearColor(0x000000, 0);
+    
+    // Use the correct method for transparency
+    renderer.setClearColorHex(0x000000, 0); // Fixed property
     containerRef.current.appendChild(renderer.domElement);
     rendererRef.current = renderer;
 
@@ -50,10 +51,9 @@ const HeroParticlesAdvanced = () => {
     particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positionArray, 3));
     particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
     
-    // Material setup
+    // Material setup with correct properties
     const particlesMaterial = new THREE.PointsMaterial({
       size: 0.01,
-      sizeAttenuation: true,
       vertexColors: true,
       transparent: true,
       opacity: 0.8,
@@ -107,12 +107,10 @@ const HeroParticlesAdvanced = () => {
       }
       
       if (particlesGeometry) {
-        // @ts-ignore - THREE.js does have dispose but TS doesn't recognize it
         particlesGeometry.dispose();
       }
       
       if (particlesMaterial) {
-        // @ts-ignore - THREE.js does have dispose but TS doesn't recognize it
         particlesMaterial.dispose();
       }
       
