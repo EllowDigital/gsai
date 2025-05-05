@@ -12,7 +12,7 @@ interface FaqItem {
 
 const FAQ = () => {
   const titleRef = useParallax<HTMLHeadingElement>({ speed: 0.1 });
-  const [activeItem, setActiveItem] = useState<string | undefined>(null);
+  const [activeItem, setActiveItem] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
