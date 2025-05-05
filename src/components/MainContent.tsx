@@ -111,25 +111,25 @@ const MainContent = () => {
       </section>
 
       {/* International Competitions Section */}
-      <section id="competitions" data-section-target="competitions" className="section-container">
+      {/* <section id="competitions" data-section-target="competitions" className="section-container">
         <Suspense fallback={<SectionLoader />}>
           {visibleSections.competitions && <InternationalCompetitions />}
         </Suspense>
-      </section>
+      </section> */}
 
       {/* Achievements Section */}
-      <section id="achievements" data-section-target="achievements" className="section-container">
+      {/* <section id="achievements" data-section-target="achievements" className="section-container">
         <Suspense fallback={<SectionLoader />}>
           {visibleSections.achievements && <Achievements />}
         </Suspense>
-      </section>
+      </section> */}
 
       {/* Coaching Staff Section */}
-      <section id="coaching-staff" data-section-target="coaching" className="section-container">
+      {/* <section id="coaching-staff" data-section-target="coaching" className="section-container">
         <Suspense fallback={<SectionLoader />}>
           {visibleSections.coaching && <CoachingStaff />}
         </Suspense>
-      </section>
+      </section> */}
 
       {/* Testimonials Section */}
       <section id="testimonials" data-section-target="testimonials" className="section-container">

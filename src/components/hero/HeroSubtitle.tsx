@@ -31,7 +31,7 @@ const HeroSubtitle = () => {
           opacity: 0,
         }}
       >
-        Internationally Recognized Training • Olympic-Level Coaching • Global Competitions
+        Internationally Recognized Training • Top-Level Coaching • Global Competitions
       </p>
     </div>
   );

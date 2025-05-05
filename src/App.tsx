@@ -131,23 +131,23 @@ const App = () => {
     }
   }, [contentLoaded]);
 
-  // Warning if build:dev script is missing
-  useEffect(() => {
-    if (process.env.NODE_ENV === 'development') {
-      console.warn("IMPORTANT: The package.json file is missing a 'build:dev' script. This script is required for Lovable to build the project. Please add a 'build:dev' script with the command: 'vite build --mode development'");
+  // // Warning if build:dev script is missing
+  // useEffect(() => {
+  //   if (process.env.NODE_ENV === 'development') {
+  //     console.warn("IMPORTANT: The package.json file is missing a 'build:dev' script. This script is required for Lovable to build the project. Please add a 'build:dev' script with the command: 'vite build --mode development'");
       
-      // Use toast notification if available
-      try {
-        toast.warning("Missing 'build:dev' script in package.json. Please add it for better development experience.", {
-          position: "top-right",
-          autoClose: 10000,
-          hideProgressBar: false,
-        });
-      } catch (e) {
-        // Silent catch if toast isn't available
-      }
-    }
-  }, []);
+  //     // Use toast notification if available
+  //     try {
+  //       toast.warning("Missing 'build:dev' script in package.json. Please add it for better development experience.", {
+  //         position: "top-right",
+  //         autoClose: 10000,
+  //         hideProgressBar: false,
+  //       });
+  //     } catch (e) {
+  //       // Silent catch if toast isn't available
+  //     }
+  //   }
+  // }, []);
 
   return (
     <HelmetProvider>

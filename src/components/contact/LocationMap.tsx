@@ -40,7 +40,7 @@ const LocationMap = () => {
           onError={(e) => {
             // If image fails to load, show a fallback
             const target = e.target as HTMLImageElement;
-            target.src = "https://maps.googleapis.com/maps/api/staticmap?center=26.880892,80.968186&zoom=15&size=1200x600&markers=color:red%7C26.880892,80.968186&key=YOUR_API_KEY";
+            target.src = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3557.7129062858908!2d81.02444217543946!3d26.912605076647186!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3999596def6ea9c7%3A0x23d2ceb539bff92!2sGhatak%20Sports%20Academy%20India!5e0!3m2!1sen!2sin!4v1746478930599!5m2!1sen!2sin";
           }}
         />
       </div>
@@ -54,12 +54,12 @@ const LocationMap = () => {
           
           <div className="bg-black/30 p-4 rounded-lg border border-white/10">
             <h4 className="text-white font-semibold mb-2">Opening Hours</h4>
-            <p className="text-gray-300 text-sm">Monday - Saturday: 6:00 AM - 8:00 PM<br />Sunday: 8:00 AM - 12:00 PM</p>
+            <p className="text-gray-300 text-sm">Monday - Saturday: 2:00 PM - 7:00 PM<br />Sunday: 10:00 AM - 4:00 PM</p>
           </div>
           
           <div className="bg-black/30 p-4 rounded-lg border border-white/10">
             <h4 className="text-white font-semibold mb-2">Public Transport</h4>
-            <p className="text-gray-300 text-sm">Bus Routes: 23, 45, 56<br />Nearby Metro: Indira Nagar (2km)</p>
+            <p className="text-gray-300 text-sm">E-Rickshaw<br />Nearby Metro: Indira Nagar (2km)</p>
           </div>
         </div>
       </div>
