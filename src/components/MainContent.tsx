@@ -90,77 +90,77 @@ const MainContent = () => {
   return (
     <div className="relative z-20">
       {/* About Section */}
-      <section id="about" data-section-target="about">
+      <section id="about" data-section-target="about" className="section-container">
         <Suspense fallback={<SectionLoader />}>
           {visibleSections.about && <About />}
         </Suspense>
       </section>
 
       {/* Founder Section */}
-      <section id="founderSection" data-section-target="founder">
+      <section id="founderSection" data-section-target="founder" className="section-container">
         <Suspense fallback={<SectionLoader />}>
           {visibleSections.founder && <Founder />}
         </Suspense>
       </section>
 
       {/* Programs Section */}
-      <section id="programs" data-section-target="programs">
+      <section id="programs" data-section-target="programs" className="section-container">
         <Suspense fallback={<SectionLoader />}>
           {visibleSections.programs && <Programs />}
         </Suspense>
       </section>
 
-      {/* International Competitions Section - NEW */}
-      <section id="competitions" data-section-target="competitions">
+      {/* International Competitions Section */}
+      <section id="competitions" data-section-target="competitions" className="section-container">
         <Suspense fallback={<SectionLoader />}>
           {visibleSections.competitions && <InternationalCompetitions />}
         </Suspense>
       </section>
 
-      {/* Achievements Section - NEW */}
-      <section id="achievements" data-section-target="achievements">
+      {/* Achievements Section */}
+      <section id="achievements" data-section-target="achievements" className="section-container">
         <Suspense fallback={<SectionLoader />}>
           {visibleSections.achievements && <Achievements />}
         </Suspense>
       </section>
 
-      {/* Coaching Staff Section - NEW */}
-      <section id="coaching-staff" data-section-target="coaching">
+      {/* Coaching Staff Section */}
+      <section id="coaching-staff" data-section-target="coaching" className="section-container">
         <Suspense fallback={<SectionLoader />}>
           {visibleSections.coaching && <CoachingStaff />}
         </Suspense>
       </section>
 
       {/* Testimonials Section */}
-      <section id="testimonials" data-section-target="testimonials">
+      <section id="testimonials" data-section-target="testimonials" className="section-container">
         <Suspense fallback={<SectionLoader />}>
           {visibleSections.testimonials && <Testimonials />}
         </Suspense>
       </section>
 
       {/* Gallery Section */}
-      <section id="gallery" data-section-target="gallery">
+      <section id="gallery" data-section-target="gallery" className="section-container">
         <Suspense fallback={<SectionLoader />}>
           {visibleSections.gallery && <Gallery />}
         </Suspense>
       </section>
 
       {/* FAQ Section */}
-      <section id="faq" data-section-target="faq">
+      <section id="faq" data-section-target="faq" className="section-container">
         <Suspense fallback={<SectionLoader />}>
           {visibleSections.faq && <FAQ />}
         </Suspense>
       </section>
 
       {/* Contact Section */}
-      <section id="contact" data-section-target="contact">
+      <section id="contact" data-section-target="contact" className="section-container">
         <Suspense fallback={<SectionLoader />}>
           {visibleSections.contact && <Contact />}
         </Suspense>
       </section>
 
       {/* Affiliations Section */}
-      <section id="affiliationsSection" data-section-target="affiliations">
+      <section id="affiliationsSection" data-section-target="affiliations" className="section-container">
         <Suspense fallback={<SectionLoader />}>
           {visibleSections.affiliations && <Affiliations />}
         </Suspense>

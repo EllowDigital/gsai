@@ -62,6 +62,13 @@ const Hero = () => {
         }}
       />
 
+      {/* Decorative Elements - International Flags Silhouettes (Very Subtle) */}
+      <div className="absolute inset-0 z-5 opacity-5">
+        <div className="absolute top-[20%] left-[10%] w-20 h-20 bg-contain bg-no-repeat" style={{ backgroundImage: "url(/images/flag.png)" }}></div>
+        <div className="absolute top-[30%] right-[15%] w-16 h-16 bg-contain bg-no-repeat" style={{ backgroundImage: "url(/images/india.png)" }}></div>
+        <div className="absolute bottom-[25%] left-[20%] w-24 h-24 bg-contain bg-no-repeat opacity-30" style={{ backgroundImage: "url(/images/takewondo.png)" }}></div>
+      </div>
+
       {/* Main Hero Content */}
       <div
         ref={contentEffect.ref}
@@ -76,29 +83,59 @@ const Hero = () => {
           <HeroTitle />
           <HeroSubtitle />
 
-          <div
-            className="w-full flex justify-center mt-6 sm:mt-10 mb-14 sm:mb-20"
-            style={{
-              animation: "float 3s ease-in-out infinite 0.4s",
-              transform: `perspective(1000px) rotateY(${mousePosition.x * 0.05}deg) rotateX(${mousePosition.y * -0.05}deg)`,
-            }}
-          >
-            <CTAButton
-              label="Join Now"
-              href="https://forms.gle/LTYn59kPWkQgC3VR7"
-              onClick={scrollToContact}
-              icon={
-                <svg
-                  className="w-5 h-5 inline-block mr-1"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              }
-            />
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6 sm:mt-10 mb-14 sm:mb-20">
+            <div
+              className="w-full sm:w-auto"
+              style={{
+                animation: "float 3s ease-in-out infinite 0.4s",
+                transform: `perspective(1000px) rotateY(${mousePosition.x * 0.05}deg) rotateX(${mousePosition.y * -0.05}deg)`,
+              }}
+            >
+              <CTAButton
+                label="Join Now"
+                href="#contact"
+                onClick={scrollToContact}
+                icon={
+                  <svg
+                    className="w-5 h-5 inline-block mr-1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                }
+              />
+            </div>
+            
+            <div
+              className="w-full sm:w-auto"
+              style={{
+                animation: "float 3s ease-in-out infinite 0.6s",
+                transform: `perspective(1000px) rotateY(${mousePosition.x * 0.05}deg) rotateX(${mousePosition.y * -0.05}deg)`,
+              }}
+            >
+              <CTAButton
+                label="Explore Programs"
+                href="#programs"
+                variant="secondary"
+                onClick={() => {
+                  document.getElementById("programs")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }}
+                icon={
+                  <svg
+                    className="w-5 h-5 inline-block mr-1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                }
+              />
+            </div>
           </div>
         </div>
       </div>

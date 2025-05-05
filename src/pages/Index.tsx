@@ -5,6 +5,7 @@ import Hero from '@/components/Hero';
 import { Helmet } from 'react-helmet-async';
 import MainContent from '@/components/MainContent';
 import { useLocation } from 'react-router-dom';
+import '@/styles/section-styles.css';
 
 const Index = () => {
   const location = useLocation();
@@ -44,9 +45,9 @@ const Index = () => {
   return (
     <>
       <Helmet>
-        <title>Ghatak Sports Academy | Top Martial Arts Training in India</title>
+        <title>Ghatak Sports Academy | Premier International Martial Arts Training in India</title>
         <meta name="description"
-          content="Join Ghatak Sports Academy - India's premier martial arts training center. Expert coaching in karate, taekwondo, self-defense, and more." />
+          content="Join Ghatak Sports Academy - India's elite international standard martial arts training center. Expert coaching in karate, taekwondo, MMA, boxing, and more with world-class facilities." />
         <link rel="canonical" href="https://ghatakgsai.netlify.app" />
         {/* Structured data added through Helmet */}
         <script type="application/ld+json">{`
@@ -56,7 +57,7 @@ const Index = () => {
             "name": "Ghatak Sports Academy India",
             "url": "https://ghatakgsai.netlify.app",
             "logo": "https://ghatakgsai.netlify.app/images/logo.png",
-            "description": "India's premier martial arts training academy offering classes in karate, taekwondo, boxing, MMA, and self-defense.",
+            "description": "India's premier international standard martial arts training academy offering world-class training in karate, taekwondo, boxing, MMA, and self-defense with international accreditation.",
             "telephone": "+91 6394135988",
             "email": "ghatakgsai@gmail.com",
             "address": {
@@ -66,7 +67,12 @@ const Index = () => {
               "addressRegion": "Uttar Pradesh",
               "postalCode": "226021",
               "addressCountry": "IN"
-            }
+            },
+            "sameAs": [
+              "https://www.facebook.com/ghatakgsai",
+              "https://www.instagram.com/ghatak_gsai",
+              "https://twitter.com/ghatakgsai"
+            ]
           }
         `}</script>
 
@@ -74,6 +80,7 @@ const Index = () => {
         <link rel="preload" href="/images/logo.png" as="image" />
         <link rel="preload" as="style" href="/src/App.css" />
         <link rel="preload" as="style" href="/src/styles/glassmorphism.css" />
+        <link rel="preload" as="style" href="/src/styles/section-styles.css" />
         
         {/* Add optimized performance settings */}
         <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
