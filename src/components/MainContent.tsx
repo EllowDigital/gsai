@@ -1,3 +1,4 @@
+
 import { Suspense, lazy, useEffect, useState } from 'react';
 import SectionLoader from './SectionLoader';
 
@@ -70,6 +71,10 @@ const MainContent = () => {
       });
     }, 1500);
 
+    // Log all section IDs to help with debugging
+    console.log('Available section IDs:', 
+      Array.from(document.querySelectorAll('[id]')).map(el => el.id));
+
     // Cleanup
     return () => {
       observer.disconnect();
@@ -87,7 +92,7 @@ const MainContent = () => {
       </section>
 
       {/* Founder Section */}
-      <section id="founderSection" data-section-target="founder" className="section-container">
+      <section id="founder" data-section-target="founder" className="section-container">
         <Suspense fallback={<SectionLoader />}>
           {visibleSections.founder && <Founder />}
         </Suspense>
@@ -122,21 +127,21 @@ const MainContent = () => {
       </section>
 
       {/* Contact Section */}
-      <section id="contact-section" data-section-target="contact" className="section-container">
+      <section id="contact" data-section-target="contact" className="section-container">
         <Suspense fallback={<SectionLoader />}>
           {visibleSections.contact && <Contact />}
         </Suspense>
       </section>
 
       {/* Affiliations Section */}
-      <section id="affiliationsSection" data-section-target="affiliations" className="section-container">
+      <section id="affiliations" data-section-target="affiliations" className="section-container">
         <Suspense fallback={<SectionLoader />}>
           {visibleSections.affiliations && <Affiliations />}
         </Suspense>
       </section>
 
       {/* Footer - always visible */}
-      <section id="footerSection" data-section-target="footer">
+      <section id="footer" data-section-target="footer">
         <Suspense fallback={<SectionLoader />}>
           <Footer />
         </Suspense>

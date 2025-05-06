@@ -1,100 +1,136 @@
 
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { useGLTF, Environment, OrbitControls, Sparkles } from '@react-three/drei';
+import { OrbitControls, Sphere, MeshDistortMaterial } from '@react-three/drei';
 import * as THREE from 'three';
+import { isWebGLSupported } from '@/utils/webglDetection';
 
-// 3D Logo component with rotation animation
-const LogoModel = ({ scale = 1.5, rotation = [0, 0, 0] }) => {
-  const meshRef = useRef<THREE.Group>(null);
-  const [hovered, setHovered] = useState(false);
-  
-  // Rotate the logo smoothly
-  useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y += 0.01;
-      meshRef.current.rotation.x = THREE.MathUtils.lerp(
-        meshRef.current.rotation.x,
-        hovered ? state.clock.elapsedTime * 0.05 % (Math.PI * 2) : 0,
-        0.1
-      );
-    }
+// Animated sphere component 
+const AnimatedSphere = () => {
+  const sphereRef = useRef<THREE.Mesh>(null);
+  const clock = new THREE.Clock();
+
+  useFrame(() => {
+    if (!sphereRef.current) return;
+
+    const elapsedTime = clock.getElapsedTime();
+    
+    // Gently rotate the sphere
+    sphereRef.current.rotation.y = THREE.MathUtils.lerp(
+      sphereRef.current.rotation.y,
+      elapsedTime * 0.15,
+      0.05
+    );
+    
+    sphereRef.current.rotation.x = THREE.MathUtils.lerp(
+      sphereRef.current.rotation.x,
+      Math.sin(elapsedTime * 0.25) * 0.15,
+      0.05
+    );
+
+    // Pulse scale effect
+    const scale = 1 + Math.sin(elapsedTime * 0.8) * 0.05;
+    sphereRef.current.scale.set(scale, scale, scale);
   });
 
-  // Create a fallback sphere when no logo model is available
   return (
-    <group
-      ref={meshRef}
-      scale={[scale, scale, scale]}
-      rotation={rotation as [number, number, number]}
-      onPointerOver={() => setHovered(true)}
-      onPointerOut={() => setHovered(false)}
-    >
-      {/* Fallback sphere with GSAI colors */}
-      <mesh castShadow receiveShadow>
-        <sphereGeometry args={[1, 64, 64]} />
-        <meshStandardMaterial 
-          color={hovered ? "#ff4500" : "#ff0000"}
-          roughness={0.2}
-          metalness={0.8}
-          emissive={hovered ? "#ff4500" : "#330000"}
-          emissiveIntensity={0.5}
-        />
-      </mesh>
-      
-      {/* Additional ornaments */}
-      <mesh position={[0, 0, 0]} castShadow receiveShadow>
-        <torusGeometry args={[1.5, 0.2, 16, 100]} />
-        <meshStandardMaterial color="#ffcc00" metalness={1} roughness={0.3} />
-      </mesh>
-    </group>
+    <Sphere args={[1, 64, 64]} ref={sphereRef}>
+      <meshPhysicalMaterial 
+        color="#bd0000"
+        roughness={0.3}
+        metalness={0.8}
+        emissive="#470000"
+        emissiveIntensity={0.5}
+      />
+    </Sphere>
   );
 };
 
-// Sparkle effect background
-const Background = () => (
-  <Sparkles 
-    count={100}
-    size={6}
-    scale={12}
-    speed={0.3}
-    color="#ffcc00"
-    opacity={0.5}
-  />
-);
+const GoldRing = () => {
+  const ringRef = useRef<THREE.Mesh>(null);
+  
+  useFrame(({ clock }) => {
+    if (!ringRef.current) return;
+    const t = clock.getElapsedTime();
+    ringRef.current.rotation.z = t * 0.1;
+    ringRef.current.rotation.x = Math.sin(t * 0.2) * 0.2;
+  });
 
-// Main ThreePreloader component
-const ThreePreloader = ({ progress = 0 }) => {
   return (
-    <div className="w-full h-full absolute inset-0">
-      <Canvas shadows camera={{ position: [0, 0, 5], fov: 45 }}>
-        <color attach="background" args={['#000']} />
-        
-        {/* Lighting setup */}
-        <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 10]} intensity={1} castShadow />
-        <pointLight position={[-10, -10, -5]} intensity={0.5} color="#ff0000" />
-        
-        {/* 3D elements */}
-        <LogoModel />
-        <Background />
-        <Environment preset="city" />
-        
-        {/* Controls (disabled for production) */}
-        {process.env.NODE_ENV === 'development' && (
-          <OrbitControls enableZoom={false} enablePan={false} />
-        )}
-      </Canvas>
+    <mesh ref={ringRef} rotation={[0, 0, 0]} position={[0, 0, 0]}>
+      <torusGeometry args={[1.8, 0.1, 16, 64]} />
+      <meshStandardMaterial
+        color="#d4af37"
+        metalness={0.9}
+        roughness={0.2}
+      />
+    </mesh>
+  );
+};
+
+const ThreeScene = () => {
+  return (
+    <>
+      <ambientLight intensity={0.4} />
+      <directionalLight position={[5, 5, 5]} intensity={1} castShadow />
+      <pointLight position={[-5, -5, -5]} intensity={0.5} color="#bd0000" />
       
-      {/* Loading progress overlay */}
-      <div className="absolute bottom-8 left-0 right-0 flex flex-col items-center">
-        <div className="w-64 h-1 bg-black/30 rounded-full overflow-hidden">
-          <div 
-            className="h-full bg-gradient-to-r from-gsai-red to-gsai-gold transition-all duration-300 ease-out"
-            style={{ width: `${progress}%` }}
+      <AnimatedSphere />
+      <GoldRing />
+      
+      <OrbitControls enableZoom={false} enablePan={false} enableRotate={false} />
+    </>
+  );
+};
+
+interface ThreePreloaderProps {
+  progress?: number;
+}
+
+const ThreePreloader = ({ progress = 0 }: ThreePreloaderProps) => {
+  const [webglSupported] = useState(isWebGLSupported());
+  
+  // If WebGL is not supported, render a fallback 2D preloader
+  if (!webglSupported) {
+    return (
+      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black">
+        <div className="h-20 w-20 animate-pulse">
+          <img
+            src="/images/logo.png"
+            alt="GSAI Logo"
+            className="h-full w-full object-contain"
           />
         </div>
-        <div className="text-white text-sm mt-2 font-medium">{Math.round(progress)}%</div>
+        <div className="mt-6 w-40 h-2 bg-gray-700 rounded-full overflow-hidden">
+          <div 
+            className="h-full bg-gradient-to-r from-gsai-red to-gsai-gold rounded-full"
+            style={{ width: `${progress}%` }}
+          ></div>
+        </div>
+        <p className="text-gsai-gold mt-2 text-sm">{Math.round(progress)}%</p>
+      </div>
+    );
+  }
+
+  // Render 3D preloader with WebGL
+  return (
+    <div className="fixed inset-0 z-50 bg-black">
+      <Canvas
+        shadows
+        camera={{ position: [0, 0, 5], fov: 45 }}
+        className="!touch-none"
+      >
+        <ThreeScene />
+      </Canvas>
+      
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-40">
+        <div className="h-2 w-full bg-gray-800 rounded-full overflow-hidden">
+          <div 
+            className="h-full bg-gradient-to-r from-gsai-red to-gsai-gold rounded-full transition-all duration-300 ease-out"
+            style={{ width: `${progress}%` }}
+          ></div>
+        </div>
+        <p className="text-gsai-gold text-center mt-2">{Math.round(progress)}%</p>
       </div>
     </div>
   );
