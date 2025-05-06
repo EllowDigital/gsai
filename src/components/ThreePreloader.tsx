@@ -25,14 +25,12 @@ const AnimatedSphere = () => {
     sphereRef.current.scale.set(scale, scale, scale);
   });
 
-  // Fixed material props application for Three.js
   return (
     <Sphere args={[1, 64, 64]} ref={sphereRef}>
       <meshPhongMaterial
-        attach="material"
-        color="#bd0000" 
-        emissive="#470000" 
-        emissiveIntensity={0.5} 
+        color="#bd0000"
+        emissive="#470000"
+        emissiveIntensity={0.5}
         shininess={30}
       />
     </Sphere>
@@ -49,12 +47,10 @@ const GoldRing = () => {
     ringRef.current.rotation.x = Math.sin(t * 0.2) * 0.2;
   });
 
-  // Fixed material props for Three.js
   return (
     <mesh ref={ringRef} rotation={[0, 0, 0]} position={[0, 0, 0]}>
       <torusGeometry args={[1.8, 0.1, 16, 64]} />
-      <meshStandardMaterial 
-        attach="material"
+      <meshStandardMaterial
         color="#d4af37"
         metalness={0.9}
         roughness={0.2}

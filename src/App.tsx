@@ -1,3 +1,4 @@
+
 import { useState, useEffect, Suspense, lazy } from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -8,6 +9,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { ThemeProvider } from './components/ThemeProvider';
 import Preloader from './components/Preloader';
 import PWA from './pwa';
+import { SkipLink } from './components/ui/skip-link';
 // Import react-toastify styles without the toast function
 import "react-toastify/dist/ReactToastify.css";
 
@@ -132,6 +134,9 @@ const App = () => {
   return (
     <HelmetProvider>
       <ThemeProvider>
+        {/* Skip link for keyboard accessibility */}
+        <SkipLink skipTo="main-content" />
+        
         <Preloader isVisible={showPreloader} />
         {(contentLoaded || !showPreloader) && (
           <QueryClientProvider client={queryClient}>
@@ -140,7 +145,7 @@ const App = () => {
               <Sonner />
               <BrowserRouter>
                 <Suspense fallback={
-                  <div className="w-full h-screen flex items-center justify-center bg-black">
+                  <div className="w-full h-screen flex items-center justify-center bg-black" role="alert" aria-busy="true">
                     <div className="animate-pulse-glow w-12 h-12 rounded-full bg-gsai-red">
                       <span className="sr-only">Loading...</span>
                     </div>
