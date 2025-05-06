@@ -7,7 +7,7 @@ import { isWebGLSupported } from '@/utils/webglDetection';
 
 // Animated sphere component 
 const AnimatedSphere = () => {
-  const sphereRef = useRef<THREE.Mesh>(null);
+  const sphereRef = useRef<THREE.Object3D>(null);
   const clock = new THREE.Clock();
 
   useFrame(() => {
@@ -36,18 +36,17 @@ const AnimatedSphere = () => {
   return (
     <Sphere args={[1, 64, 64]} ref={sphereRef}>
       <meshPhongMaterial 
-        color="#bd0000"
-        roughness={0.3}
-        metalness={0.8}
-        emissive="#470000"
+        color={new THREE.Color("#bd0000")}
+        emissive={new THREE.Color("#470000")}
         emissiveIntensity={0.5}
+        shininess={30}
       />
     </Sphere>
   );
 };
 
 const GoldRing = () => {
-  const ringRef = useRef<THREE.Mesh>(null);
+  const ringRef = useRef<THREE.Object3D>(null);
   
   useFrame(({ clock }) => {
     if (!ringRef.current) return;
@@ -60,7 +59,7 @@ const GoldRing = () => {
     <mesh ref={ringRef} rotation={[0, 0, 0]} position={[0, 0, 0]}>
       <torusGeometry args={[1.8, 0.1, 16, 64]} />
       <meshStandardMaterial
-        color="#d4af37"
+        color={new THREE.Color("#d4af37")}
         metalness={0.9}
         roughness={0.2}
       />
