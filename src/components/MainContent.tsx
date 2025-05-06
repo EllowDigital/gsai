@@ -6,6 +6,9 @@ import SectionLoader from './SectionLoader';
 const About = lazy(() => import('@/components/About'));
 const Founder = lazy(() => import('@/components/Founder'));
 const Programs = lazy(() => import('@/components/Programs'));
+const InternationalCompetitions = lazy(() => import('@/components/InternationalCompetitions'));
+const Achievements = lazy(() => import('@/components/Achievements'));
+const CoachingStaff = lazy(() => import('@/components/CoachingStaff'));
 const Testimonials = lazy(() => import('@/components/Testimonials'));
 const Gallery = lazy(() => import('@/components/Gallery'));
 const FAQ = lazy(() => import('@/components/FAQ'));
@@ -24,6 +27,9 @@ const MainContent = () => {
     about: false,
     founder: false,
     programs: false,
+    competitions: false,
+    achievements: false,
+    coaching: false,
     testimonials: false,
     gallery: false,
     faq: false,
@@ -62,6 +68,9 @@ const MainContent = () => {
         about: true,
         founder: true,
         programs: true,
+        competitions: true,
+        achievements: true,
+        coaching: true,
         testimonials: true,
         gallery: true,
         faq: true,
@@ -70,10 +79,6 @@ const MainContent = () => {
         footer: true
       });
     }, 1500);
-
-    // Log all section IDs to help with debugging
-    console.log('Available section IDs:', 
-      Array.from(document.querySelectorAll('[id]')).map(el => el.id));
 
     // Cleanup
     return () => {
@@ -92,7 +97,7 @@ const MainContent = () => {
       </section>
 
       {/* Founder Section */}
-      <section id="founder" data-section-target="founder" className="section-container">
+      <section id="founderSection" data-section-target="founder" className="section-container">
         <Suspense fallback={<SectionLoader />}>
           {visibleSections.founder && <Founder />}
         </Suspense>
@@ -104,6 +109,27 @@ const MainContent = () => {
           {visibleSections.programs && <Programs />}
         </Suspense>
       </section>
+
+      {/* International Competitions Section */}
+      {/* <section id="competitions" data-section-target="competitions" className="section-container">
+        <Suspense fallback={<SectionLoader />}>
+          {visibleSections.competitions && <InternationalCompetitions />}
+        </Suspense>
+      </section> */}
+
+      {/* Achievements Section */}
+      {/* <section id="achievements" data-section-target="achievements" className="section-container">
+        <Suspense fallback={<SectionLoader />}>
+          {visibleSections.achievements && <Achievements />}
+        </Suspense>
+      </section> */}
+
+      {/* Coaching Staff Section */}
+      {/* <section id="coaching-staff" data-section-target="coaching" className="section-container">
+        <Suspense fallback={<SectionLoader />}>
+          {visibleSections.coaching && <CoachingStaff />}
+        </Suspense>
+      </section> */}
 
       {/* Testimonials Section */}
       <section id="testimonials" data-section-target="testimonials" className="section-container">
@@ -134,14 +160,14 @@ const MainContent = () => {
       </section>
 
       {/* Affiliations Section */}
-      <section id="affiliations" data-section-target="affiliations" className="section-container">
+      <section id="affiliationsSection" data-section-target="affiliations" className="section-container">
         <Suspense fallback={<SectionLoader />}>
           {visibleSections.affiliations && <Affiliations />}
         </Suspense>
       </section>
 
       {/* Footer - always visible */}
-      <section id="footer" data-section-target="footer">
+      <section id="footerSection" data-section-target="footer">
         <Suspense fallback={<SectionLoader />}>
           <Footer />
         </Suspense>

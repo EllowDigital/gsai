@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Menu, X } from "lucide-react";
 import CTAButton from "./CTAButton";
@@ -33,8 +33,8 @@ const NavBar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Improved navigation function with better timing and reliability
-  const handleNavClick = useCallback((href: string) => {
+  // Improved navigation function with better timing
+  const handleNavClick = (href: string) => {
     setIsOpen(false);
     
     // Extract the section ID from the href (remove the leading #)
@@ -46,50 +46,26 @@ const NavBar = () => {
       return;
     }
 
-    // Improved scrolling behavior with more reliable timing
-    setTimeout(() => {
-      // Try both ID formats to improve reliability
-      let element = document.getElementById(sectionId);
-      
-      if (!element) {
-        // Try alternative IDs that might be used
-        const alternativeIds = [
-          `${sectionId}-section`,
-          `${sectionId}Section`
-        ];
-        
-        for (const altId of alternativeIds) {
-          const altElement = document.getElementById(altId);
-          if (altElement) {
-            element = altElement;
-            console.log(`Found alternative element with ID: ${altId}`);
-            break;
-          }
-        }
-      }
-      
-      if (element) {
-        console.log(`Scrolling to element with ID: ${element.id}`);
-        
-        // Use offset to account for fixed header
-        const headerOffset = 80;
-        const elementPosition = element.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-        
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: "smooth"
+    // Find the element and scroll to it with a more reliable approach
+    const element = document.getElementById(sectionId);
+    
+    if (element) {
+      // Prevent default behavior and any history changes
+      setTimeout(() => {
+        // Use scrollIntoView with a block setting that ensures the element is visible
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
         });
         
-        // Set focus for accessibility
+        // Additional focus to ensure the browser's attention is on this element
         element.setAttribute('tabindex', '-1');
         element.focus({ preventScroll: true });
-      } else {
-        console.error(`Section with ID "${sectionId}" not found. Available IDs:`, 
-          Array.from(document.querySelectorAll('[id]')).map(el => el.id));
-      }
-    }, 100);
-  }, [isHomePage, navigate]);
+      }, 150); // Slightly increased timeout for better reliability
+    } else {
+      console.error(`Section with ID "${sectionId}" not found`);
+    }
+  };
 
   const logoSize = deviceType === "mobile" ? "h-8 w-8" : "h-10 w-10";
   const logoTextSize = deviceType === "mobile" ? "text-base" : "text-lg";

@@ -25,8 +25,8 @@ const CTAButton = ({
   const [hovered, setHovered] = useState(false);
   const [pressed, setPressed] = useState(false);
 
-  const rotateX = useTransform(y, [0, 1], [10, -10]);
-  const rotateY = useTransform(x, [0, 1], [-10, 10]);
+  const rotateX = useTransform(y, [0, 1], [8, -8]);
+  const rotateY = useTransform(x, [0, 1], [-8, 8]);
 
   const smoothRotateX = useSpring(rotateX, { stiffness: 300, damping: 30 });
   const smoothRotateY = useSpring(rotateY, { stiffness: 300, damping: 30 });
@@ -66,10 +66,10 @@ const CTAButton = ({
 
   const ButtonBase = href ? motion.a : motion.button;
 
-  // Updated color variants with enhanced contrast and luxurious feel
+  // Updated color variants with enhanced contrast
   const variantStyles = {
-    primary: "bg-gradient-to-r from-gsai-red to-gsai-red-dark text-white",
-    secondary: "bg-gradient-to-r from-gsai-gold to-gsai-gold-dark text-black"
+    primary: "bg-gsai-red-DEFAULT text-white",
+    secondary: "bg-gsai-gold-DEFAULT text-black"
   };
 
   const baseClasses = `
@@ -80,8 +80,7 @@ const CTAButton = ({
     ${variantStyles[variant]}
     ${className}
     sm:px-8 sm:py-4 sm:text-lg
-    focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black
-    ${variant === "primary" ? "focus:ring-gsai-red" : "focus:ring-gsai-gold"}
+    focus:outline-none focus:ring-2
   `;
 
   // More pronounced shine effect for better visual feedback
@@ -100,15 +99,14 @@ const CTAButton = ({
         rotateX: smoothRotateX,
         rotateY: smoothRotateY,
         transformStyle: "preserve-3d",
-        perspective: "1000px",
-        transform: pressed ? "scale(0.97)" : "scale(1)",
+        transform: pressed ? "scale(0.98)" : "scale(1)",
         boxShadow: hovered 
           ? variant === "primary" 
-            ? "0 10px 30px -5px rgba(234, 56, 76, 0.7), 0 0 15px rgba(234, 56, 76, 0.4)" 
-            : "0 10px 30px -5px rgba(218, 165, 32, 0.7), 0 0 15px rgba(218, 165, 32, 0.4)"
-          : "0 4px 15px -3px rgba(0, 0, 0, 0.5)"
+            ? "0 10px 25px -5px rgba(234, 56, 76, 0.5)" 
+            : "0 10px 25px -5px rgba(218, 165, 32, 0.5)"
+          : "0 4px 15px -3px rgba(0, 0, 0, 0.3)"
       }}
-      whileTap={{ scale: 0.95 }}
+      whileTap={{ scale: 0.96 }}
       animate={{ 
         scale: hovered ? 1.03 : 1,
         transition: { duration: 0.2 } 
@@ -123,45 +121,9 @@ const CTAButton = ({
       aria-label={label}
     >
       <div className={shineClasses} />
-      
-      {/* Inner content with 3D effect */}
-      <div className="relative z-20 flex items-center justify-center">
-        {icon && (
-          <motion.span 
-            className="mr-2 relative z-20"
-            animate={{ 
-              rotateY: hovered ? [0, 10, 0, -10, 0] : 0
-            }}
-            transition={{
-              duration: 2,
-              repeat: hovered ? Infinity : 0,
-              repeatType: "loop"
-            }}
-          >
-            {icon}
-          </motion.span>
-        )}
-        <span className="relative z-20 tracking-wide">{label}</span>
-      </div>
-
-      {/* Background gradient animation */}
-      <motion.div
-        className="absolute inset-0 -z-10 opacity-80"
-        style={{
-          background: variant === "primary"
-            ? "linear-gradient(120deg, #ea384c, #c41e30, #ea384c)"
-            : "linear-gradient(120deg, #daa520, #b8860b, #daa520)",
-          backgroundSize: "200% 100%"
-        }}
-        animate={{
-          backgroundPosition: hovered ? ["0% 50%", "100% 50%"] : "0% 50%"
-        }}
-        transition={{
-          duration: 2,
-          repeat: hovered ? Infinity : 0,
-          repeatType: "reverse"
-        }}
-      />
+      <div className="absolute inset-0 rounded-md shadow-inner opacity-50 pointer-events-none z-10" />
+      {icon && <span className="mr-2 relative z-20">{icon}</span>}
+      <span className="relative z-20">{label}</span>
 
       {/* Enhanced pulse effect on hover */}
       {hovered && (
@@ -184,19 +146,6 @@ const CTAButton = ({
           }}
         />
       )}
-
-      {/* Subtle border effect */}
-      <motion.div
-        className="absolute inset-0 rounded-md border pointer-events-none"
-        style={{
-          borderColor: variant === "primary" 
-            ? "rgba(234, 56, 76, 0.3)" 
-            : "rgba(218, 165, 32, 0.3)",
-        }}
-        animate={{
-          opacity: hovered ? 1 : 0,
-        }}
-      />
     </ButtonBase>
   );
 };
