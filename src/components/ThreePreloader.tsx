@@ -15,14 +15,10 @@ const AnimatedSphere = () => {
 
     const elapsedTime = clock.getElapsedTime();
     
-    // Gently rotate the sphere
-    sphereRef.current.rotation.y = THREE.MathUtils ? 
-      THREE.MathUtils.lerp(sphereRef.current.rotation.y, elapsedTime * 0.15, 0.05) :
-      sphereRef.current.rotation.y + (elapsedTime * 0.15 - sphereRef.current.rotation.y) * 0.05;
-    
-    sphereRef.current.rotation.x = THREE.MathUtils ? 
-      THREE.MathUtils.lerp(sphereRef.current.rotation.x, Math.sin(elapsedTime * 0.25) * 0.15, 0.05) :
-      sphereRef.current.rotation.x + (Math.sin(elapsedTime * 0.25) * 0.15 - sphereRef.current.rotation.x) * 0.05;
+    // Gently rotate the sphere using manual lerp instead of MathUtils
+    const lerpFactor = 0.05;
+    sphereRef.current.rotation.y += (elapsedTime * 0.15 - sphereRef.current.rotation.y) * lerpFactor;
+    sphereRef.current.rotation.x += (Math.sin(elapsedTime * 0.25) * 0.15 - sphereRef.current.rotation.x) * lerpFactor;
 
     // Pulse scale effect
     const scale = 1 + Math.sin(elapsedTime * 0.8) * 0.05;
@@ -32,10 +28,12 @@ const AnimatedSphere = () => {
   return (
     <Sphere args={[1, 64, 64]} ref={sphereRef}>
       <meshPhongMaterial 
-        color={"#bd0000"}
-        emissive={"#470000"}
-        emissiveIntensity={0.5}
-        shininess={30}
+        args={[{
+          color: "#bd0000",
+          emissive: "#470000",
+          emissiveIntensity: 0.5,
+          shininess: 30
+        }]}
       />
     </Sphere>
   );
@@ -55,9 +53,11 @@ const GoldRing = () => {
     <mesh ref={ringRef} rotation={[0, 0, 0]} position={[0, 0, 0]}>
       <torusGeometry args={[1.8, 0.1, 16, 64]} />
       <meshStandardMaterial
-        color={"#d4af37"}
-        metalness={0.9}
-        roughness={0.2}
+        args={[{
+          color: "#d4af37",
+          metalness: 0.9,
+          roughness: 0.2
+        }]}
       />
     </mesh>
   );
