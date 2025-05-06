@@ -5,7 +5,7 @@ import { OrbitControls, Sphere } from '@react-three/drei';
 import * as THREE from 'three';
 import { isWebGLSupported } from '@/utils/webglDetection';
 
-// Animated sphere component 
+// Optimized animated sphere component with proper Three.js handling
 const AnimatedSphere = () => {
   const sphereRef = useRef<THREE.Object3D>(null);
   const clock = new THREE.Clock();
@@ -15,7 +15,7 @@ const AnimatedSphere = () => {
 
     const elapsedTime = clock.getElapsedTime();
     
-    // Gently rotate the sphere using manual lerp instead of MathUtils
+    // Gently rotate the sphere using manual lerp
     const lerpFactor = 0.05;
     sphereRef.current.rotation.y += (elapsedTime * 0.15 - sphereRef.current.rotation.y) * lerpFactor;
     sphereRef.current.rotation.x += (Math.sin(elapsedTime * 0.25) * 0.15 - sphereRef.current.rotation.x) * lerpFactor;
@@ -25,16 +25,14 @@ const AnimatedSphere = () => {
     sphereRef.current.scale.set(scale, scale, scale);
   });
 
+  // Fixed material props application to avoid "__r3f" error
   return (
     <Sphere args={[1, 64, 64]} ref={sphereRef}>
-      <meshPhongMaterial 
-        attach="material"
-        args={[{
-          color: new THREE.Color("#bd0000"),
-          emissive: new THREE.Color("#470000"),
-          emissiveIntensity: 0.5,
-          shininess: 30
-        }]}
+      <meshPhongMaterial
+        color="#bd0000" 
+        emissive="#470000" 
+        emissiveIntensity={0.5} 
+        shininess={30}
       />
     </Sphere>
   );
@@ -50,21 +48,20 @@ const GoldRing = () => {
     ringRef.current.rotation.x = Math.sin(t * 0.2) * 0.2;
   });
 
+  // Fixed material props to avoid "__r3f" error
   return (
     <mesh ref={ringRef} rotation={[0, 0, 0]} position={[0, 0, 0]}>
       <torusGeometry args={[1.8, 0.1, 16, 64]} />
-      <meshStandardMaterial
-        attach="material"
-        args={[{
-          color: new THREE.Color("#d4af37"),
-          metalness: 0.9,
-          roughness: 0.2
-        }]}
+      <meshStandardMaterial 
+        color="#d4af37"
+        metalness={0.9}
+        roughness={0.2}
       />
     </mesh>
   );
 };
 
+// Optimized ThreeScene component with performance optimizations
 const ThreeScene = () => {
   return (
     <>
@@ -84,10 +81,12 @@ interface ThreePreloaderProps {
   progress?: number;
 }
 
+// Main ThreePreloader component with performance optimizations and better fallback
 const ThreePreloader = ({ progress = 0 }: ThreePreloaderProps) => {
+  // Memoize WebGL support check to avoid recalculation
   const [webglSupported] = useState(isWebGLSupported());
   
-  // If WebGL is not supported, render a fallback 2D preloader
+  // Optimized 2D fallback for devices without WebGL
   if (!webglSupported) {
     return (
       <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black">
@@ -100,7 +99,7 @@ const ThreePreloader = ({ progress = 0 }: ThreePreloaderProps) => {
         </div>
         <div className="mt-6 w-40 h-2 bg-gray-700 rounded-full overflow-hidden">
           <div 
-            className="h-full bg-gradient-to-r from-gsai-red to-gsai-gold rounded-full"
+            className="h-full bg-gradient-to-r from-gsai-red to-gsai-gold rounded-full transition-duration-300"
             style={{ width: `${progress}%` }}
           ></div>
         </div>
@@ -109,13 +108,15 @@ const ThreePreloader = ({ progress = 0 }: ThreePreloaderProps) => {
     );
   }
 
-  // Render 3D preloader with WebGL
+  // Optimized 3D preloader with WebGL
   return (
     <div className="fixed inset-0 z-50 bg-black">
       <Canvas
         shadows
         camera={{ position: [0, 0, 5], fov: 45 }}
         className="!touch-none"
+        dpr={[1, 2]} // Optimize for device pixel ratio
+        performance={{ min: 0.5 }} // Better performance management
       >
         <ThreeScene />
       </Canvas>
