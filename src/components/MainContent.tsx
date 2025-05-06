@@ -110,27 +110,6 @@ const MainContent = () => {
         </Suspense>
       </section>
 
-      {/* International Competitions Section */}
-      {/* <section id="competitions" data-section-target="competitions" className="section-container">
-        <Suspense fallback={<SectionLoader />}>
-          {visibleSections.competitions && <InternationalCompetitions />}
-        </Suspense>
-      </section> */}
-
-      {/* Achievements Section */}
-      {/* <section id="achievements" data-section-target="achievements" className="section-container">
-        <Suspense fallback={<SectionLoader />}>
-          {visibleSections.achievements && <Achievements />}
-        </Suspense>
-      </section> */}
-
-      {/* Coaching Staff Section */}
-      {/* <section id="coaching-staff" data-section-target="coaching" className="section-container">
-        <Suspense fallback={<SectionLoader />}>
-          {visibleSections.coaching && <CoachingStaff />}
-        </Suspense>
-      </section> */}
-
       {/* Testimonials Section */}
       <section id="testimonials" data-section-target="testimonials" className="section-container">
         <Suspense fallback={<SectionLoader />}>
@@ -153,7 +132,7 @@ const MainContent = () => {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" data-section-target="contact" className="section-container">
+      <section id="contact-section" data-section-target="contact" className="section-container">
         <Suspense fallback={<SectionLoader />}>
           {visibleSections.contact && <Contact />}
         </Suspense>

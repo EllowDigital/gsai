@@ -107,7 +107,7 @@ const LocationMap = () => {
                 <p className="text-gray-300 text-sm">E-Rickshaw<br />Nearby Metro: Indira Nagar (2km)</p>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </motion.div>
