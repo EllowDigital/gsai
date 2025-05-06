@@ -5,6 +5,27 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 type Theme = "dark" | "light" | "system";
 
+type ColorPalette = {
+  red: {
+    DEFAULT: string;
+    light: string;
+    dark: string;
+  };
+  gold: {
+    DEFAULT: string;
+    light: string;
+    dark: string;
+  };
+  black: {
+    DEFAULT: string;
+    light: string;
+  };
+  white: {
+    DEFAULT: string;
+    muted: string;
+  };
+};
+
 type ThemeProviderProps = {
   children: React.ReactNode;
   defaultTheme?: Theme;
@@ -16,6 +37,29 @@ type ThemeProviderState = {
   setTheme: (theme: Theme) => void;
   systemTheme: "dark" | "light";
   resolvedTheme: "dark" | "light";
+  colors: ColorPalette;
+};
+
+// Standard color palette for the app
+const colorPalette: ColorPalette = {
+  red: {
+    DEFAULT: "#bd0000",
+    light: "#e83030",
+    dark: "#8a0000",
+  },
+  gold: {
+    DEFAULT: "#d4af37",
+    light: "#f4d45f",
+    dark: "#a58829",
+  },
+  black: {
+    DEFAULT: "#000000",
+    light: "#333333",
+  },
+  white: {
+    DEFAULT: "#ffffff",
+    muted: "#f1f1f1",
+  },
 };
 
 const initialState: ThemeProviderState = {
@@ -23,6 +67,7 @@ const initialState: ThemeProviderState = {
   setTheme: () => null,
   systemTheme: "dark", // Default to dark if system theme can't be detected
   resolvedTheme: "dark", // Default to dark if system theme can't be detected
+  colors: colorPalette,
 };
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
@@ -80,6 +125,7 @@ export function ThemeProvider({
     setTheme,
     systemTheme,
     resolvedTheme,
+    colors: colorPalette,
   };
 
   return (

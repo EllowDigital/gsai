@@ -1,141 +1,168 @@
 
 import { useState, useEffect } from 'react';
 
-// Breakpoint configuration
-const breakpoints = {
-  xs: 400,
+interface ResponsiveConfig {
+  xs: number;
+  sm: number;
+  md: number;
+  lg: number;
+  xl: number;
+  xxl: number;
+}
+
+type BreakpointKey = keyof ResponsiveConfig;
+
+const defaultBreakpoints: ResponsiveConfig = {
+  xs: 0,
   sm: 640,
   md: 768,
   lg: 1024,
   xl: 1280,
-  '2xl': 1400,
+  xxl: 1536,
 };
 
-type BreakpointKey = keyof typeof breakpoints;
-
-/**
- * Hook that returns the current breakpoint based on window width
- * @returns Current breakpoint key ('xs', 'sm', 'md', 'lg', 'xl', '2xl')
- */
-export function useBreakpoint() {
-  // Initialize with default value based on viewport width
-  const getInitialBreakpoint = (): BreakpointKey => {
-    // If window is not available (SSR), default to 'md'
-    if (typeof window === 'undefined') return 'md';
-    
-    const width = window.innerWidth;
-    
-    if (width < breakpoints.xs) return 'xs';
-    if (width < breakpoints.sm) return 'xs';
-    if (width < breakpoints.md) return 'sm';
-    if (width < breakpoints.lg) return 'md';
-    if (width < breakpoints.xl) return 'lg';
-    if (width < breakpoints['2xl']) return 'xl';
-    return '2xl';
-  };
-
-  const [breakpoint, setBreakpoint] = useState<BreakpointKey>(getInitialBreakpoint);
-
-  useEffect(() => {
-    // Handler to call on window resize
-    const handleResize = () => {
-      const width = window.innerWidth;
-      
-      if (width < breakpoints.xs) {
-        setBreakpoint('xs');
-      } else if (width < breakpoints.sm) {
-        setBreakpoint('xs');
-      } else if (width < breakpoints.md) {
-        setBreakpoint('sm');
-      } else if (width < breakpoints.lg) {
-        setBreakpoint('md');
-      } else if (width < breakpoints.xl) {
-        setBreakpoint('lg');
-      } else if (width < breakpoints['2xl']) {
-        setBreakpoint('xl');
-      } else {
-        setBreakpoint('2xl');
-      }
-    };
-
-    // Add event listener
-    window.addEventListener('resize', handleResize);
-    
-    // Call handler right away to set initial size
-    handleResize();
-    
-    // Clean up on unmount
-    return () => window.removeEventListener('resize', handleResize);
-  }, []); // Empty array ensures effect runs only on mount and unmount
-
-  return breakpoint;
+interface DeviceInfo {
+  width: number;
+  height: number;
+  isMobile: boolean;
+  isTablet: boolean;
+  isDesktop: boolean;
+  isLandscape: boolean;
+  isPortrait: boolean;
+  breakpoint: BreakpointKey;
+  hasTouchScreen: boolean;
+  supportsHover: boolean;
+  prefersReducedMotion: boolean;
+  prefersColorScheme: 'dark' | 'light' | 'no-preference';
 }
 
 /**
- * Hook that checks if the current breakpoint matches or is larger than the specified breakpoint
- * @param breakpoint - The breakpoint to check against ('sm', 'md', 'lg', 'xl', '2xl')
- * @returns Boolean indicating whether current width is above the specified breakpoint
+ * Custom hook for responsive design that provides comprehensive device information
+ * @param customBreakpoints Optional custom breakpoints configuration
+ * @returns Device information object including size, orientation, capabilities, etc.
  */
-export function useMediaQuery(breakpoint: BreakpointKey) {
-  // We get the px value for the desired breakpoint
-  const minWidth = breakpoints[breakpoint];
+export function useResponsive(customBreakpoints?: Partial<ResponsiveConfig>): DeviceInfo {
+  // Merge custom breakpoints with defaults
+  const breakpoints = { ...defaultBreakpoints, ...customBreakpoints };
   
-  // State to hold the matched state
-  const [matches, setMatches] = useState<boolean>(() => {
-    // If window is not available (SSR), return false by default
-    if (typeof window === 'undefined') return false;
-    return window.innerWidth >= minWidth;
+  const [deviceInfo, setDeviceInfo] = useState<DeviceInfo>(() => {
+    // Set initial values (will be updated in useEffect)
+    const width = typeof window !== 'undefined' ? window.innerWidth : 0;
+    const height = typeof window !== 'undefined' ? window.innerHeight : 0;
+    
+    // Determine breakpoint based on width
+    let currentBreakpoint: BreakpointKey = 'xs';
+    for (const bp of Object.keys(breakpoints) as BreakpointKey[]) {
+      if (width >= breakpoints[bp]) {
+        currentBreakpoint = bp;
+      }
+    }
+    
+    return {
+      width,
+      height,
+      isMobile: width < breakpoints.md,
+      isTablet: width >= breakpoints.md && width < breakpoints.lg,
+      isDesktop: width >= breakpoints.lg,
+      isLandscape: width > height,
+      isPortrait: height >= width,
+      breakpoint: currentBreakpoint,
+      hasTouchScreen: false, // Will be updated in useEffect
+      supportsHover: true,  // Will be updated in useEffect
+      prefersReducedMotion: false, // Will be updated in useEffect
+      prefersColorScheme: 'light', // Will be updated in useEffect
+    };
   });
-
+  
   useEffect(() => {
-    // If window is not available, exit early
     if (typeof window === 'undefined') return;
     
-    // Handler to call on window resize
-    const handleResize = () => {
-      setMatches(window.innerWidth >= minWidth);
+    // Function to update device info based on current window dimensions and settings
+    const updateDeviceInfo = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      
+      // Determine current breakpoint
+      let currentBreakpoint: BreakpointKey = 'xs';
+      for (const bp of Object.keys(breakpoints) as BreakpointKey[]) {
+        if (width >= breakpoints[bp]) {
+          currentBreakpoint = bp;
+        }
+      }
+      
+      // Check for touch screen capability
+      const hasTouchScreen = 
+        ('ontouchstart' in window) || 
+        (navigator.maxTouchPoints > 0) || 
+        // @ts-ignore - For older browsers
+        (navigator.msMaxTouchPoints > 0);
+      
+      // Check if device supports hover
+      const supportsHover = window.matchMedia('(hover: hover)').matches;
+      
+      // Check reduced motion preference
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      
+      // Check color scheme preference
+      const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      let colorScheme: 'dark' | 'light' | 'no-preference' = 'light';
+      
+      if (darkModeMediaQuery.media === 'not all') {
+        colorScheme = 'no-preference';
+      } else {
+        colorScheme = darkModeMediaQuery.matches ? 'dark' : 'light';
+      }
+      
+      setDeviceInfo({
+        width,
+        height,
+        isMobile: width < breakpoints.md,
+        isTablet: width >= breakpoints.md && width < breakpoints.lg,
+        isDesktop: width >= breakpoints.lg,
+        isLandscape: width > height,
+        isPortrait: height >= width,
+        breakpoint: currentBreakpoint,
+        hasTouchScreen,
+        supportsHover,
+        prefersReducedMotion,
+        prefersColorScheme: colorScheme,
+      });
     };
     
-    // Add event listener
-    window.addEventListener('resize', handleResize);
+    // Initial update
+    updateDeviceInfo();
     
-    // Call handler right away to set initial matched state
-    handleResize();
+    // Add event listeners for resize and orientation change
+    window.addEventListener('resize', updateDeviceInfo);
+    window.addEventListener('orientationchange', updateDeviceInfo);
     
-    // Clean up on unmount
-    return () => window.removeEventListener('resize', handleResize);
-  }, [minWidth]); // Only re-run effect if minWidth changes
-
-  return matches;
-}
-
-/**
- * Hook that returns true if the screen is considered mobile
- * @param maxWidth - Maximum width to consider as mobile (default: 'md' breakpoint)
- * @returns Boolean indicating whether current device is mobile
- */
-export function useMobileDetect(maxWidth: BreakpointKey = 'md') {
-  // We invert the matches value to get isMobile
-  const isMobile = !useMediaQuery(maxWidth);
+    // Update when color scheme or reduced motion preferences change
+    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const motionMediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    
+    if (darkModeMediaQuery.addEventListener) {
+      darkModeMediaQuery.addEventListener('change', updateDeviceInfo);
+      motionMediaQuery.addEventListener('change', updateDeviceInfo);
+    } else if (darkModeMediaQuery.addListener) {
+      // For older browsers
+      darkModeMediaQuery.addListener(updateDeviceInfo);
+      motionMediaQuery.addListener(updateDeviceInfo);
+    }
+    
+    // Cleanup
+    return () => {
+      window.removeEventListener('resize', updateDeviceInfo);
+      window.removeEventListener('orientationchange', updateDeviceInfo);
+      
+      if (darkModeMediaQuery.removeEventListener) {
+        darkModeMediaQuery.removeEventListener('change', updateDeviceInfo);
+        motionMediaQuery.removeEventListener('change', updateDeviceInfo);
+      } else if (darkModeMediaQuery.removeListener) {
+        darkModeMediaQuery.removeListener(updateDeviceInfo);
+        motionMediaQuery.removeListener(updateDeviceInfo);
+      }
+    };
+  }, [breakpoints]);
   
-  // Additional mobile detection based on user agent for more accuracy
-  const [hasTouchScreen, setHasTouchScreen] = useState<boolean>(() => {
-    if (typeof window === 'undefined') return false;
-    
-    // Check for touch support
-    const hasTouch = Boolean(
-      'ontouchstart' in window || 
-      navigator.maxTouchPoints > 0
-    );
-    
-    // Basic UA detection for mobile
-    const mobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent
-    );
-    
-    return hasTouch && mobileUA;
-  });
-  
-  // We consider a device mobile if it either has a small viewport OR has touch capabilities + mobile UA
-  return isMobile || hasTouchScreen;
+  return deviceInfo;
 }

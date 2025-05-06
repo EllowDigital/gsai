@@ -55,10 +55,8 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        // Fix for TypeScript error by using a valid component structure
-        // that matches the expected type in react-day-picker
-        IconLeft: (props) => <ChevronLeft className="h-4 w-4" {...props} />,
-        IconRight: (props) => <ChevronRight className="h-4 w-4" {...props} />
+        IconLeft: ({ ...props }) => <ChevronLeft className="h-4 w-4" {...props} />,
+        IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" {...props} />
       }}
       {...props}
     />
