@@ -1,7 +1,7 @@
 
 import { useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Sphere, MeshDistortMaterial } from '@react-three/drei';
+import { OrbitControls, Sphere } from '@react-three/drei';
 import * as THREE from 'three';
 import { isWebGLSupported } from '@/utils/webglDetection';
 
@@ -35,7 +35,7 @@ const AnimatedSphere = () => {
 
   return (
     <Sphere args={[1, 64, 64]} ref={sphereRef}>
-      <meshPhysicalMaterial 
+      <meshPhongMaterial 
         color="#bd0000"
         roughness={0.3}
         metalness={0.8}
