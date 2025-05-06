@@ -55,9 +55,9 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        // Fix the error by using proper component names
-        IconLeft: ({ ...props }) => <ChevronLeft className="h-4 w-4" />,
-        IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" />,
+        // Don't use the IconLeft or IconRight custom components
+        IconLeft: () => <ChevronLeft className="h-4 w-4" />,
+        IconRight: () => <ChevronRight className="h-4 w-4" />,
       }}
       {...props}
     />

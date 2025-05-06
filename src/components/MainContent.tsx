@@ -1,4 +1,3 @@
-
 import { Suspense, lazy, useEffect, useState } from 'react';
 import SectionLoader from './SectionLoader';
 
@@ -6,9 +5,6 @@ import SectionLoader from './SectionLoader';
 const About = lazy(() => import('@/components/About'));
 const Founder = lazy(() => import('@/components/Founder'));
 const Programs = lazy(() => import('@/components/Programs'));
-const InternationalCompetitions = lazy(() => import('@/components/InternationalCompetitions'));
-const Achievements = lazy(() => import('@/components/Achievements'));
-const CoachingStaff = lazy(() => import('@/components/CoachingStaff'));
 const Testimonials = lazy(() => import('@/components/Testimonials'));
 const Gallery = lazy(() => import('@/components/Gallery'));
 const FAQ = lazy(() => import('@/components/FAQ'));
@@ -27,9 +23,6 @@ const MainContent = () => {
     about: false,
     founder: false,
     programs: false,
-    competitions: false,
-    achievements: false,
-    coaching: false,
     testimonials: false,
     gallery: false,
     faq: false,
@@ -68,9 +61,6 @@ const MainContent = () => {
         about: true,
         founder: true,
         programs: true,
-        competitions: true,
-        achievements: true,
-        coaching: true,
         testimonials: true,
         gallery: true,
         faq: true,
