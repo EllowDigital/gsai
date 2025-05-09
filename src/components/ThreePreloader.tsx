@@ -28,8 +28,9 @@ const AnimatedSphere = () => {
   return (
     <Sphere args={[1, 64, 64]} ref={sphereRef}>
       <meshPhongMaterial 
-        color="#bd0000"
-        emissive="#470000"
+        attach="material"
+        color={new THREE.Color("#bd0000")}
+        emissive={new THREE.Color("#470000")}
         emissiveIntensity={0.5}
         shininess={30}
       />
@@ -51,7 +52,8 @@ const GoldRing = () => {
     <mesh ref={ringRef} rotation={[0, 0, 0]} position={[0, 0, 0]}>
       <torusGeometry args={[1.8, 0.1, 16, 64]} />
       <meshStandardMaterial
-        color="#d4af37"
+        attach="material"
+        color={new THREE.Color("#d4af37")}
         metalness={0.9}
         roughness={0.2}
       />
