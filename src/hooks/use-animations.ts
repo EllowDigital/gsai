@@ -1,18 +1,18 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useInView } from 'framer-motion';
 
 /**
  * Hook for applying animations when elements come into view
  */
 export const useScrollAnimation = (threshold = 0.1) => {
-  const [ref, setRef] = useState<HTMLElement | null>(null);
+  const ref = useRef<HTMLElement | null>(null);
   const isInView = useInView(ref, {
     once: true,
     amount: threshold,
   });
 
-  return { ref: setRef, isInView };
+  return { ref, isInView };
 };
 
 /**
