@@ -1,8 +1,7 @@
 
-// Service Worker for GSAI website
+// A working service worker
 self.addEventListener('install', event => {
   console.log('[Service Worker] Installed');
-  self.skipWaiting();
 });
 
 self.addEventListener('activate', event => {
@@ -11,16 +10,6 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-  event.respondWith(
-    fetch(event.request)
-      .catch(() => {
-        // Return a fallback response for offline access
-        if (event.request.destination === 'document') {
-          return new Response('You are currently offline. Please reconnect to the internet.', {
-            headers: { 'Content-Type': 'text/html' }
-          });
-        }
-        return new Response();
-      })
-  );
+  // Simple pass-through fetch handler
+  event.respondWith(fetch(event.request));
 });

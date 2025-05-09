@@ -27,7 +27,12 @@ const AnimatedSphere = () => {
 
   return (
     <Sphere args={[1, 64, 64]} ref={sphereRef}>
-      <meshPhongMaterial color="#bd0000" emissive="#470000" emissiveIntensity={0.5} shininess={30} />
+      <meshPhongMaterial>
+        <color attach="color" args={["#bd0000"]} />
+        <color attach="emissive" args={["#470000"]} />
+        <primitive attach="emissiveIntensity" object={0.5} />
+        <primitive attach="shininess" object={30} />
+      </meshPhongMaterial>
     </Sphere>
   );
 };
@@ -45,7 +50,11 @@ const GoldRing = () => {
   return (
     <mesh ref={ringRef} rotation={[0, 0, 0]} position={[0, 0, 0]}>
       <torusGeometry args={[1.8, 0.1, 16, 64]} />
-      <meshStandardMaterial color="#d4af37" metalness={0.9} roughness={0.2} />
+      <meshStandardMaterial>
+        <color attach="color" args={["#d4af37"]} />
+        <primitive attach="metalness" object={0.9} />
+        <primitive attach="roughness" object={0.2} />
+      </meshStandardMaterial>
     </mesh>
   );
 };
