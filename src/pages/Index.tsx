@@ -13,7 +13,6 @@ const Index = () => {
   const location = useLocation();
   const isLoading = useAppStore(state => state.isLoading);
   const setLoading = useAppStore(state => state.setLoading);
-  const { visibleSections } = useAppStore();
 
   // Handle loading state for smoother transitions
   useEffect(() => {

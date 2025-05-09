@@ -1,195 +1,165 @@
 
-import { useEffect, useRef, useState, KeyboardEvent } from 'react';
+import { useState, useEffect, useCallback, KeyboardEvent as ReactKeyboardEvent } from 'react';
 
 /**
- * Hook to manage keyboard navigation for accessible components
- * @param options Configuration options for keyboard navigation
+ * Hook to manage keyboard navigation
+ * @returns Functions and state for keyboard navigation
  */
-export function useKeyboardNavigation<T extends HTMLElement = HTMLDivElement>(
-  options: {
-    onArrowUp?: () => void;
-    onArrowDown?: () => void;
-    onArrowLeft?: () => void;
-    onArrowRight?: () => void;
-    onEnter?: () => void;
-    onEscape?: () => void;
-    onTab?: () => void;
-    onSpace?: () => void;
-    enabled?: boolean;
-  } = {}
-) {
-  const ref = useRef<T>(null);
-  const {
-    onArrowUp,
-    onArrowDown,
-    onArrowLeft,
-    onArrowRight,
-    onEnter,
-    onEscape,
-    onTab,
-    onSpace,
-    enabled = true
-  } = options;
-
-  useEffect(() => {
-    const element = ref.current;
-    if (!element || !enabled) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      switch (e.key) {
-        case 'ArrowUp':
-          if (onArrowUp) {
-            e.preventDefault();
-            onArrowUp();
-          }
-          break;
-        case 'ArrowDown':
-          if (onArrowDown) {
-            e.preventDefault();
-            onArrowDown();
-          }
-          break;
-        case 'ArrowLeft':
-          if (onArrowLeft) {
-            e.preventDefault();
-            onArrowLeft();
-          }
-          break;
-        case 'ArrowRight':
-          if (onArrowRight) {
-            e.preventDefault();
-            onArrowRight();
-          }
-          break;
-        case 'Enter':
-          if (onEnter) {
-            e.preventDefault();
-            onEnter();
-          }
-          break;
-        case 'Escape':
-          if (onEscape) {
-            e.preventDefault();
-            onEscape();
-          }
-          break;
-        case 'Tab':
-          if (onTab) {
-            onTab();
-          }
-          break;
-        case ' ':
-          if (onSpace) {
-            e.preventDefault();
-            onSpace();
-          }
-          break;
-      }
-    };
-
-    // Add event listener
-    element.addEventListener('keydown', handleKeyDown as EventListener);
+export function useKeyboardNavigation() {
+  const [focusedIndex, setFocusedIndex] = useState(-1);
+  const [navigationEnabled, setNavigationEnabled] = useState(false);
+  
+  /**
+   * Enable keyboard navigation
+   */
+  const enableNavigation = useCallback(() => {
+    setNavigationEnabled(true);
+  }, []);
+  
+  /**
+   * Disable keyboard navigation
+   */
+  const disableNavigation = useCallback(() => {
+    setNavigationEnabled(false);
+    setFocusedIndex(-1);
+  }, []);
+  
+  /**
+   * Handle arrow key navigation
+   */
+  const handleKeyboardNavigation = useCallback((e: ReactKeyboardEvent | KeyboardEvent, itemsLength: number) => {
+    if (!navigationEnabled) return;
     
-    // Clean up
-    return () => {
-      element.removeEventListener('keydown', handleKeyDown as EventListener);
-    };
-  }, [onArrowUp, onArrowDown, onArrowLeft, onArrowRight, onEnter, onEscape, onTab, onSpace, enabled]);
-
-  return ref;
+    const key = e.key;
+    
+    switch (key) {
+      case 'ArrowDown':
+      case 'ArrowRight':
+        e.preventDefault();
+        setFocusedIndex(prev => (prev + 1) % itemsLength);
+        break;
+      case 'ArrowUp':
+      case 'ArrowLeft':
+        e.preventDefault();
+        setFocusedIndex(prev => (prev - 1 + itemsLength) % itemsLength);
+        break;
+      default:
+        break;
+    }
+  }, [navigationEnabled]);
+  
+  return {
+    focusedIndex,
+    setFocusedIndex,
+    navigationEnabled,
+    enableNavigation,
+    disableNavigation,
+    handleKeyboardNavigation
+  };
 }
 
 /**
- * Hook to manage focus trapping within components like modals
+ * Hook to manage focus trap within a component
+ * @param triggerRef - Ref to the element that triggers the trap
+ * @param containerRef - Ref to the container to trap focus within
+ * @param isActive - Whether the focus trap is active
  */
-export function useFocusTrap<T extends HTMLElement = HTMLDivElement>(enabled: boolean = true) {
-  const containerRef = useRef<T>(null);
+export function useFocusTrap(isActive: boolean = false) {
+  const [lastActiveElement, setLastActiveElement] = useState<HTMLElement | null>(null);
   
-  useEffect(() => {
-    if (!enabled) return;
+  // Handle keydown events for focus trap
+  const handleTabKey = useCallback((e: KeyboardEvent) => {
+    if (!isActive) return;
     
-    const container = containerRef.current;
-    if (!container) return;
-    
-    // Get all focusable elements
-    const focusableElements = container.querySelectorAll<HTMLElement>(
-      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    const focusableElements = document.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
     );
     
     if (focusableElements.length === 0) return;
     
-    const firstElement = focusableElements[0];
-    const lastElement = focusableElements[focusableElements.length - 1];
+    const firstElement = focusableElements[0] as HTMLElement;
+    const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
     
-    const handleTabKey = (e: KeyboardEvent) => {
-      if (e.key !== 'Tab') return;
-      
-      // Shift + Tab
-      if (e.shiftKey) {
-        if (document.activeElement === firstElement) {
-          e.preventDefault();
-          lastElement.focus();
-        }
-      } 
-      // Tab
-      else {
-        if (document.activeElement === lastElement) {
-          e.preventDefault();
-          firstElement.focus();
-        }
+    // Handle shift+tab
+    if (e.shiftKey) {
+      if (document.activeElement === firstElement) {
+        lastElement.focus();
+        e.preventDefault();
       }
-    };
-    
-    // Set initial focus
-    firstElement.focus();
-    
-    // Add event listener
-    container.addEventListener('keydown', handleTabKey as EventListener);
-    
-    // Return focus to previous element when unmounted
-    const previouslyFocused = document.activeElement as HTMLElement;
-    
-    return () => {
-      container.removeEventListener('keydown', handleTabKey as EventListener);
-      if (previouslyFocused) {
-        previouslyFocused.focus();
+    } 
+    // Handle tab
+    else {
+      if (document.activeElement === lastElement) {
+        firstElement.focus();
+        e.preventDefault();
       }
-    };
-  }, [enabled]);
+    }
+  }, [isActive]);
   
-  return containerRef;
+  // Enable and disable focus trap
+  useEffect(() => {
+    if (isActive) {
+      setLastActiveElement(document.activeElement as HTMLElement);
+      
+      // Add event listener for tab key
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Tab') handleTabKey(e);
+        if (e.key === 'Escape' && isActive) {
+          // Handle escape key if needed
+        }
+      };
+      
+      document.addEventListener('keydown', handleKeyDown as EventListener);
+      
+      return () => {
+        document.removeEventListener('keydown', handleKeyDown as EventListener);
+        if (lastActiveElement) {
+          setTimeout(() => {
+            lastActiveElement.focus();
+          }, 0);
+        }
+      };
+    }
+  }, [isActive, handleTabKey, lastActiveElement]);
+  
+  return {
+    restoreFocus: () => {
+      if (lastActiveElement) {
+        lastActiveElement.focus();
+      }
+    }
+  };
 }
 
 /**
- * Hook to announce messages to screen readers
+ * Hook for managing skip links
+ * @returns Methods for handling skip links
  */
-export function useAnnounce() {
-  const [message, setMessage] = useState('');
-  
+export function useSkipLinks() {
   useEffect(() => {
-    if (!message) return;
+    const handleSkipLinkClick = (e: KeyboardEvent) => {
+      if (e.key === 'Enter' && (e.target as HTMLElement).classList.contains('skip-link')) {
+        e.preventDefault();
+        const targetId = (e.target as HTMLAnchorElement).getAttribute('href')?.substring(1);
+        if (targetId) {
+          const targetElement = document.getElementById(targetId);
+          if (targetElement) {
+            targetElement.tabIndex = -1;
+            targetElement.focus();
+          }
+        }
+      }
+    };
     
-    // Create or get live region if it exists
-    let liveRegion = document.getElementById('sr-live-region');
-    if (!liveRegion) {
-      liveRegion = document.createElement('div');
-      liveRegion.id = 'sr-live-region';
-      liveRegion.className = 'sr-only';
-      liveRegion.setAttribute('aria-live', 'polite');
-      liveRegion.setAttribute('aria-atomic', 'true');
-      document.body.appendChild(liveRegion);
-    }
-    
-    // Set the message
-    liveRegion.textContent = message;
-    
-    // Clear after a delay
-    const timer = setTimeout(() => {
-      liveRegion.textContent = '';
-    }, 1000);
-    
-    return () => clearTimeout(timer);
-  }, [message]);
+    document.addEventListener('keydown', handleSkipLinkClick as EventListener);
+    return () => document.removeEventListener('keydown', handleSkipLinkClick as EventListener);
+  }, []);
   
-  return setMessage;
+  return {
+    createSkipLink: (targetId: string, label: string = "Skip to content") => ({
+      href: `#${targetId}`,
+      className: "skip-link sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 z-50 bg-white text-black px-4 py-2 rounded",
+      children: label,
+    })
+  };
 }
