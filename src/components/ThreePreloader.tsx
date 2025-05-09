@@ -1,40 +1,50 @@
-
 import { useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Sphere } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import { isWebGLSupported } from '@/utils/webglDetection';
 
-// Optimized animated sphere component with proper Three.js handling
-const AnimatedSphere = () => {
-  const sphereRef = useRef<THREE.Object3D>(null);
-  const clock = new THREE.Clock();
+interface ThreePreloaderProps {
+  progress?: number;
+}
 
-  useFrame(() => {
-    if (!sphereRef.current) return;
+// Animated red sphere with pulse and rotation
+const AnimatedSphere = () => {
+  const sphereRef = useRef<THREE.Mesh>(null);
+
+  useFrame(({ clock }) => {
+    const sphere = sphereRef.current;
+    if (!sphere) return;
 
     const elapsedTime = clock.getElapsedTime();
-    
-    // Gently rotate the sphere using manual lerp
     const lerpFactor = 0.05;
-    sphereRef.current.rotation.y += (elapsedTime * 0.15 - sphereRef.current.rotation.y) * lerpFactor;
-    sphereRef.current.rotation.x += (Math.sin(elapsedTime * 0.25) * 0.15 - sphereRef.current.rotation.x) * lerpFactor;
 
-    // Pulse scale effect
+    // Smooth rotation
+    sphere.rotation.y += (elapsedTime * 0.15 - sphere.rotation.y) * lerpFactor;
+    sphere.rotation.x += (Math.sin(elapsedTime * 0.25) * 0.15 - sphere.rotation.x) * lerpFactor;
+
+    // Pulse effect
     const scale = 1 + Math.sin(elapsedTime * 0.8) * 0.05;
-    sphereRef.current.scale.set(scale, scale, scale);
+    sphere.scale.set(scale, scale, scale);
   });
 
   return (
-    <Sphere args={[1, 64, 64]} ref={sphereRef}>
-      <meshPhongMaterial color="#bd0000" emissive="#470000" emissiveIntensity={0.5} shininess={30} />
-    </Sphere>
+    <mesh ref={sphereRef}>
+      <sphereGeometry args={[1, 64, 64]} />
+      <meshPhongMaterial
+        color="#bd0000"
+        emissive="#470000"
+        emissiveIntensity={0.5}
+        shininess={30}
+      />
+    </mesh>
   );
 };
 
+// Rotating gold torus ring
 const GoldRing = () => {
-  const ringRef = useRef<THREE.Object3D>(null);
-  
+  const ringRef = useRef<THREE.Mesh>(null);
+
   useFrame(({ clock }) => {
     if (!ringRef.current) return;
     const t = clock.getElapsedTime();
@@ -50,32 +60,24 @@ const GoldRing = () => {
   );
 };
 
-// Optimized ThreeScene component with performance optimizations
-const ThreeScene = () => {
-  return (
-    <>
-      <ambientLight intensity={0.4} />
-      <directionalLight position={[5, 5, 5]} intensity={1} castShadow />
-      <pointLight position={[-5, -5, -5]} intensity={0.5} color="#bd0000" />
-      
-      <AnimatedSphere />
-      <GoldRing />
-      
-      <OrbitControls enableZoom={false} enablePan={false} enableRotate={false} />
-    </>
-  );
-};
+// 3D scene
+const ThreeScene = () => (
+  <>
+    <ambientLight intensity={0.4} />
+    <directionalLight position={[5, 5, 5]} intensity={1} castShadow />
+    <pointLight position={[-5, -5, -5]} intensity={0.5} color="#bd0000" />
+    
+    <AnimatedSphere />
+    <GoldRing />
+    
+    <OrbitControls enableZoom={false} enablePan={false} enableRotate={false} />
+  </>
+);
 
-interface ThreePreloaderProps {
-  progress?: number;
-}
-
-// Main ThreePreloader component with performance optimizations and better fallback
+// Main preloader component
 const ThreePreloader = ({ progress = 0 }: ThreePreloaderProps) => {
-  // Memoize WebGL support check to avoid recalculation
   const [webglSupported] = useState(isWebGLSupported());
-  
-  // Optimized 2D fallback for devices without WebGL
+
   if (!webglSupported) {
     return (
       <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black">
@@ -87,35 +89,34 @@ const ThreePreloader = ({ progress = 0 }: ThreePreloaderProps) => {
           />
         </div>
         <div className="mt-6 w-40 h-2 bg-gray-700 rounded-full overflow-hidden">
-          <div 
-            className="h-full bg-gradient-to-r from-gsai-red to-gsai-gold rounded-full transition-duration-300"
+          <div
+            className="h-full bg-gradient-to-r from-gsai-red to-gsai-gold rounded-full transition-all duration-300"
             style={{ width: `${progress}%` }}
-          ></div>
+          />
         </div>
         <p className="text-gsai-gold mt-2 text-sm">{Math.round(progress)}%</p>
       </div>
     );
   }
 
-  // Optimized 3D preloader with WebGL
   return (
     <div className="fixed inset-0 z-50 bg-black">
       <Canvas
         shadows
         camera={{ position: [0, 0, 5], fov: 45 }}
         className="!touch-none"
-        dpr={[1, 2]} // Optimize for device pixel ratio
-        performance={{ min: 0.5 }} // Better performance management
+        dpr={[1, 2]}
+        performance={{ min: 0.5 }}
       >
         <ThreeScene />
       </Canvas>
-      
+
       <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-40">
         <div className="h-2 w-full bg-gray-800 rounded-full overflow-hidden">
-          <div 
+          <div
             className="h-full bg-gradient-to-r from-gsai-red to-gsai-gold rounded-full transition-all duration-300 ease-out"
             style={{ width: `${progress}%` }}
-          ></div>
+          />
         </div>
         <p className="text-gsai-gold text-center mt-2">{Math.round(progress)}%</p>
       </div>

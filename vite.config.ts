@@ -8,7 +8,7 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: "autoUpdate", // Automatically update the service worker
+      registerType: "autoUpdate",
       includeAssets: [
         "favicon_io/favicon.ico",
         "favicon_io/apple-touch-icon.png",
@@ -21,7 +21,7 @@ export default defineConfig({
         description:
           "Train in martial arts at Ghatak Sports Academy, India's leading martial arts and self-defense school.",
         start_url: "/",
-        scope: "/", // Ensure PWA is in the scope of the whole site
+        scope: "/",
         display: "standalone",
         background_color: "#ffffff",
         theme_color: "#ff4500",
@@ -56,53 +56,54 @@ export default defineConfig({
       workbox: {
         runtimeCaching: [
           {
-            urlPattern: ({ request }) => request.destination === "document", // Handle HTML requests
+            urlPattern: ({ request }) => request.destination === "document",
             handler: "NetworkFirst",
             options: {
               cacheName: "html-cache",
               expiration: {
                 maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24, // Cache for 1 day
+                maxAgeSeconds: 60 * 60 * 24,
               },
             },
           },
           {
-            urlPattern: ({ request }) => request.destination === "image", // Handle image requests
+            urlPattern: ({ request }) => request.destination === "image",
             handler: "CacheFirst",
             options: {
               cacheName: "image-cache",
               expiration: {
                 maxEntries: 50,
-                maxAgeSeconds: 60 * 60 * 24 * 30, // Cache for 30 days
+                maxAgeSeconds: 60 * 60 * 24 * 30,
               },
             },
           },
         ],
       },
     }),
-    componentTagger(), // For component tagging (if you're using it for static analysis or SEO)
+    componentTagger(),
   ],
   resolve: {
     preserveSymlinks: true,
     alias: {
-      "@": path.resolve(__dirname, "src"), // Alias for easy imports from src directory
-      three: path.resolve(__dirname, "node_modules/three"), // Alias for three.js
+      "@": path.resolve(__dirname, "src"),
+      three: path.resolve(__dirname, "node_modules/three"),
     },
   },
   server: {
-    host: true, // Enable network access for some browsers
-    port: 8080, // Set port to 8080
-    open: true, // Automatically open the browser
-    strictPort: true, // Ensure the server only runs on the specified port
+    host: true,
+    port: 8080,
+    open: true,
+    strictPort: true,
+    allowedHosts: ["3f4b1235-7cdd-4e05-9dcd-de0368d51a2d.lovableproject.com"],
   },
   build: {
-    outDir: "dist", // Build output directory
-    emptyOutDir: true, // Clear the dist directory before building
-    minify: "esbuild", // Use esbuild for minification
-    sourcemap: true, // Enable source maps for debugging
+    outDir: "dist",
+    emptyOutDir: true,
+    minify: "esbuild",
+    sourcemap: true,
   },
   optimizeDeps: {
-    include: ["three"], // Optimize three.js for faster startup
-    entries: ["src/main.tsx", "src/tempobook/**/*"], // Pre-bundle specific entry points
+    include: ["three"],
+    entries: ["src/main.tsx", "src/tempobook/**/*"],
   },
 });
