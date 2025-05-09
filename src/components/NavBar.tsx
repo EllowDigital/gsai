@@ -1,6 +1,14 @@
 
 import { useState, useEffect, useCallback } from "react";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
+import { 
+  Sheet, 
+  SheetContent, 
+  SheetHeader, 
+  SheetTitle, 
+  SheetTrigger, 
+  SheetClose,
+  SheetDescription
+} from "@/components/ui/sheet";
 import { Menu, X } from "lucide-react";
 import CTAButton from "./CTAButton";
 import { motion } from "framer-motion";
@@ -153,9 +161,16 @@ const NavBar = () => {
             <SheetContent
               side="right"
               className="bg-black/95 border-gsai-red/20 text-white w-[80vw] max-w-sm"
-              aria-labelledby="menu-header"
-              aria-describedby="sheet-description"
             >
+              <SheetHeader>
+                <SheetTitle className="text-white text-xl font-bold">
+                  Menu
+                </SheetTitle>
+                <SheetDescription className="text-gray-400">
+                  Navigation menu. Use the buttons below to navigate through the site sections.
+                </SheetDescription>
+              </SheetHeader>
+
               <SheetClose asChild>
                 <button
                   aria-label="Close"
@@ -164,15 +179,6 @@ const NavBar = () => {
                   <X className="w-6 h-6" />
                 </button>
               </SheetClose>
-
-              <SheetHeader>
-                <SheetTitle id="menu-header" className="text-white text-xl font-bold">
-                  Menu
-                </SheetTitle>
-                <p id="sheet-description" className="sr-only">
-                  Navigation menu. Use the buttons below to navigate through the site sections.
-                </p>
-              </SheetHeader>
 
               <motion.nav
                 className="flex flex-col gap-6 mt-8"
