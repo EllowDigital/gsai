@@ -1,81 +1,145 @@
 
-import { createContext, useContext, ReactNode } from 'react';
+"use client";
 
-type ThemeContextType = {
-  colors: {
-    primary: string;
-    secondary: string;
-    accent: string;
-    background: string;
-    text: string;
-    // Extended palette for better contrast options
-    neutral: {
-      100: string;
-      200: string;
-      300: string;
-      400: string;
-      500: string;
-      600: string;
-      700: string;
-      800: string;
-      900: string;
-    },
-    // Enhanced accent colors
-    red: {
-      light: string;
-      DEFAULT: string;
-      dark: string;
-    },
-    gold: {
-      light: string;
-      DEFAULT: string;
-      dark: string;
-    },
+import { createContext, useContext, useEffect, useState } from "react";
+
+type Theme = "dark" | "light" | "system";
+
+type ColorPalette = {
+  red: {
+    DEFAULT: string;
+    light: string;
+    dark: string;
+  };
+  gold: {
+    DEFAULT: string;
+    light: string;
+    dark: string;
+  };
+  black: {
+    DEFAULT: string;
+    light: string;
+  };
+  white: {
+    DEFAULT: string;
+    muted: string;
   };
 };
 
-const defaultTheme = {
-  colors: {
-    primary: '#ea384c',    // GSAI Red - slightly more vibrant for better contrast
-    secondary: '#DAA520',  // GSAI Gold
-    accent: '#ffffff',     // White
-    background: '#000000', // Black
-    text: '#ffffff',       // White
-    // Neutral gray scale for better design options
-    neutral: {
-      100: '#f8f9fa',
-      200: '#e9ecef',
-      300: '#dee2e6',
-      400: '#ced4da',
-      500: '#adb5bd',
-      600: '#6c757d',
-      700: '#495057',
-      800: '#343a40',
-      900: '#212529',
-    },
-    // Enhanced red palette
-    red: {
-      light: '#ff6b7d', // Lighter red for hover states
-      DEFAULT: '#ea384c', // Standard GSAI red
-      dark: '#c41e30',  // Darker red for pressed states and better contrast
-    },
-    // Enhanced gold palette
-    gold: {
-      light: '#f3d98b', // Lighter gold for hover states
-      DEFAULT: '#DAA520', // Standard GSAI gold
-      dark: '#b88a1b',  // Darker gold for pressed states and better contrast
-    },
+type ThemeProviderProps = {
+  children: React.ReactNode;
+  defaultTheme?: Theme;
+  storageKey?: string;
+};
+
+type ThemeProviderState = {
+  theme: Theme;
+  setTheme: (theme: Theme) => void;
+  systemTheme: "dark" | "light";
+  resolvedTheme: "dark" | "light";
+  colors: ColorPalette;
+};
+
+// Standard color palette for the app
+const colorPalette: ColorPalette = {
+  red: {
+    DEFAULT: "#bd0000",
+    light: "#e83030",
+    dark: "#8a0000",
+  },
+  gold: {
+    DEFAULT: "#d4af37",
+    light: "#f4d45f",
+    dark: "#a58829",
+  },
+  black: {
+    DEFAULT: "#000000",
+    light: "#333333",
+  },
+  white: {
+    DEFAULT: "#ffffff",
+    muted: "#f1f1f1",
   },
 };
 
-const ThemeContext = createContext<ThemeContextType>(defaultTheme);
+const initialState: ThemeProviderState = {
+  theme: "system",
+  setTheme: () => null,
+  systemTheme: "dark", // Default to dark if system theme can't be detected
+  resolvedTheme: "dark", // Default to dark if system theme can't be detected
+  colors: colorPalette,
+};
 
-export const useTheme = () => useContext(ThemeContext);
+const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
 
-export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  return (
-    <ThemeContext.Provider value={defaultTheme}>
-      {children}
-    </ThemeContext.Provider>
+export function ThemeProvider({
+  children,
+  defaultTheme = "system",
+  storageKey = "vite-ui-theme",
+  ...props
+}: ThemeProviderProps) {
+  const [theme, setTheme] = useState<Theme>(
+    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
   );
+  const [systemTheme, setSystemTheme] = useState<"dark" | "light">(
+    window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+  );
+
+  // Calculate the resolved theme (actual applied theme) based on system and user preferences
+  const resolvedTheme = theme === "system" ? systemTheme : theme;
+
+  // Apply theme to document element
+  useEffect(() => {
+    const root = window.document.documentElement;
+
+    root.classList.remove("light", "dark");
+    root.classList.add(resolvedTheme);
+  }, [resolvedTheme]);
+
+  // Update theme in localStorage when it changes
+  useEffect(() => {
+    localStorage.setItem(storageKey, theme);
+  }, [theme, storageKey]);
+
+  // Listen for system theme changes
+  useEffect(() => {
+    const mql = window.matchMedia("(prefers-color-scheme: dark)");
+    const onMediaChange = () => {
+      setSystemTheme(mql.matches ? "dark" : "light");
+    };
+
+    // Check for modern event listener method or fall back to old approach
+    if (mql.addEventListener) {
+      mql.addEventListener("change", onMediaChange);
+      return () => mql.removeEventListener("change", onMediaChange);
+    } else if (mql.addListener) {
+      // Legacy method (Safari < 14, IE, etc)
+      mql.addListener(onMediaChange);
+      return () => mql.removeListener(onMediaChange);
+    }
+  }, []);
+
+  // Create memoized context value to prevent unnecessary re-renders
+  const value = {
+    theme,
+    setTheme,
+    systemTheme,
+    resolvedTheme,
+    colors: colorPalette,
+  };
+
+  return (
+    <ThemeProviderContext.Provider value={value} {...props}>
+      {children}
+    </ThemeProviderContext.Provider>
+  );
+}
+
+export const useTheme = () => {
+  const context = useContext(ThemeProviderContext);
+  
+  if (context === undefined)
+    throw new Error("useTheme must be used within a ThemeProvider");
+    
+  return context;
 };

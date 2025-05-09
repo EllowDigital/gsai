@@ -9,8 +9,8 @@ import { HelmetProvider } from 'react-helmet-async';
 import { ThemeProvider } from './components/ThemeProvider';
 import Preloader from './components/Preloader';
 import PWA from './pwa';
-// Import toast notification but not the container (moved to main.tsx)
-import { toast } from "react-toastify";
+import { SkipLink } from './components/ui/skip-link';
+// Import react-toastify styles without the toast function
 import "react-toastify/dist/ReactToastify.css";
 
 // Optimized lazy loading with priority
@@ -131,37 +131,21 @@ const App = () => {
     }
   }, [contentLoaded]);
 
-  // // Warning if build:dev script is missing
-  // useEffect(() => {
-  //   if (process.env.NODE_ENV === 'development') {
-  //     console.warn("IMPORTANT: The package.json file is missing a 'build:dev' script. This script is required for Lovable to build the project. Please add a 'build:dev' script with the command: 'vite build --mode development'");
-      
-  //     // Use toast notification if available
-  //     try {
-  //       toast.warning("Missing 'build:dev' script in package.json. Please add it for better development experience.", {
-  //         position: "top-right",
-  //         autoClose: 10000,
-  //         hideProgressBar: false,
-  //       });
-  //     } catch (e) {
-  //       // Silent catch if toast isn't available
-  //     }
-  //   }
-  // }, []);
-
   return (
     <HelmetProvider>
       <ThemeProvider>
+        {/* Skip link for keyboard accessibility */}
+        <SkipLink skipTo="main-content" />
+        
         <Preloader isVisible={showPreloader} />
         {(contentLoaded || !showPreloader) && (
           <QueryClientProvider client={queryClient}>
             <TooltipProvider>
               <Toaster />
               <Sonner />
-              {/* Removed ToastContainer from here as it's now in main.tsx */}
               <BrowserRouter>
                 <Suspense fallback={
-                  <div className="w-full h-screen flex items-center justify-center bg-black">
+                  <div className="w-full h-screen flex items-center justify-center bg-black" role="alert" aria-busy="true">
                     <div className="animate-pulse-glow w-12 h-12 rounded-full bg-gsai-red">
                       <span className="sr-only">Loading...</span>
                     </div>
