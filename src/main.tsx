@@ -7,6 +7,10 @@ import './styles/about-animations.css';
 import './styles/theme.css';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { initializeSite } from './utils/site-initializer';
+
+// Initialize site optimizations
+initializeSite();
 
 const reportWebVitals = (metric: any) => {
     console.log(metric);

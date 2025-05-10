@@ -1,3 +1,4 @@
+
 /* Root container */
 #root {
   width: 100vw;
@@ -260,11 +261,13 @@ h2::after {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
+/* Base transitions for all elements */
 * {
   transition: transform 0.3s ease-in-out;
   box-sizing: border-box;
 }
 
+/* Pulse glow animation */
 @keyframes pulse-glow {
   0%,
   100% {
@@ -279,7 +282,7 @@ h2::after {
   animation: pulse-glow 2s infinite;
 }
 
-/* New reveal animations */
+/* Enhanced reveal animations for better performance */
 @keyframes slide-up {
   from {
     opacity: 0;
@@ -294,6 +297,7 @@ h2::after {
 .reveal-slide-up {
   animation: slide-up 0.5s ease-out forwards;
   will-change: opacity, transform;
+  backface-visibility: hidden;
 }
 
 @keyframes scale-in {
@@ -310,9 +314,10 @@ h2::after {
 .reveal-scale {
   animation: scale-in 0.4s ease-out forwards;
   will-change: opacity, transform;
+  backface-visibility: hidden;
 }
 
-/* Lazy load placeholder animation */
+/* Optimized lazy load placeholder animation */
 @keyframes pulse {
   0%, 100% {
     opacity: 0.6;
@@ -326,6 +331,7 @@ h2::after {
   animation: pulse 1.5s ease-in-out infinite;
   background: linear-gradient(90deg, #333 0%, #444 50%, #333 100%);
   background-size: 200% 100%;
+  transform: translateZ(0); /* Hardware acceleration */
 }
 
 /* Button shine effect animation */
@@ -340,6 +346,8 @@ h2::after {
 
 .animate-shine {
   animation: shine 1.5s linear infinite;
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 /* Button hover animations */
@@ -373,4 +381,43 @@ h2::after {
 
 .animate-float {
   animation: float 5s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Responsive adjustments for touch devices */
+@media (hover: none) {
+  .hover-effects {
+    display: none;
+  }
+  
+  .touch-friendly-area {
+    padding: 12px;
+    min-height: 44px;
+  }
+}
+
+/* Mobile-specific optimizations */
+@media screen and (max-width: 767px) {
+  body {
+    overscroll-behavior-y: none;
+  }
+  
+  .mobile-scroll-container {
+    -webkit-overflow-scrolling: touch;
+    overflow-y: scroll;
+    height: auto;
+    width: 100%;
+  }
+  
+  /* Reduce animation complexity on mobile */
+  .animate-float, 
+  .animate-shine {
+    animation: none;
+  }
+  
+  /* Ensure proper touch target sizes */
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
 }

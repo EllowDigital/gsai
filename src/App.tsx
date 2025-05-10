@@ -102,7 +102,7 @@ const App = () => {
     window.addEventListener('orientationchange', handleResize);
     
     // Remove any touch event listeners that might be blocking scrolling
-    const preventDefaultForScrollKeys = (e) => {
+    const preventDefaultForScrollKeys = (e: KeyboardEvent) => {
       if ([32, 33, 34, 35, 36, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
         e.preventDefault();
         return false;
@@ -110,8 +110,8 @@ const App = () => {
     };
     
     // Enable scrolling by removing any listeners that prevent default scrolling
-    document.removeEventListener('touchmove', preventDefault, { passive: false });
-    document.removeEventListener('keydown', preventDefaultForScrollKeys, { passive: false });
+    document.removeEventListener('touchmove', preventDefault);
+    document.removeEventListener('keydown', preventDefaultForScrollKeys);
 
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -238,7 +238,7 @@ const App = () => {
 };
 
 // Helper function to prevent default event behavior
-function preventDefault(e) {
+function preventDefault(e: Event) {
   e = e || window.event;
   if (e.preventDefault) {
     e.preventDefault();

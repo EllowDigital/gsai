@@ -11,7 +11,7 @@ interface ThreePreloaderProps {
 
 // Animated red sphere with pulse and rotation
 const AnimatedSphere = () => {
-  const sphereRef = useRef<THREE.Object3D>(null);
+  const sphereRef = useRef<THREE.Mesh>(null!);
 
   useFrame(({ clock }) => {
     const sphere = sphereRef.current;
@@ -44,7 +44,7 @@ const AnimatedSphere = () => {
 
 // Rotating gold torus ring
 const GoldRing = () => {
-  const ringRef = useRef<THREE.Object3D>(null);
+  const ringRef = useRef<THREE.Mesh>(null!);
 
   useFrame(({ clock }) => {
     if (!ringRef.current) return;
