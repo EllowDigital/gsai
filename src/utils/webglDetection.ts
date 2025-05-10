@@ -1,4 +1,3 @@
-
 /**
  * Detects if WebGL is supported in the current browser
  * @returns {boolean} True if WebGL is supported
@@ -15,16 +14,18 @@ export const isWebGLSupported = (): boolean => {
   }
 };
 
+// Alias for backward compatibility or clarity
+export const detectWebGLSupport = isWebGLSupported;
+
 /**
  * Detects if the device is a low-powered mobile device
  * This is a simple heuristic and not 100% accurate
  */
 export const isLowPowerDevice = (): boolean => {
-  // Check for navigator.hardwareConcurrency as a rough estimate
   return (
     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
       navigator.userAgent
-    ) && 
+    ) &&
     (!navigator.hardwareConcurrency || navigator.hardwareConcurrency < 4)
   );
 };
