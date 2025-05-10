@@ -11,7 +11,7 @@ interface ThreePreloaderProps {
 
 // Animated red sphere with pulse and rotation
 const AnimatedSphere = () => {
-  const sphereRef = useRef<THREE.Mesh>(null);
+  const sphereRef = useRef<THREE.Object3D>(null);
 
   useFrame(({ clock }) => {
     const sphere = sphereRef.current;
@@ -33,8 +33,8 @@ const AnimatedSphere = () => {
     <mesh ref={sphereRef}>
       <sphereGeometry args={[1, 64, 64]} />
       <meshPhongMaterial 
-        color={"#bd0000"}
-        emissive={"#470000"}
+        color="#bd0000"
+        emissive="#470000"
         emissiveIntensity={0.5}
         shininess={30}
       />
@@ -44,7 +44,7 @@ const AnimatedSphere = () => {
 
 // Rotating gold torus ring
 const GoldRing = () => {
-  const ringRef = useRef<THREE.Mesh>(null);
+  const ringRef = useRef<THREE.Object3D>(null);
 
   useFrame(({ clock }) => {
     if (!ringRef.current) return;
@@ -57,7 +57,7 @@ const GoldRing = () => {
     <mesh ref={ringRef} rotation={[0, 0, 0]} position={[0, 0, 0]}>
       <torusGeometry args={[1.8, 0.1, 16, 64]} />
       <meshStandardMaterial 
-        color={"#d4af37"}
+        color="#d4af37"
         metalness={0.9}
         roughness={0.2}
       />

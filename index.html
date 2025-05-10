@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +6,7 @@
   <!-- Charset & Viewport -->
   <meta charset="UTF-8" />
   <meta name="viewport"
-    content="width=device-width, initial-scale=1, maximum-scale=5, shrink-to-fit=no, viewport-fit=cover">
+    content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, shrink-to-fit=no, user-scalable=yes">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
   <!-- Title & Description -->
@@ -140,6 +141,9 @@
       height: 100%;
       width: 100%;
       overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      touch-action: manipulation;
     }
 
     #initial-preloader {
@@ -206,7 +210,7 @@
   </style>
 </head>
 
-<body role="document" class="overflow-x-hidden">
+<body role="document" class="overflow-x-hidden overflow-y-auto">
   <!-- Preloader -->
   <div id="initial-preloader" aria-live="polite" aria-label="Loading site...">
     <div></div>

@@ -43,27 +43,51 @@ const App = () => {
     // Set proper viewport meta tag for mobile
     const viewportMeta = document.querySelector('meta[name="viewport"]');
     if (viewportMeta) {
-      viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover');
+      viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, shrink-to-fit=no, user-scalable=yes');
     } else {
       const meta = document.createElement('meta');
       meta.name = 'viewport';
-      meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover';
+      meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, shrink-to-fit=no, user-scalable=yes';
       document.head.appendChild(meta);
     }
 
+    // Enable smooth scrolling
+    document.documentElement.style.scrollBehavior = 'smooth';
+    
+    // Fix issues with height calculations on mobile
+    const updateVh = () => {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    };
+    
+    updateVh();
+    
     // Add styles to ensure content is scrollable
     const style = document.createElement('style');
     style.textContent = `
       html, body {
         overflow-x: hidden;
+        overflow-y: auto;
         width: 100%;
         position: relative;
         -webkit-overflow-scrolling: touch;
         touch-action: manipulation;
-      }
-      body {
-        overflow-y: auto;
+        height: auto;
         min-height: 100vh;
+        min-height: calc(var(--vh, 1vh) * 100);
+      }
+      #root {
+        min-height: 100vh;
+        min-height: calc(var(--vh, 1vh) * 100);
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+      .section-container {
+        width: 100%;
+        overflow-x: hidden;
+        overflow-y: visible;
       }
     `;
     document.head.appendChild(style);
@@ -71,12 +95,27 @@ const App = () => {
     // Handle resize events for responsive layout
     const handleResize = () => {
       setDeviceWidth(window.innerWidth);
+      updateVh();
     };
     
     window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleResize);
     
+    // Remove any touch event listeners that might be blocking scrolling
+    const preventDefaultForScrollKeys = (e) => {
+      if ([32, 33, 34, 35, 36, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+        e.preventDefault();
+        return false;
+      }
+    };
+    
+    // Enable scrolling by removing any listeners that prevent default scrolling
+    document.removeEventListener('touchmove', preventDefault, { passive: false });
+    document.removeEventListener('keydown', preventDefaultForScrollKeys, { passive: false });
+
     return () => {
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleResize);
     };
   }, []);
 
@@ -197,5 +236,14 @@ const App = () => {
     </HelmetProvider>
   );
 };
+
+// Helper function to prevent default event behavior
+function preventDefault(e) {
+  e = e || window.event;
+  if (e.preventDefault) {
+    e.preventDefault();
+  }
+  e.returnValue = false;
+}
 
 export default App;
