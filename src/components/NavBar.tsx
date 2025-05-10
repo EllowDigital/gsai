@@ -42,20 +42,28 @@ const NavBar = () => {
   }, []);
 
   // Improved navigation function with better timing and reliability
-  const handleNavClick = useCallback((href: string) => {
+  const handleNavClick = useCallback((href: string, event?: React.MouseEvent) => {
+    // Ensure any default actions are prevented
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    
+    // Close the mobile menu if it's open
     setIsOpen(false);
     
-    // Extract the section ID from the href (remove the leading #)
-    const sectionId = href.substring(1);
-    
-    if (!isHomePage) {
-      // If not on homepage, navigate to homepage with the state
-      navigate("/", { state: { scrollTo: sectionId } });
-      return;
-    }
-
-    // Improved scrolling behavior with more reliable timing
+    // Wait for a short time to let the sheet close animation complete on mobile
     setTimeout(() => {
+      // Extract the section ID from the href (remove the leading #)
+      const sectionId = href.substring(1);
+      
+      if (!isHomePage) {
+        // If not on homepage, navigate to homepage with the state
+        navigate("/", { state: { scrollTo: sectionId } });
+        return;
+      }
+      
+      // Improved scrolling behavior with more reliable timing
       // Try both ID formats to improve reliability
       let element = document.getElementById(sectionId);
       
@@ -82,8 +90,9 @@ const NavBar = () => {
         // Use offset to account for fixed header
         const headerOffset = 80;
         const elementPosition = element.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        const offsetPosition = elementPosition + window.scrollY - headerOffset;
         
+        // Use scrollIntoView with behavior: 'smooth' for better performance
         window.scrollTo({
           top: offsetPosition,
           behavior: "smooth"
@@ -92,11 +101,16 @@ const NavBar = () => {
         // Set focus for accessibility
         element.setAttribute('tabindex', '-1');
         element.focus({ preventScroll: true });
+        
+        // Update URL hash without causing a page jump
+        if (history.pushState) {
+          history.pushState(null, '', href);
+        }
       } else {
         console.error(`Section with ID "${sectionId}" not found. Available IDs:`, 
           Array.from(document.querySelectorAll('[id]')).map(el => el.id));
       }
-    }, 100);
+    }, 100); // Short delay to ensure sheet closure completes
   }, [isHomePage, navigate]);
 
   const logoSize = deviceType === "mobile" ? "h-8 w-8" : "h-10 w-10";
@@ -118,6 +132,7 @@ const NavBar = () => {
             src="/favicon_io/android-chrome-192x192.png"
             alt="GSAI Logo"
             className={`${logoSize} rounded-full object-cover shadow-lg transition-transform group-hover:scale-105`}
+            loading="eager"
           />
           <span className={`font-extrabold ${logoTextSize} text-white drop-shadow-sm whitespace-nowrap`}>
             <span className="text-gsai-red">G</span>
@@ -131,10 +146,7 @@ const NavBar = () => {
           {NAV_LINKS.map(({ label, href }) => (
             <Button
               key={href}
-              onClick={(e) => {
-                e.preventDefault();
-                handleNavClick(href);
-              }}
+              onClick={(e) => handleNavClick(href, e)}
               variant="ghost"
               className="text-gray-300 hover:text-black hover:bg-white font-medium transition-colors relative px-2 lg:px-3 py-1 lg:py-2 h-auto after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-gsai-red after:left-0 after:-bottom-1 after:scale-x-0 hover:after:scale-x-100 after:origin-bottom-right hover:after:origin-bottom-left after:transition-transform after:duration-300"
             >
@@ -187,18 +199,16 @@ const NavBar = () => {
                 transition={{ duration: 0.3 }}
               >
                 {NAV_LINKS.map(({ label, href }) => (
-                  <SheetClose key={href} asChild>
-                    <Button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleNavClick(href);
-                      }}
-                      variant="ghost"
-                      className="text-left justify-start text-gray-300 hover:text-gsai-red text-lg transition-colors flex items-center gap-2 w-full px-2 py-3 rounded-lg hover:bg-white/10 h-auto"
-                    >
-                      {label}
-                    </Button>
-                  </SheetClose>
+                  <Button
+                    key={href}
+                    onClick={(e) => {
+                      handleNavClick(href, e);
+                    }}
+                    variant="ghost"
+                    className="text-left justify-start text-gray-300 hover:text-gsai-red text-lg transition-colors flex items-center gap-2 w-full px-2 py-3 rounded-lg hover:bg-white/10 h-auto"
+                  >
+                    {label}
+                  </Button>
                 ))}
               </motion.nav>
             </SheetContent>

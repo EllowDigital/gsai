@@ -12,33 +12,70 @@ import { initializeSite } from './utils/site-initializer';
 // Initialize site optimizations
 initializeSite();
 
+// Set up performance monitoring with error handling
 const reportWebVitals = (metric: any) => {
-    console.log(metric);
+    if (metric && typeof metric === 'object') {
+        console.log(metric);
+    }
 };
 
-const observer = new PerformanceObserver((entryList) => {
-    entryList.getEntries().forEach(entry => reportWebVitals(entry));
-});
+// Set up performance observer with error handling
+try {
+    const observer = new PerformanceObserver((entryList) => {
+        entryList.getEntries().forEach(entry => reportWebVitals(entry));
+    });
 
-['largest-contentful-paint', 'first-input', 'layout-shift'].forEach(type => {
-    observer.observe({ type, buffered: true });
-});
+    ['largest-contentful-paint', 'first-input', 'layout-shift'].forEach(type => {
+        observer.observe({ type, buffered: true });
+    });
+} catch (error) {
+    console.warn('Performance observer not supported:', error);
+}
 
+// Get the root element
 const rootElement = document.getElementById("root");
 
 if (rootElement) {
     try {
+        // Measure render time
         const startTime = performance.now();
+        
+        // Create root and render app
         const root = createRoot(rootElement);
         root.render(
             <>
                 <App />
-                <ToastContainer position="top-right" autoClose={3000} />
+                <ToastContainer 
+                    position="top-right" 
+                    autoClose={3000} 
+                    hideProgressBar={false}
+                    newestOnTop
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                />
             </>
         );
 
+        // Log render time
         const renderTime = performance.now() - startTime;
         console.log(`Initial render took ${renderTime.toFixed(2)}ms`);
+        
+        // Add some extra performance metrics
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const navTiming = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+                if (navTiming) {
+                    console.log('Performance metrics:', {
+                        pageLoad: Math.round(navTiming.loadEventEnd - navTiming.startTime),
+                        domContentLoaded: Math.round(navTiming.domContentLoadedEventEnd - navTiming.startTime)
+                    });
+                }
+            }, 0);
+        });
+        
     } catch (error) {
         console.error("Error rendering the app:", error);
         rootElement.innerHTML = `

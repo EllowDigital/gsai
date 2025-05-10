@@ -36,7 +36,7 @@ const PWA = () => {
     }
 
     // Handle beforeinstallprompt for app installation
-    window.addEventListener('beforeinstallprompt', (e) => {
+    window.addEventListener('beforeinstallprompt', () => {
       // For future implementation: store event for later use
       // Currently not showing install prompt automatically
     });

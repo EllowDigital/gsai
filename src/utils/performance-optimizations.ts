@@ -1,171 +1,157 @@
 
 /**
- * Utility functions for optimizing website performance
- */
-
-interface DebouncedFunction<T extends (...args: any[]) => any> {
-  (...args: Parameters<T>): void;
-  cancel: () => void;
-}
-
-/**
- * Creates a debounced function that delays invoking the provided function
- * until after the specified wait time has elapsed since the last invocation.
- * 
+ * Debounce function to limit the rate at which a function can fire
  * @param func The function to debounce
- * @param wait Wait time in milliseconds
- * @returns Debounced function with cancel method
+ * @param wait Wait time in ms
+ * @param immediate Whether to invoke the function immediately
+ * @returns Debounced function
  */
 export function debounce<T extends (...args: any[]) => any>(
   func: T,
-  wait: number
-): DebouncedFunction<T> {
+  wait = 300,
+  immediate = false
+): { 
+  (...args: Parameters<T>): ReturnType<T> | undefined;
+  cancel: () => void; 
+} {
   let timeout: ReturnType<typeof setTimeout> | null = null;
-
-  const debounced = function(...args: Parameters<T>) {
-    const later = () => {
+  
+  const debounced = function(this: any, ...args: Parameters<T>) {
+    const context = this;
+    
+    const later = function() {
       timeout = null;
-      func(...args);
+      if (!immediate) func.apply(context, args);
     };
     
-    if (timeout) {
-      clearTimeout(timeout);
-    }
+    const callNow = immediate && !timeout;
+    
+    if (timeout) clearTimeout(timeout);
     timeout = setTimeout(later, wait);
-  } as DebouncedFunction<T>;
-
-  debounced.cancel = () => {
+    
+    if (callNow) return func.apply(context, args);
+  };
+  
+  debounced.cancel = function() {
     if (timeout) {
       clearTimeout(timeout);
       timeout = null;
     }
   };
-
+  
   return debounced;
 }
 
 /**
- * Creates a throttled function that only invokes the provided function
- * at most once per every specified interval.
- * 
+ * Throttle function to limit the rate at which a function can fire
  * @param func The function to throttle
- * @param limit Limit time in milliseconds
+ * @param wait Wait time in ms
+ * @param options Throttle options
  * @returns Throttled function
  */
 export function throttle<T extends (...args: any[]) => any>(
   func: T,
-  limit: number
-): (...args: Parameters<T>) => void {
-  let inThrottle = false;
-  let lastFunc: ReturnType<typeof setTimeout>;
-  let lastRan: number;
-
-  return function(...args: Parameters<T>): void {
-    if (!inThrottle) {
-      func(...args);
-      lastRan = Date.now();
-      inThrottle = true;
-
-      setTimeout(() => {
-        inThrottle = false;
-      }, limit);
-    } else {
-      clearTimeout(lastFunc);
-      lastFunc = setTimeout(() => {
-        if (Date.now() - lastRan >= limit) {
-          func(...args);
-          lastRan = Date.now();
-        }
-      }, limit - (Date.now() - lastRan));
+  wait = 300,
+  options: { leading?: boolean; trailing?: boolean } = {}
+): { 
+  (...args: Parameters<T>): ReturnType<T> | undefined;
+  cancel: () => void; 
+} {
+  let timeout: ReturnType<typeof setTimeout> | null = null;
+  let previous = 0;
+  const { leading = true, trailing = true } = options;
+  
+  const throttled = function(this: any, ...args: Parameters<T>) {
+    const now = Date.now();
+    if (!previous && !leading) previous = now;
+    
+    const remaining = wait - (now - previous);
+    const context = this;
+    
+    if (remaining <= 0 || remaining > wait) {
+      if (timeout) {
+        clearTimeout(timeout);
+        timeout = null;
+      }
+      
+      previous = now;
+      return func.apply(context, args);
+    }
+    
+    if (!timeout && trailing) {
+      timeout = setTimeout(() => {
+        previous = !leading ? 0 : Date.now();
+        timeout = null;
+        func.apply(context, args);
+      }, remaining);
     }
   };
-}
-
-/**
- * Optimizes image loading by preloading important images
- * @param imageSources Array of image URLs to preload
- * @returns Promise that resolves when all images have been preloaded
- */
-export function preloadImages(imageSources: string[]): Promise<void[]> {
-  const imagePromises = imageSources.map(src => {
-    return new Promise<void>((resolve) => {
-      const img = new Image();
-      img.src = src;
-      img.onload = () => resolve();
-      img.onerror = () => resolve(); // Resolve even on error to prevent blocking
-    });
-  });
   
-  return Promise.all(imagePromises);
+  throttled.cancel = function() {
+    if (timeout) {
+      clearTimeout(timeout);
+      timeout = null;
+    }
+    previous = 0;
+  };
+  
+  return throttled;
 }
 
 /**
- * Checks if the device is a low-end device based on hardware concurrency
- * @returns Boolean indicating if the device is low-end
+ * Preload images to improve performance
+ * @param images Array of image URLs to preload
+ */
+export function preloadImages(images: string[]): void {
+  images.forEach(src => {
+    const img = new Image();
+    img.src = src;
+  });
+}
+
+/**
+ * Apply critical CSS inline to improve First Contentful Paint
+ * @param css CSS string to apply
+ */
+export function applyCriticalCSS(css: string): void {
+  if (typeof document !== 'undefined') {
+    const style = document.createElement('style');
+    style.textContent = css;
+    document.head.appendChild(style);
+  }
+}
+
+/**
+ * Check if the device is a low-end device based on memory and CPU
+ * @returns Boolean indicating if it's a low-end device
  */
 export function isLowEndDevice(): boolean {
   if (typeof navigator === 'undefined') return false;
   
-  // Check hardware concurrency (CPU cores)
-  if (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) {
-    return true;
+  // Check device memory (if available)
+  const lowMemory = 'deviceMemory' in navigator && 
+    // @ts-ignore - deviceMemory exists but TypeScript doesn't know about it
+    (navigator.deviceMemory as number) < 4;
+  
+  // Check for slow connection
+  let slowConnection = false;
+  
+  // Use optional chaining to avoid TypeScript errors
+  // @ts-ignore - Some browsers support this
+  if (navigator.connection) {
+    // @ts-ignore - Some browsers support this
+    const conn = navigator.connection;
+    slowConnection = conn.saveData || 
+      // @ts-ignore - Some browsers support this
+      conn.effectiveType === 'slow-2g' || 
+      // @ts-ignore - Some browsers support this
+      conn.effectiveType === '2g' || 
+      // @ts-ignore - Some browsers support this
+      conn.effectiveType === '3g';
   }
   
-  // Check device memory if available (in GB)
-  if ('deviceMemory' in navigator && (navigator as any).deviceMemory <= 4) {
-    return true;
-  }
+  // Check for hardware concurrency
+  const lowCPU = navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4;
   
-  // Check if data saver is enabled
-  if (navigator.connection && 'saveData' in navigator.connection && (navigator.connection as any).saveData) {
-    return true;
-  }
-  
-  return false;
-}
-
-/**
- * Adds intersection observer to lazy load elements
- * @param selector CSS selector for elements to lazy load
- * @param loadCallback Function to call when element comes into view
- */
-export function setupLazyLoading(
-  selector: string, 
-  loadCallback: (element: Element) => void
-): void {
-  if (!('IntersectionObserver' in window)) {
-    // Fallback for browsers that don't support IntersectionObserver
-    document.querySelectorAll(selector).forEach(element => {
-      loadCallback(element);
-    });
-    return;
-  }
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        loadCallback(entry.target);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, {
-    rootMargin: '100px',
-    threshold: 0.01
-  });
-
-  document.querySelectorAll(selector).forEach(element => {
-    observer.observe(element);
-  });
-}
-
-/**
- * Applies critical CSS inline for faster initial rendering
- * @param css CSS string to apply
- */
-export function applyCriticalCSS(css: string): void {
-  if (typeof document === 'undefined') return;
-  
-  const style = document.createElement('style');
-  style.innerHTML = css;
-  document.head.appendChild(style);
+  return lowMemory || slowConnection || lowCPU;
 }
