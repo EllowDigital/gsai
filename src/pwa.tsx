@@ -1,16 +1,16 @@
 
-import { useEffect, useState } from 'react';
-import { toast } from '@/components/ui/use-toast';
+import { useEffect } from 'react';
+import { useToast } from "@/hooks/use-toast";
 
 const PWA = () => {
-  const [installPrompt, setInstallPrompt] = useState<any>(null);
-  const [isUpdateAvailable, setIsUpdateAvailable] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     // Handle PWA install prompt
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
-      setInstallPrompt(e);
+      // We're intentionally not storing the event since we're not using the prompt
+      // functionality in this version
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
@@ -27,7 +27,7 @@ const PWA = () => {
             if (newWorker) {
               newWorker.addEventListener('statechange', () => {
                 if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                  setIsUpdateAvailable(true);
+                  // Update is available, show toast notification
                   toast({
                     title: "Update Available",
                     description: "A new version of the app is available. Refresh to update.",
@@ -51,7 +51,7 @@ const PWA = () => {
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     };
-  }, []);
+  }, [toast]);
 
   return null;
 };
