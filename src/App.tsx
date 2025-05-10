@@ -38,8 +38,37 @@ const App = () => {
   const [contentLoaded, setContentLoaded] = useState(false);
   const [deviceWidth, setDeviceWidth] = useState(window.innerWidth);
 
-  // Handle resize events for responsive layout
+  // Fix mobile scrolling issue by ensuring proper viewport settings
   useEffect(() => {
+    // Set proper viewport meta tag for mobile
+    const viewportMeta = document.querySelector('meta[name="viewport"]');
+    if (viewportMeta) {
+      viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover');
+    } else {
+      const meta = document.createElement('meta');
+      meta.name = 'viewport';
+      meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover';
+      document.head.appendChild(meta);
+    }
+
+    // Add styles to ensure content is scrollable
+    const style = document.createElement('style');
+    style.textContent = `
+      html, body {
+        overflow-x: hidden;
+        width: 100%;
+        position: relative;
+        -webkit-overflow-scrolling: touch;
+        touch-action: manipulation;
+      }
+      body {
+        overflow-y: auto;
+        min-height: 100vh;
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Handle resize events for responsive layout
     const handleResize = () => {
       setDeviceWidth(window.innerWidth);
     };
