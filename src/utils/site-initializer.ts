@@ -1,108 +1,117 @@
 
+import { detectWebGLSupport } from './webglDetection';
 import { setupMobileOptimizations } from './mobile-optimizations';
-import { preloadImages, applyCriticalCSS } from './performance-optimizations';
 
 /**
- * Critical CSS applied immediately to prevent FOUC and optimize First Contentful Paint
+ * Initialize the site with various optimizations
  */
-const criticalCSS = `
-  html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    min-height: 100%;
-    background-color: black;
-    color: white;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-    overscroll-behavior-y: none;
+export function initializeSite() {
+  console.log('Site initialized with optimizations');
+  
+  // Mobile-specific optimizations
+  if (typeof window !== 'undefined' && 
+      (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
+    setupMobileOptimizations();
   }
   
-  @keyframes pulseLoader {
-    0%, 100% {
-      opacity: 0.5;
-      transform: scale(0.95);
-    }
-    50% {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
+  // Set up proper viewport for all devices to ensure proper scrolling
+  ensureProperViewport();
   
-  .initial-loader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: black;
-    z-index: 9999;
-  }
+  // Fix CSS scrolling issues
+  fixScrollingIssues();
   
-  .loader-icon {
-    width: 70px;
-    height: 70px;
-    animation: pulseLoader 1.5s ease-in-out infinite;
-    opacity: 0.8;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-`;
+  // Add additional performance monitors if needed
+  setupPerformanceMonitoring();
+  
+  // Check WebGL support for 3D elements
+  detectWebGLSupport();
+}
 
 /**
- * Critical images to preload immediately
+ * Ensures the viewport meta tag is correctly set for proper scrolling
  */
-const criticalImages = [
-  '/images/logo.png',
-];
+function ensureProperViewport() {
+  if (typeof document === 'undefined') return;
+  
+  const viewportMeta = document.querySelector('meta[name="viewport"]');
+  if (viewportMeta) {
+    viewportMeta.setAttribute(
+      'content', 
+      'width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, shrink-to-fit=no, user-scalable=yes'
+    );
+  }
+}
 
 /**
- * Initialize the website by applying optimizations and performance improvements
+ * Fixes common CSS issues that prevent proper scrolling
  */
-export function initializeSite(): void {
-  try {
-    // Apply critical CSS first for faster initial render
-    applyCriticalCSS(criticalCSS);
-    
-    // Setup mobile optimizations
-    if (typeof navigator !== 'undefined' && 
-        (navigator.userAgent.match(/Android/i) || 
-         navigator.userAgent.match(/iPhone|iPad|iPod/i))) {
-      setupMobileOptimizations();
+function fixScrollingIssues() {
+  if (typeof document === 'undefined') return;
+  
+  // Apply CSS fixes for scrolling issues
+  const style = document.createElement('style');
+  style.textContent = `
+    html, body {
+      overflow-x: hidden;
+      overflow-y: auto;
+      width: 100%;
+      height: auto;
+      min-height: 100vh;
+      position: relative;
+      -webkit-overflow-scrolling: touch;
+      touch-action: manipulation;
+      scroll-behavior: smooth;
     }
     
-    // Preload critical images
-    preloadImages(criticalImages);
-    
-    // Add browsers hints for key resources
-    if (typeof document !== 'undefined') {
-      // Preconnect to key domains
-      ['https://fonts.googleapis.com', 'https://fonts.gstatic.com'].forEach(domain => {
-        const link = document.createElement('link');
-        link.rel = 'preconnect';
-        link.href = domain;
-        link.crossOrigin = 'anonymous';
-        document.head.appendChild(link);
-      });
+    #root {
+      min-height: 100vh;
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
     
-    // Monitor for errors and log them
-    if (typeof window !== 'undefined') {
-      window.addEventListener('error', (event) => {
-        console.error('Runtime error caught:', {
-          message: event.message,
-          filename: event.filename,
-          lineno: event.lineno,
-          colno: event.colno
-        });
-      });
+    .section-container {
+      width: 100%;
+      overflow-x: hidden;
+      overflow-y: visible;
     }
-    
-    console.log('Site initialized with optimizations');
-  } catch (err) {
-    console.error('Error during site initialization:', err);
-  }
+  `;
+  
+  document.head.appendChild(style);
+  
+  // Fix vh units on mobile
+  const setVhProperty = () => {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  };
+  
+  setVhProperty();
+  window.addEventListener('resize', setVhProperty);
+  window.addEventListener('orientationchange', setVhProperty);
+  
+  // Enable smooth scrolling
+  document.documentElement.style.scrollBehavior = 'smooth';
+}
+
+/**
+ * Sets up performance monitoring for the site
+ */
+function setupPerformanceMonitoring() {
+  // Record initial site load metrics when page loads
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      if (performance.getEntriesByType) {
+        const navEntries = performance.getEntriesByType('navigation');
+        if (navEntries.length > 0) {
+          const navTiming = navEntries[0] as PerformanceNavigationTiming;
+          console.log('Performance metrics:', {
+            pageLoad: Math.round(navTiming.loadEventEnd - navTiming.startTime),
+            domContentLoaded: Math.round(navTiming.domContentLoadedEventEnd - navTiming.startTime)
+          });
+        }
+      }
+    }, 0);
+  });
 }

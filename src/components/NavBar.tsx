@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { 
   Sheet, 
   SheetContent, 
@@ -32,6 +32,7 @@ const NavBar = () => {
   const navigate = useNavigate();
   const isHomePage = location.pathname === "/";
   const deviceType = useDeviceType();
+  const sheetCloseTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -52,8 +53,13 @@ const NavBar = () => {
     // Close the mobile menu if it's open
     setIsOpen(false);
     
+    // Clear any existing timeout
+    if (sheetCloseTimeoutRef.current) {
+      clearTimeout(sheetCloseTimeoutRef.current);
+    }
+    
     // Wait for a short time to let the sheet close animation complete on mobile
-    setTimeout(() => {
+    sheetCloseTimeoutRef.current = setTimeout(() => {
       // Extract the section ID from the href (remove the leading #)
       const sectionId = href.substring(1);
       
@@ -63,36 +69,16 @@ const NavBar = () => {
         return;
       }
       
-      // Improved scrolling behavior with more reliable timing
-      // Try both ID formats to improve reliability
-      let element = document.getElementById(sectionId);
-      
-      if (!element) {
-        // Try alternative IDs that might be used
-        const alternativeIds = [
-          `${sectionId}-section`,
-          `${sectionId}Section`
-        ];
-        
-        for (const altId of alternativeIds) {
-          const altElement = document.getElementById(altId);
-          if (altElement) {
-            element = altElement;
-            console.log(`Found alternative element with ID: ${altId}`);
-            break;
-          }
-        }
-      }
+      // Find the section element
+      const element = document.getElementById(sectionId);
       
       if (element) {
-        console.log(`Scrolling to element with ID: ${element.id}`);
-        
         // Use offset to account for fixed header
         const headerOffset = 80;
-        const elementPosition = element.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.scrollY - headerOffset;
+        const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+        const offsetPosition = elementPosition - headerOffset;
         
-        // Use scrollIntoView with behavior: 'smooth' for better performance
+        // Scroll to the section
         window.scrollTo({
           top: offsetPosition,
           behavior: "smooth"
@@ -107,11 +93,11 @@ const NavBar = () => {
           history.pushState(null, '', href);
         }
       } else {
-        console.error(`Section with ID "${sectionId}" not found. Available IDs:`, 
-          Array.from(document.querySelectorAll('[id]')).map(el => el.id));
+        console.error(`Section with ID "${sectionId}" not found`);
+        console.log("Available section IDs:", Array.from(document.querySelectorAll('[id]')).map(el => el.id));
       }
-    }, 100); // Short delay to ensure sheet closure completes
-  }, [isHomePage, navigate]);
+    }, deviceType === "mobile" ? 300 : 100); // Longer delay on mobile for better UX
+  }, [isHomePage, navigate, deviceType]);
 
   const logoSize = deviceType === "mobile" ? "h-8 w-8" : "h-10 w-10";
   const logoTextSize = deviceType === "mobile" ? "text-base" : "text-lg";
@@ -165,14 +151,17 @@ const NavBar = () => {
         <div className="md:hidden">
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
-              <button aria-label="Open mobile menu" className="text-white hover:text-gray-300 transition p-2">
+              <button 
+                aria-label="Open mobile menu" 
+                className="text-white hover:text-gray-300 transition p-2 touch-manipulation"
+              >
                 <Menu className="w-6 h-6" />
               </button>
             </SheetTrigger>
 
             <SheetContent
               side="right"
-              className="bg-black/95 border-gsai-red/20 text-white w-[80vw] max-w-sm"
+              className="bg-black/95 border-gsai-red/20 text-white w-[80vw] max-w-sm overflow-y-auto touch-manipulation"
             >
               <SheetHeader>
                 <SheetTitle className="text-white text-xl font-bold">
@@ -186,7 +175,7 @@ const NavBar = () => {
               <SheetClose asChild>
                 <button
                   aria-label="Close"
-                  className="absolute top-4 right-4 text-white hover:text-gsai-red transition"
+                  className="absolute top-4 right-4 text-white hover:text-gsai-red transition touch-manipulation"
                 >
                   <X className="w-6 h-6" />
                 </button>
@@ -201,11 +190,9 @@ const NavBar = () => {
                 {NAV_LINKS.map(({ label, href }) => (
                   <Button
                     key={href}
-                    onClick={(e) => {
-                      handleNavClick(href, e);
-                    }}
+                    onClick={(e) => handleNavClick(href, e)}
                     variant="ghost"
-                    className="text-left justify-start text-gray-300 hover:text-gsai-red text-lg transition-colors flex items-center gap-2 w-full px-2 py-3 rounded-lg hover:bg-white/10 h-auto"
+                    className="text-left justify-start text-gray-300 hover:text-gsai-red text-lg transition-colors flex items-center gap-2 w-full px-2 py-3 rounded-lg hover:bg-white/10 h-auto touch-manipulation"
                   >
                     {label}
                   </Button>
